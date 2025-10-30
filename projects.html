@@ -1,0 +1,651 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Projects - Alexander Van den Putte</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/splitting@1.0.6/dist/splitting.css">
+    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.min.js"></script>
+    
+    <style>
+        :root {
+            --charcoal-dark: #1D2A3A; /* Dark background */
+            --charcoal-light: #2A3B4F; /* Lighter card background */
+            --text-primary: #F8F9FA; /* Bright text */
+            --text-secondary: #C0C5CC; /* Subdued text */
+            --accent-teal: #4DB6AC; /* Main accent */
+            --accent-teal-dark: #26A69A; /* Hover */
+
+            --font-heading: 'Montserrat', sans-serif;
+            --font-body: 'Open Sans', sans-serif;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: var(--font-body);
+            background: var(--charcoal-dark);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+        
+        /* Navigation */
+        nav {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            background: rgba(29, 42, 58, 0.9);
+            backdrop-filter: blur(10px);
+            z-index: 1000;
+            padding: 1rem 0;
+            border-bottom: 1px solid var(--charcoal-light);
+        }
+        
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 2rem;
+        }
+        
+        .logo {
+            font-family: var(--font-heading);
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: var(--accent-teal);
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .logo:hover {
+            color: var(--text-primary);
+        }
+        
+        .nav-links {
+            display: flex;
+            list-style: none;
+            gap: 2rem;
+        }
+        
+        .nav-links a {
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+        
+        .nav-links a:hover,
+        .nav-links a.active {
+            color: var(--text-primary);
+        }
+        
+        .nav-links a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--accent-teal);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-links a:hover::after,
+        .nav-links a.active::after {
+            width: 100%;
+        }
+        
+        /* Main Content */
+        .main-content {
+            margin-top: 80px;
+            padding: 3rem 0;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .page-title {
+            font-family: var(--font-heading);
+            font-size: 3rem;
+            text-align: center;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+        }
+        
+        .page-subtitle {
+            text-align: center;
+            font-size: 1.2rem;
+            color: var(--text-secondary);
+            margin-bottom: 3rem;
+        }
+        
+        .section-title {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            text-align: center;
+            margin-bottom: 3rem;
+            color: var(--text-primary);
+        }
+        
+        /* Featured Project */
+        .featured-project {
+            background: var(--charcoal-light);
+            border-radius: 20px;
+            padding: 3rem;
+            margin-bottom: 4rem;
+            position: relative;
+            overflow: hidden;
+            border: 1px solid var(--charcoal-light);
+        }
+        
+        .featured-content {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .featured-badge {
+            background: var(--accent-teal);
+            color: var(--charcoal-dark);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+            font-size: 0.9rem;
+        }
+        
+        .featured-title {
+            font-family: var(--font-heading);
+            font-size: 2.5rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+        }
+        
+        .featured-description {
+            font-size: 1.1rem;
+            color: var(--text-secondary);
+            line-height: 1.8;
+            margin-bottom: 2rem;
+        }
+        
+        .featured-highlights {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .highlight-item {
+            background: var(--charcoal-dark);
+            border-radius: 10px;
+            padding: 1.5rem;
+            border: 1px solid var(--charcoal-light);
+        }
+        
+        .highlight-title {
+            font-family: var(--font-heading);
+            color: var(--accent-teal);
+            margin-bottom: 0.5rem;
+        }
+        
+        .highlight-text {
+            color: var(--text-secondary);
+            font-size: 0.95rem;
+        }
+
+        /* Timeline Section */
+        .timeline-section {
+            margin-bottom: 4rem;
+        }
+        
+        .timeline {
+            position: relative;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+        
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4px;
+            height: 100%;
+            background: var(--accent-teal);
+            border-radius: 2px;
+        }
+        
+        .timeline-item {
+            position: relative;
+            margin-bottom: 3rem;
+            cursor: default;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-item:nth-child(odd) .timeline-content-wrapper {
+            margin-right: 55%;
+            text-align: right;
+        }
+        
+        .timeline-item:nth-child(even) .timeline-content-wrapper {
+            margin-left: 55%;
+            text-align: left;
+        }
+        
+        .timeline-marker {
+            position: absolute;
+            left: 50%;
+            top: 0;
+            transform: translateX(-50%);
+            width: 20px;
+            height: 20px;
+            background: var(--accent-teal);
+            border: 4px solid var(--charcoal-dark);
+            border-radius: 50%;
+            z-index: 2;
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-item:hover .timeline-marker {
+            transform: translateX(-50%) scale(1.3);
+            box-shadow: 0 0 20px var(--accent-teal);
+        }
+        
+        .timeline-content-wrapper {
+            background: var(--charcoal-light);
+            border-radius: 15px;
+            padding: 2rem;
+            border: 1px solid var(--charcoal-light);
+            transition: all 0.3s ease;
+        }
+        
+        .timeline-item:hover .timeline-content-wrapper {
+            border-color: var(--accent-teal);
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+        }
+        
+        .timeline-date {
+            font-family: var(--font-heading);
+            color: var(--accent-teal);
+            font-weight: 600;
+            font-size: 1.1rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .timeline-title {
+            font-size: 1.3rem;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            font-weight: 600;
+        }
+        
+        .timeline-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+        }
+        
+        /* Projects Grid */
+        .projects-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+        
+        .project-card {
+            background: var(--charcoal-light);
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid var(--charcoal-light);
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            border-color: var(--accent-teal);
+        }
+        
+        .project-image {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            transition: all 0.3s ease;
+            background-color: var(--charcoal-dark);
+        }
+        
+        .project-card:hover .project-image {
+            transform: scale(1.05);
+        }
+        
+        .project-content {
+            padding: 2rem;
+            flex-grow: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .project-title {
+            font-family: var(--font-heading);
+            font-size: 1.4rem;
+            color: var(--accent-teal);
+            margin-bottom: 1rem;
+        }
+        
+        .project-category {
+            background: var(--accent-teal);
+            color: var(--charcoal-dark);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+            display: inline-block;
+            margin-bottom: 1rem;
+            align-self: flex-start;
+        }
+        
+        .project-description {
+            color: var(--text-secondary);
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+            flex-grow: 1;
+        }
+        
+        .project-tech {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+        }
+        
+        .tech-tag {
+            background: var(--charcoal-dark);
+            color: var(--text-primary);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+        
+        /* Footer */
+        footer {
+            background: var(--charcoal-dark);
+            padding: 2rem 0;
+            text-align: center;
+            border-top: 1px solid var(--charcoal-light);
+        }
+        
+        .footer-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 2rem;
+        }
+        
+        .footer-text {
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .page-title {
+                font-size: 2rem;
+            }
+            
+            .timeline::before {
+                left: 20px;
+            }
+            
+            .timeline-item:nth-child(odd) .timeline-content-wrapper,
+            .timeline-item:nth-child(even) .timeline-content-wrapper {
+                margin-left: 60px;
+                margin-right: 0;
+                text-align: left;
+            }
+            
+            .timeline-marker {
+                left: 20px;
+                transform: translateX(-50%);
+            }
+            
+            .projects-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .featured-title {
+                font-size: 2rem;
+            }
+            
+            .featured-highlights {
+                grid-template-columns: 1fr;
+            }
+        }
+        
+        /* Animation Classes */
+        .reveal {
+            opacity: 0;
+            transform: translateY(50px);
+            transition: all 0.8s ease;
+        }
+        
+        .reveal.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+    <nav>
+        <div class="nav-container">
+            <a href="index.html" class="logo">AVdP</a>
+            <ul class="nav-links">
+                <li><a href="index.html">Home</a></li>
+                <li><a href="about.html">About</a></li>
+                <li><a href="projects.html" class="active">Projects</a></li>
+                <li><a href="contact.html">Contact</a></li>
+            </ul>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <h1 class="page-title reveal">My Projects</h1>
+            <p class="page-subtitle reveal">Hands-on experience in design, prototyping, and engineering</p>
+            
+            <section class="featured-project reveal">
+                <div class="featured-content">
+                    <div class="featured-badge">🏆 Award-Winning Bachelor's Thesis</div>
+                    <h2 class="featured-title">Bachelor's Thesis: Biomechanical Ornithopter</h2>
+                    <p class="featured-description">
+                        As my final year Bachelor's project, my colleague (Tibo Opdebeeck) and I took on the challenge of biomechanically replicating a bird's flight. The result was an award-winning ornithopter (a robotic bird).
+                        <br><br>
+                        We developed multiple prototypes that simulated the complex wing flap as accurately as possible, combining mechanics, electronics, and aerodynamics to turn an idea into a working prototype. All components were custom-designed, 3D-printed, and lasercut by us. By combining knowledge from these different domains, we arrived at a functional and well-thought-out technological solution.
+                    </p>
+                    
+                    <div class="featured-highlights">
+                        <div class="highlight-item">
+                            <h4 class="highlight-title">Innovation</h4>
+                            <p class="highlight-text">Simulated biomechanics of a bird's wing flap using integrated mechanics, electronics, and aerodynamics.</p>
+                        </div>
+                        <div class="highlight-item">
+                            <h4 class="highlight-title">Rapid Prototyping</h4>
+                            <p class="highlight-text">All components were personally designed, 3D-printed, and lasercut to create multiple working prototypes.</p>
+                        </div>
+                        <div class="highlight-item">
+                            <h4 class="highlight-title">Recognition</h4>
+                            <p class="highlight-text">Winners of the "Pitch je STEM-project 2025" competition at KU Leuven, Campus Geel.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <section class="timeline-section reveal">
+                <h2 class="section-title">Career & Education Timeline</h2>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content-wrapper">
+                            <div class="timeline-date">2015</div>
+                            <h3 class="timeline-title">Began 3D Printing & Prototyping</h3>
+                            <p class="timeline-description">Started working with 3D printers, sparking a long-term passion for personal design and fabrication.</p>
+                        </div>
+                    </div>
+                    
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content-wrapper">
+                            <div class="timeline-date">2021 - 2025</div>
+                            <h3 class="timeline-title">Bachelor of Science: Industrial Engineering</h3>
+                            <p class="timeline-description">KU Leuven, Campus Geel</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content-wrapper">
+                            <div class="timeline-date">Summer 2021</div>
+                            <h3 class="timeline-title">Student Production Operator</h3>
+                            <p class="timeline-description">DAF Trucks</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content-wrapper">
+                            <div class="timeline-date">Summer 2022</div>
+                            <h3 class="timeline-title">Student Production Operator</h3>
+                            <p class="timeline-description">DAF Trucks</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content-wrapper">
+                            <div class="timeline-date">Summer 2023</div>
+                            <h3 class="timeline-title">Student Production Operator</h3>
+                            <p class="timeline-description">Keune & Nagel</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content-wrapper">
+                            <div class="timeline-date">Summer 2024</div>
+                            <h3 class="timeline-title">Student Production Operator</h3>
+                            <p class="timeline-description">Estée Lauder</p>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content-wrapper">
+                            <div class="timeline-date">2025</div>
+                            <h3 class="timeline-title">Won "Pitch je STEM-project" (Bachelor's Thesis)</h3>
+                            <p class="timeline-description">KU Leuven, Campus Geel</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content-wrapper">
+                            <div class="timeline-date">Summer 2025</div>
+                            <h3 class="timeline-title">Student Production Operator</h3>
+                            <p class="timeline-description">Smurfit Westrock</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content-wrapper">
+                            <div class="timeline-date">Summer 2025 - Present</div>
+                            <h3 class="timeline-title">Volunteer & Workshop Host</h3>
+                            <p class="timeline-description">De Maakplek, Westerlo</p>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-marker"></div>
+                        <div class="timeline-content-wrapper">
+                            <div class="timeline-date">2025 - 2026 (Expected)</div>
+                            <h3 class="timeline-title">Master of Science: Industrial Engineering</h3>
+                            <p class="timeline-description">KU Leuven, Gent</p>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <section class="projects-section reveal">
+                <h2 class="section-title">Personal Prototyping Gallery</h2>
+                <p class="page-subtitle">A place to showcase what I build for fun. Here I will add projects with brief explanations of the process and the result.</p>
+
+                <div class="projects-grid">
+                    <div class="project-card" data-category="design">
+                        <img src="https://via.placeholder.com/600x400/2A3B4F/F8F9FA?text=Project+1" alt="Placeholder Project" class="project-image">
+                        <div class="project-content">
+                            <div class="project-category">Personal Project</div>
+                            <h3 class="project-title">Project Title Here</h3>
+                            <p class="project-description">A description of the project, the problem I solved, and the process I used (e.g., 3D modeling, printing, electronics).</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">3D Printing</span>
+                                <span class="tech-tag">Autodesk Inventor</span>
+                                <span class="tech-tag">Electronics</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-card" data-category="design">
+                        <img src="https://via.placeholder.com/600x400/2A3B4F/F8F9FA?text=Project+2" alt="Placeholder Project" class="project-image">
+                        <div class="project-content">
+                            <div class="project-category">Personal Project</div>
+                            <h3 class="project-title">Project Title Here</h3>
+                            <p class="project-description">A description of the project, the problem I solved, and the process I used (e.g., 3D modeling, printing, electronics).</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">Lasercutting</span>
+                                <span class="tech-tag">CAD</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="project-card" data-category="design">
+                        <img src="https://via.placeholder.com/600x400/2A3B4F/F8F9FA?text=Project+3" alt="Placeholder Project" class="project-image">
+                        <div class="project-content">
+                            <div class="project-category">Personal Project</div>
+                            <h3 class="project-title">Project Title Here</h3>
+                            <p class="project-description">A description of the project, the problem I solved, and the process I used (e.g., 3D modeling, printing, electronics).</p>
+                            <div class="project-tech">
+                                <span class="tech-tag">Product Design</span>
+                                <span class="tech-tag">Prototyping</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <footer>
+        <div class="footer-content">
+            <p class="footer-text">&copy; 2025 Alexander Van den Putte. All rights reserved. | Industrial Engineering Portfolio</p>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>
