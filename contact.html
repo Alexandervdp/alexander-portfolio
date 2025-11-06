@@ -108,6 +108,21 @@
         .nav-links a.active::after {
             width: 100%;
         }
+
+        /* ADDED: Mobile Toggle Icon */
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+        
+        .mobile-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            transition: all 0.3s ease;
+        }
         
         /* Main Content */
         .main-content {
@@ -441,6 +456,27 @@
         
         /* Responsive Design */
         @media (max-width: 768px) {
+            /* ADDED: Mobile Menu Styling */
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--charcoal-dark);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1rem;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .mobile-toggle {
+                display: flex;
+            }
+
             .page-title {
                 font-size: 2rem;
             }
@@ -522,6 +558,11 @@
                 <li><a href="projects.html">Projects</a></li>
                 <li><a href="contact.html" class="active">Contact</a></li>
             </ul>
+            <div class="mobile-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </nav>
 
@@ -531,43 +572,42 @@
             <p class="page-subtitle reveal">Let's connect and explore opportunities together</p>
             
             <section class="contact-section reveal">
-                <div class="contact-info">
-                    <h2>Contact Information</h2>
-                    
-                    <div class="contact-item">
-                        <div class="contact-icon">📧</div>
-                        <div class="contact-details">
-                            <h3>Email</h3>
-                            <p><a href="mailto:alexander.vandenputte@outlook.com" class="contact-link">alexander.vandenputte@outlook.com</a></p>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-item">
-                        <div class="contact-icon">📱</div>
-                        <div class="contact-details">
-                            <h3>Phone or Whatsapp'</h3>
-                            <p><a href="tel:+32484848071" class="contact-link">+32 484 84 80 71</a></p>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-item">
-                        <div class="contact-icon">📍</div>
-                        <div class="contact-details">
-                            <h3>Target Work Region</h3>
-                            <p>Antwerp / Ghent, Belgium</p>
-                            <p>Open to international opportunities</p>
-                        </div>
-                    </div>
-                    
-                    <div class="contact-item">
-                        <div class="contact-icon">⏱️</div>
-                        <div class="contact-details">
-                            <h3>Response Time</h3>
-                            <p>Within 24 hours</p>
-                        </div>
-                    </div>
-                </div>
-                
+<div class="contact-info">
+    <h2>Contact Information</h2>
+
+    <div class="contact-item">
+        <div class="contact-icon">📧</div>
+        <div class="contact-details">
+            <h3>Email</h3>
+            <p><a href="mailto:alexander.vandenputte@outlook.com" class="contact-link">alexander.vandenputte@outlook.com</a></p>
+        </div>
+    </div>
+
+    <div class="contact-item">
+        <div class="contact-icon">📱</div>
+        <div class="contact-details">
+            <h3>Phone</h3>
+            <p><a href="tel:+32484848071" class="contact-link">+32 484 84 80 71</a></p>
+        </div>
+    </div>
+
+    <div class="contact-item">
+        <div class="contact-icon"><i class="fa-brands fa-whatsapp" style="color: var(--charcoal-dark);"></i></div>
+        <div class="contact-details">
+            <h3>WhatsApp</h3>
+            <p><a href="https://wa.me/32484848071" class="contact-link" target="_blank">message me</a></p>
+        </div>
+    </div>
+
+    <div class="contact-item">
+        <div class="contact-icon">📍</div>
+        <div class="contact-details">
+            <h3>Region</h3>
+            <p>Antwerp / Ghent, Belgium</p>
+        </div>
+    </div>
+
+</div>                
                 <div class="contact-form-container">
                     <h2>Send a Message</h2>
                     <form class="contact-form" id="contactForm" action="https://api.web3forms.com/submit" method="POST">
@@ -590,7 +630,7 @@
                             <select id="subject" name="subject" class="form-select" required>
                                 <option value="">Select a subject</option>
                                 <option value="job">Job Opportunity (Post-2026)</option>
-                                <option value="networking">Networking</option>
+                                <option value="networking">Request</option>
                                 <option value="project">Project Collaboration</option>
                                 <option value="question">General Question</option>
                                 <option value="other">Other</option>
@@ -605,7 +645,7 @@
                         
                         <div class="form-group">
                             <label for="message" class="form-label">Message *</label>
-                            <textarea id="message" name="message" class="form-textarea" placeholder="Tell me about your opportunity, project, or question..." required></textarea>
+                            <textarea id="message" name="message" class="form-textarea" placeholder="Tell me about your opportunity, request, question..." required></textarea>
                             <div class="form-error">Please enter your message</div>
                         </div>
                         

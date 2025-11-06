@@ -162,7 +162,7 @@
             font-weight: 700;
             margin-bottom: 1rem;
             color: var(--text-primary);
-            line-height: 1.2; /* Adjust line height for two lines */
+            line-height: 1.2; 
         }
         
         .hero-subtitle {
@@ -373,7 +373,27 @@
             line-height: 1.6;
             min-height: 100px; /* Added for consistent card height */
         }
-        
+	
+    	.cta-shortcut {
+		    background: var(--charcoal-dark);
+		    padding: 5rem 0;
+		    text-align: center;
+		    border-top: 1px solid var(--charcoal-light);
+       		border-bottom: 1px solid var(--charcoal-light);
+    	}
+
+    	.cta-shortcut .section-title {
+        	margin-bottom: 2rem;
+        	font-size: 2rem;
+        	color: var(--accent-teal);
+    	}
+
+    	.cta-shortcut .btn-primary {
+		    padding: 1rem 2rem; /* Matches existing .btn size */
+        	font-size: 1rem;
+   	    }
+	
+	
         /* Footer */
         footer {
             background: var(--charcoal-dark);
@@ -546,15 +566,15 @@
             <h2 class="section-title reveal">Technical Skills</h2>
             <div class="skills-grid">
                 <div class="skill-item reveal">
-                    <div class="skill-name">Autodesk Inventor (CAD)</div>
+                    <div class="skill-name">MS365</div>
                     <div class="skill-bar">
                         <div class="skill-progress" data-width="100"></div>
                     </div>
                 </div>
                 <div class="skill-item reveal">
-                    <div class="skill-name">MS365</div>
+                    <div class="skill-name">Autodesk Inventor (CAD)</div>
                     <div class="skill-bar">
-                        <div class="skill-progress" data-width="100"></div>
+                        <div class="skill-progress" data-width="95"></div>
                     </div>
                 </div>
                 <div class="skill-item reveal">
@@ -621,6 +641,18 @@
                     </ul>
                 </div>
             </div>
+        </div>
+    </section>
+
+    <section class="cta-shortcut">
+        <div class="container">
+            <h2 class="section-title reveal">Ready to Connect?</h2>
+            <a href="contact.html" class="btn btn-primary reveal">
+                <span>Send Me a Message</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+            </a>
         </div>
     </section>
 

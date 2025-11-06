@@ -82,7 +82,7 @@ function initializeSkillsChart() {
 
     const skillsChart = echarts.init(chartElement);
     
-    // UPDATED: Re-ordered to match your image
+    // UPDATED: Re-ordered to match your image (Inv, MS, Py, MAT, FEA, TIA)
     const option = {
         backgroundColor: 'transparent',
         radar: {
@@ -130,8 +130,8 @@ function initializeSkillsChart() {
             name: 'Skills',
             type: 'radar',
             data: [{
-                // UPDATED: Values re-ordered to match new indicator order
-                value: [100, 100, 60, 75, 70, 80], // Inv, MS, Py, MAT, FEA, TIA
+                // UPDATED: Values re-ordered to match new indicator order and values
+                value: [95, 100, 60, 75, 70, 80], // Inv, MS, Py, MAT, FEA, TIA
                 name: 'Technical Skills',
                 areaStyle: {
                     color: 'rgba(77, 182, 172, 0.3)'
@@ -177,16 +177,35 @@ function initializeCounters() {
     counters.forEach(counter => observer.observe(counter));
 }
 
+// UPDATED: Counter function for speed and natural start
 function animateCounter(element) {
     const target = parseInt(element.getAttribute('data-target'));
     if (isNaN(target)) return;
 
-    const duration = 2000;
+    // NEW LOGIC: Start high for year values, start low for small values.
     let start = 0;
+    let duration = 250; // Default speed
+    
+    if (target == 5) { 
+        start = 0; 
+        duration = 1250; // Much faster transition (1 second)
+    }
+
+    if (target == 9) { 
+        start = 0; 
+        duration = 1750; // Much faster transition (1 second)
+    }
+
+    if (target > 100) { 
+        // This condition targets the '2026' value 
+        start = 2003; 
+        duration = 2400; // Much faster transition (1 second)
+    }
+
     const stepTime = 16; // approx 60fps
     const steps = duration / stepTime;
     const increment = (target - start) / steps;
-    
+
     const timer = setInterval(() => {
         start += increment;
         if (start >= target) {

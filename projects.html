@@ -108,6 +108,21 @@
         .nav-links a.active::after {
             width: 100%;
         }
+
+        /* ADDED: Mobile Toggle Icon */
+        .mobile-toggle {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+            gap: 4px;
+        }
+        
+        .mobile-toggle span {
+            width: 25px;
+            height: 3px;
+            background: var(--text-primary);
+            transition: all 0.3s ease;
+        }
         
         /* Main Content */
         .main-content {
@@ -142,6 +157,32 @@
             text-align: center;
             margin-bottom: 3rem;
             color: var(--text-primary);
+        }
+
+        /* Base Button Style (from index.html) */
+        .btn {
+            padding: 1rem 2rem;
+            border: none;
+            border-radius: 5px;
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-family: var(--font-heading);
+        }
+        
+        .btn-primary {
+            background: var(--accent-teal);
+            color: var(--charcoal-dark);
+        }
+        
+        .btn-primary:hover {
+            background: var(--accent-teal-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
         }
         
         /* Featured Project */
@@ -386,6 +427,26 @@
             font-size: 0.8rem;
             font-weight: 600;
         }
+
+        /* ADDED: CTA Shortcut Styling */
+    	.cta-shortcut {
+		    background: var(--charcoal-dark);
+		    padding: 5rem 0;
+		    text-align: center;
+		    border-top: 1px solid var(--charcoal-light);
+       		border-bottom: 1px solid var(--charcoal-light);
+    	}
+
+    	.cta-shortcut .section-title {
+        	margin-bottom: 2rem;
+        	font-size: 2rem;
+        	color: var(--accent-teal);
+    	}
+
+    	.cta-shortcut .btn-primary {
+		    padding: 1rem 2rem; /* Matches existing .btn size */
+        	font-size: 1rem;
+   	    }
         
         /* Footer */
         footer {
@@ -408,6 +469,27 @@
         
         /* Responsive Design */
         @media (max-width: 768px) {
+            /* ADDED: Mobile Menu Styling */
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 100%;
+                left: 0;
+                width: 100%;
+                background: var(--charcoal-dark);
+                flex-direction: column;
+                padding: 2rem;
+                gap: 1rem;
+            }
+            
+            .nav-links.active {
+                display: flex;
+            }
+            
+            .mobile-toggle {
+                display: flex;
+            }
+
             .page-title {
                 font-size: 2rem;
             }
@@ -464,6 +546,11 @@
                 <li><a href="projects.html" class="active">Projects</a></li>
                 <li><a href="contact.html">Contact</a></li>
             </ul>
+            <div class="mobile-toggle">
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
         </div>
     </nav>
 
@@ -593,19 +680,20 @@
 
             <section class="projects-section reveal">
                 <h2 class="section-title">Personal Prototyping Gallery</h2>
-                <p class="page-subtitle">A place to showcase what I build for fun. Here I will add projects with brief explanations of the process and the result.</p>
+                <p class="page-subtitle">A place to showcase what I build. Here I will add projects with brief explanations of the process and the result.</p>
 
                 <div class="projects-grid">
                     <div class="project-card" data-category="design">
                         <img src="https://via.placeholder.com/600x400/2A3B4F/F8F9FA?text=Project+1" alt="Placeholder Project" class="project-image">
                         <div class="project-content">
                             <div class="project-category">Personal Project</div>
-                            <h3 class="project-title">Project Title Here</h3>
-                            <p class="project-description">A description of the project, the problem I solved, and the process I used (e.g., 3D modeling, printing, electronics).</p>
+                            <h3 class="project-title">Scratch A Cat</h3>
+                            <p class="project-description">A product that works as a cat massager, can be filled with a herb blend to attracts and relaxes your cat.</p>
                             <div class="project-tech">
                                 <span class="tech-tag">3D Printing</span>
-                                <span class="tech-tag">Autodesk Inventor</span>
-                                <span class="tech-tag">Electronics</span>
+				<span class="tech-tag">CAD</span>
+                                <span class="tech-tag">Prototyping</span>
+				<span class="tech-tag">product development</span>
                             </div>
                         </div>
                     </div>
@@ -614,11 +702,12 @@
                         <img src="https://via.placeholder.com/600x400/2A3B4F/F8F9FA?text=Project+2" alt="Placeholder Project" class="project-image">
                         <div class="project-content">
                             <div class="project-category">Personal Project</div>
-                            <h3 class="project-title">Project Title Here</h3>
-                            <p class="project-description">A description of the project, the problem I solved, and the process I used (e.g., 3D modeling, printing, electronics).</p>
+                            <h3 class="project-title">Modular Guitar Pedal</h3>
+                            <p class="project-description">A fully worked out conceptual Guitar Pedal, where each effect can be inserted like the nostalgic Nintendo 64.</p>
                             <div class="project-tech">
-                                <span class="tech-tag">Lasercutting</span>
-                                <span class="tech-tag">CAD</span>
+                                <span class="tech-tag">CAD/CAM</span>
+                                <span class="tech-tag">Prototyping</span>
+				<span class="tech-tag">Collaboration</span>
                             </div>
                         </div>
                     </div>
@@ -627,11 +716,13 @@
                         <img src="https://via.placeholder.com/600x400/2A3B4F/F8F9FA?text=Project+3" alt="Placeholder Project" class="project-image">
                         <div class="project-content">
                             <div class="project-category">Personal Project</div>
-                            <h3 class="project-title">Project Title Here</h3>
-                            <p class="project-description">A description of the project, the problem I solved, and the process I used (e.g., 3D modeling, printing, electronics).</p>
+                            <h3 class="project-title">Decorational LED Lamp</h3>
+                            <p class="project-description">A beautiful decorational lamp, based on Arabic design. Remotely controlled LEDs via wifi.</p>
                             <div class="project-tech">
                                 <span class="tech-tag">Product Design</span>
                                 <span class="tech-tag">Prototyping</span>
+				<span class="tech-tag">CAD</span>
+				<span class="tech-tag">3D Printing</span>
                             </div>
                         </div>
                     </div>
@@ -639,6 +730,18 @@
             </section>
         </div>
     </main>
+
+    <section class="cta-shortcut">
+        <div class="container">
+            <h2 class="section-title reveal">Ready to Connect?</h2>
+            <a href="contact.html" class="btn btn-primary reveal">
+                <span>Send Me a Message</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
+            </a>
+        </div>
+    </section>
 
     <footer>
         <div class="footer-content">
