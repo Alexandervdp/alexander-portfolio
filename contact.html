@@ -545,6 +545,17 @@
         .notification.error {
             background: #f44336;
         }
+
+	#particles-js {
+    		position: fixed; /* Stays in place */
+    		width: 100%;
+    		height: 100%;
+    		top: 0;
+    		left: 0;
+    		z-index: -1; /* Sits BEHIND all other content */
+    		background-color: var(--charcoal-dark); /* Your site's background color */
+	}
+
     </style>
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
 </head>
@@ -565,6 +576,8 @@
             </div>
         </div>
     </nav>
+
+    <div id="particles-js"></div>
 
     <main class="main-content">
         <div class="container">
@@ -709,5 +722,13 @@
     </footer>
 
     <script src="main.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+    	particlesJS.load('particles-js', 'particles.json', function() {
+        	console.log('particles.js loaded - callback');
+    	});
+    </script>
+
 </body>
 </html>
