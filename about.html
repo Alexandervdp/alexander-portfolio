@@ -14,9 +14,6 @@
     <link rel="stylesheet" href="https://unpkg.com/splitting@1.0.6/dist/splitting.css">
     <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.min.js"></script>
 
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-    
     <style>
         :root {
             --charcoal-dark: #1D2A3A; /* Dark background */
@@ -611,12 +608,12 @@
                         <p>
                             I thrive on complexity and am driven to master new skills. I believe that with dedication, I can learn anything required to succeed and help a company achieve its goals. I am ready to work hard for the right opportunity and grow with a team that values reliability and innovation.
                         </p>
-                        <button class="cv-download-btn">
+                        <a href="CV_Alexander_Van_den_Putte.pdf" class="cv-download-btn" download>
                             <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
                                 <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
                             </svg>
                             Download CV (PDF)
-                        </button>
+                        </a>
                     </div>
                 </section>
 
@@ -776,6 +773,9 @@
             <h2 class="section-title reveal">Ready to Connect?</h2>
             <a href="contact.html" class="btn btn-primary reveal">
                 <span>Send Me a Message</span>
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
+                </svg>
             </a>
         </div>
     </section>
@@ -790,9 +790,31 @@
 
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script>
-    	particlesJS.load('particles-js', 'particles.json', function() {
-        	console.log('particles.js loaded - callback');
-    	});
+    particlesJS('particles-js', 
+      {
+        "particles": {
+          "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
+          "color": { "value": "#4DB6AC" },
+          "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 } },
+          "opacity": { "value": 0.2, "random": false, "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false } },
+          "size": { "value": 3, "random": true, "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false } },
+          "line_linked": { "enable": true, "distance": 150, "color": "#C0C5CC", "opacity": 0.15, "width": 1 },
+          "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 } }
+        },
+        "interactivity": {
+          "detect_on": "canvas",
+          "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+          "modes": {
+            "grab": { "distance": 400, "line_linked": { "opacity": 1 } },
+            "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
+            "repulse": { "distance": 100, "duration": 0.4 },
+            "push": { "particles_nb": 4 },
+            "remove": { "particles_nb": 2 }
+          }
+        },
+        "retina_detect": true
+      }
+    );
     </script>
 
 </body>

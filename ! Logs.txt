@@ -1,9 +1,3 @@
-Hamburger on every page
+particle effects
 
-Key metrics better counting
-
-Changed skill values
-
-Optimized contact page
-
-Partially updated projects
+cv download function
