@@ -7,7 +7,10 @@ document.addEventListener('DOMContentLoaded', function() {
     initializeScrollEffects();
     initializeNavigation();
     initializeContactForm(); // For contact.html
-    generateCV(); // For about.html
+    // REMOVED: generateCV(); 
+
+    // ADDED: Logic for new glass nav "active" class
+    initializeGlassNav();
 });
 
 // Animation initialization
@@ -276,13 +279,13 @@ function initializeScrollEffects() {
     revealElements.forEach(el => revealObserver.observe(el));
 }
 
-// Navigation functionality
+// Navigation functionality (for old nav on projects/contact)
 function initializeNavigation() {
-    const nav = document.querySelector('nav');
-    const mobileToggle = document.querySelector('.mobile-toggle');
-    const navLinksContainer = document.querySelector('.nav-links');
+    const nav = document.querySelector('nav'); // Finds <nav> on all pages
+    const mobileToggle = document.querySelector('.mobile-toggle'); // Finds hamburger
+    const navLinksContainer = document.querySelector('.nav-links'); // Finds link container
     
-    // Mobile menu toggle
+    // Mobile menu toggle - This will only run if mobileToggle exists on the page
     if (mobileToggle) {
         mobileToggle.addEventListener('click', () => {
             navLinksContainer.classList.toggle('active');
@@ -301,8 +304,8 @@ function initializeNavigation() {
                     block: 'start'
                 });
             }
-            // Close mobile menu
-            if (navLinksContainer.classList.contains('active')) {
+            // Close mobile menu (if it exists)
+            if (navLinksContainer && navLinksContainer.classList.contains('active')) {
                 navLinksContainer.classList.remove('active');
             }
         });
@@ -329,6 +332,21 @@ function initializeNavigation() {
         });
     });
 }
+
+// ADDED: Logic for new glass nav "active" class
+function initializeGlassNav() {
+    const navItems = document.querySelectorAll('.nav-item');
+    if (!navItems.length) return; // Only runs if the new nav exists
+
+    navItems.forEach(item => {
+      item.addEventListener('click', function(e) {
+        // We don't preventDefault, so the link still works
+        navItems.forEach(navItem => navItem.classList.remove('active'));
+        this.classList.add('active');
+      });
+    });
+}
+
 
 // Contact form functionality
 function initializeContactForm() {
@@ -447,98 +465,4 @@ function showNotification(message, type) {
     }, 3000);
 }
 
-// *** REAL CV PDF Generation ***
-function generateCV() {
-    const button = document.querySelector('.cv-download-btn');
-    if (!button) return; // Only run on about.html
-    
-    // Check if libraries are loaded
-    if (typeof jspdf === 'undefined' || typeof html2canvas === 'undefined') {
-        console.error('jsPDF or html2canvas not loaded');
-        return;
-    }
-
-    button.addEventListener('click', () => {
-        const { jsPDF } = jspdf;
-        const cvContent = document.getElementById('cv-content');
-        if (!cvContent) {
-            showNotification('Error: CV content not found', 'error');
-            return;
-        }
-
-        // Show loading state
-        const originalText = button.innerHTML;
-        button.innerHTML = 'Generating CV...';
-        button.disabled = true;
-        
-        // Use html2canvas to render the div
-        html2canvas(cvContent, {
-            scale: 2, // Improve resolution
-            backgroundColor: '#1D2A3A', // Set background color
-            useCORS: true // For images
-        }).then(canvas => {
-            const imgData = canvas.toDataURL('image/png');
-            const pdf = new jsPDF('p', 'mm', 'a4');
-            const pdfWidth = pdf.internal.pageSize.getWidth();
-            const pdfHeight = pdf.internal.pageSize.getHeight();
-            
-            const canvasWidth = canvas.width;
-            const canvasHeight = canvas.height;
-            
-            // Calculate height ratio
-            const pdfCanvasHeight = canvas.height * pdfWidth / canvas.width;
-            
-            let totalHeight = pdfCanvasHeight;
-            let yPos = 0;
-
-            // Simple multi-page logic
-            if (totalHeight > pdfHeight) {
-                let page = 1;
-                while (totalHeight > 0) {
-                    // This creates a "slice" of the canvas for each page
-                    const pageCanvas = document.createElement('canvas');
-                    pageCanvas.width = canvasWidth;
-                    // Calculate the height of the slice in canvas pixels
-                    const sliceHeight = canvas.height * (pdfHeight / pdfCanvasHeight);
-                    pageCanvas.height = sliceHeight;
-
-                    const pageCtx = pageCanvas.getContext('2d');
-                    
-                    // sx, sy, sWidth, sHeight, dx, dy, dWidth, dHeight
-                    // Calculate the source 'y' position on the original canvas
-                    const sY = (page - 1) * sliceHeight;
-                    
-                    if (sY >= canvas.height) break;
-
-                    pageCtx.drawImage(canvas, 0, sY, canvas.width, sliceHeight, 0, 0, pageCanvas.width, pageCanvas.height);
-
-                    const pageImgData = pageCanvas.toDataURL('image/png');
-                    
-                    // Add the image to the PDF page
-                    pdf.addImage(pageImgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
-                    
-                    totalHeight -= pdfHeight;
-                    if (totalHeight > 0) {
-                        pdf.addPage();
-                    }
-                    page++;
-                }
-            } else {
-                 pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfCanvasHeight);
-            }
-            
-            pdf.save('CV-Alexander-Van-den-Putte.pdf');
-
-            // Restore button
-            button.innerHTML = originalText;
-            button.disabled = false;
-            showNotification('CV downloaded successfully!', 'success');
-
-        }).catch(err => {
-            console.error('PDF Generation Error:', err);
-            showNotification('Error generating PDF', 'error');
-            button.innerHTML = originalText;
-            button.disabled = false;
-        });
-    });
-}
+// REMOVED: Old generateCV() function
