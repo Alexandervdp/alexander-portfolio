@@ -2,919 +2,894 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Alexander Van den Putte | IE Portfolio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Alexander Van den Putte | Portfolio</title>
     
+    <!-- Typography: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/typed.js/2.0.12/typed.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css">
-    <link rel="stylesheet" href="https://unpkg.com/splitting@1.0.6/dist/splitting.css">
-    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.min.js"></script>
-    
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <!-- Three.js for High-Fidelity 3D Rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+
     <style>
         :root {
-            --charcoal-dark: #1D2A3A; /* Dark background */
-            --charcoal-light: #2A3B4F; /* Lighter card background */
-            --text-primary: #F8F9FA; /* Bright text */
-            --text-secondary: #C0C5CC; /* Subdued text */
-            --accent-teal: #4DB6AC; /* Main accent */
-            --accent-teal-dark: #26A69A; /* Hover */
-
-            --font-heading: 'Montserrat', sans-serif;
-            --font-body: 'Open Sans', sans-serif;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: var(--font-body);
-            background: var(--charcoal-dark);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-        
-        /* Floating Island Glass Navigation Bar - DESKTOP */
-        .glass-nav {
-            --bg-color: rgba(29, 42, 58, 0.7);
-            --highlight: rgba(255, 255, 255, 0.2);
-            --text: #F8F9FA;
+            /* Brand Colors */
+            --primary: #4DB6AC;
+            --primary-dark: #004d40;
+            --primary-glow: rgba(77, 182, 172, 0.5);
             
+            /* Background Gradient Colors */
+            --bg-center: #172a45; /* Darkish Blue Center */
+            --bg-edge: #020202;   /* Deep Black Edge */
+            
+            /* Glass UI - Enhanced */
+            --glass-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-blur: 16px;
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            
+            /* Radius */
+            --radius-card: 24px;
+            --radius-dock: 24px;
+            
+            --text-white: #ffffff;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            /* The Vignette: Radial gradient from blue center to black edges */
+            background: radial-gradient(circle at 50% 30%, var(--bg-center), var(--bg-edge) 80%);
+            background-attachment: fixed; /* Keeps gradient in place while scrolling */
+            color: var(--text-white);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* --- 1. LIGHTWEIGHT BACKGROUND (Particles) --- */
+        #particles-js {
             position: fixed;
-            top: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 95%;
-            max-width: 800px;
-            border-radius: 16px;
-            overflow: hidden;
-            background: transparent;
-            z-index: 1000;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            opacity: 0.6; 
         }
 
-        .glass-filter,
-        .glass-overlay,
-        .glass-specular {
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-        }
-
-        .glass-filter {
-            z-index: 1;
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            filter: url(#glass-distortion) saturate(120%) brightness(1.1);
-        }
-
-        .glass-overlay {
-            z-index: 2;
-            background: var(--bg-color);
-        }
-
-        .glass-specular {
-            z-index: 3;
-            box-shadow: 
-                inset 1px 1px 0 var(--highlight),
-                inset -1px -1px 0 rgba(0, 0, 0, 0.1);
-        }
-
-        .glass-content {
+        /* --- 2. THE "LAVA" LOGO (3D Container) --- */
+        .lava-orb-container {
             position: relative;
-            z-index: 4;
-            padding: 1rem 2rem;
+            width: 180px; /* Increased size for better visibility of the 3D detail */
+            height: 180px;
             display: flex;
-            /* UPDATED: Puts logo left, links right */
-            justify-content: space-between; 
             align-items: center;
+            justify-content: center;
+            margin-right: 1rem;
+        }
+        
+        .lava-orb-container canvas {
+            outline: none;
+            /* Subtle CSS bloom outside canvas to blend it with the page */
+            filter: drop-shadow(0 0 20px rgba(77, 182, 172, 0.2)); 
         }
 
-        .glass-logo {
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent-teal);
-            text-decoration: none;
-            transition: all 0.3s ease;
+        /* --- 3. LAYOUT STRUCTURE --- */
+        .main-container {
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 0 1.5rem 8rem; 
         }
 
-        .glass-logo:hover {
-            color: var(--text-primary);
-            transform: scale(1.05);
+        section {
+            margin-bottom: 6rem;
+            opacity: 0; 
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .nav-list {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 0.5rem;
+        section.visible {
+            opacity: 1;
+            transform: translateY(0);
         }
 
-        .nav-item {
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            font-family: var(--font-body);
-            white-space: nowrap;
-        }
-
-        .nav-item:hover {
-            background-color: rgba(77, 182, 172, 0.2);
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .nav-item.active {
-            background-color: rgba(77, 182, 172, 0.3);
-            color: var(--accent-teal);
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(77, 182, 172, 0.25);
-        }
-
-        /* Mobile Hamburger Menu */
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 95%;
-            max-width: 400px;
-            z-index: 1000;
-        }
-
-        .mobile-hamburger {
-            position: relative;
-            width: 100%;
-            border-radius: 16px;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .mobile-hamburger .glass-filter,
-        .mobile-hamburger .glass-overlay,
-        .mobile-hamburger .glass-specular {
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-        }
-
-        .mobile-hamburger .glass-filter {
-            z-index: 1;
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            filter: url(#glass-distortion) saturate(120%) brightness(1.1);
-        }
-
-        .mobile-hamburger .glass-overlay {
-            z-index: 2;
-            background: rgba(29, 42, 58, 0.7);
-        }
-
-        .mobile-hamburger .glass-specular {
-            z-index: 3;
-            box-shadow: 
-                inset 1px 1px 0 rgba(255, 255, 255, 0.2),
-                inset -1px -1px 0 rgba(0, 0, 0, 0.1);
-        }
-
-        .mobile-hamburger .glass-content {
-            position: relative;
-            z-index: 4;
-            padding: 1rem 2rem;
-            color: var(--text-primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: var(--font-heading);
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .hamburger-icon {
+        /* --- 4. HERO SECTION --- */
+        .hero {
+            min-height: 90vh;
             display: flex;
             flex-direction: column;
-            gap: 4px;
-            transition: transform 0.3s ease;
-            /* This ensures the bars rotate from their center */
             justify-content: center;
-            align-items: center;
-            width: 20px;
-            height: 14px; /* (2px * 3 bars) + (4px * 2 gaps) = 14px */
-        }
-
-        .hamburger-icon span {
-            width: 20px;
-            height: 2px;
-            background: var(--text-primary);
-            border-radius: 2px;
-            transition: all 0.3s ease;
-            /* This makes the rotation look clean */
-            transform-origin: center;
-        }
-
-        /* Mobile Dropdown Menu */
-        .mobile-dropdown-content {
+            align-items: flex-start;
             position: relative;
-            overflow: hidden;
-            max-height: 0;
-            transition: max-height 0.4s ease;
-            border-radius: 16px;
-            margin-top: 8px;
         }
 
-        .mobile-dropdown-content .glass-filter,
-        .mobile-dropdown-content .glass-overlay,
-        .mobile-dropdown-content .glass-specular {
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-        }
-
-        .mobile-dropdown-content .glass-filter {
-            z-index: 1;
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            filter: url(#glass-distortion) saturate(120%) brightness(1.1);
-        }
-
-        .mobile-dropdown-content .glass-overlay {
-            z-index: 2;
-            background: rgba(29, 42, 58, 0.8);
-        }
-
-        .mobile-dropdown-content .glass-specular {
-            z-index: 3;
-            box-shadow: 
-                inset 1px 1px 0 rgba(255, 255, 255, 0.2),
-                inset -1px -1px 0 rgba(0, 0, 0, 0.1);
-        }
-
-        .mobile-nav-list {
-            position: relative;
-            z-index: 4;
-            list-style: none;
-            margin: 0;
-            padding: 1.5rem;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease 0.1s;
-        }
-
-        .mobile-nav-list li {
-            margin-bottom: 0.8rem;
-        }
-
-        .mobile-nav-list li:last-child {
-            margin-bottom: 0;
-        }
-
-        .mobile-nav-item {
-            color: var(--text-primary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            font-family: var(--font-body);
-            display: block;
-            /* UPDATED: Aligns text to the right */
-            text-align: right;
-        }
-
-        .mobile-nav-item:hover,
-        .mobile-nav-item.active {
-            background-color: rgba(77, 182, 172, 0.3);
-            color: var(--accent-teal);
-            transform: translateY(-2px);
-            /* UPDATED: Reduced the glow for a cleaner, modern look */
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Mobile Menu Toggle States */
-        #mobile-menu-toggle {
-            display: none;
-        }
-
-        #mobile-menu-toggle:checked ~ .mobile-hamburger .hamburger-icon {
-            /* No rotation needed on the container */
-        }
-
-        /* UPDATED: Correct 'X' transform */
-        #mobile-menu-toggle:checked ~ .mobile-hamburger .hamburger-icon span:nth-child(1) {
-            transform: translateY(6px) rotate(45deg);
-        }
-
-        #mobile-menu-toggle:checked ~ .mobile-hamburger .hamburger-icon span:nth-child(2) {
-            opacity: 0;
-            transform: scale(0);
-        }
-        
-        /* UPDATED: Correct 'X' transform */
-        #mobile-menu-toggle:checked ~ .mobile-hamburger .hamburger-icon span:nth-child(3) {
-            transform: translateY(-6px) rotate(-45deg);
-        }
-
-        #mobile-menu-toggle:checked ~ .mobile-dropdown-content {
-            max-height: 300px;
-        }
-
-        #mobile-menu-toggle:checked ~ .mobile-dropdown-content .mobile-nav-list {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Responsive Design - Mobile Only */
-        @media (max-width: 768px) {
-            .glass-nav {
-                display: none; /* Hide desktop navigation on mobile */
-            }
-            
-            .mobile-menu {
-                display: block; /* Show mobile menu on mobile */
-            }
-            
-            /* UPDATED: main-content margin-top was missing */
-            .main-content {
-                margin-top: 100px; /* Adjust for mobile menu height */
-            }
-        }
-
-        /* Keep desktop styles for larger screens */
-        @media (min-width: 769px) {
-            .mobile-menu {
-                display: none; /* Hide mobile menu on desktop */
-            }
-            
-            .glass-nav {
-                display: block; /* Show desktop navigation on desktop */
-            }
-
-            .main-content {
-                margin-top: 100px; /* Adjust for desktop menu height */
-            }
-        }
-        
-        /* Hero Section */
-        .hero {
-            height: 100vh;
-            position: relative;
+        .hero-top {
             display: flex;
             align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            /* Adjust hero to start from the top edge */
-            margin-top: -100px;
-        }
-        
-        .hero-bg {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(rgba(29, 42, 58, 0.7), rgba(18, 18, 18, 0.9)), url('https://via.placeholder.com/1920x1080/1D2A3A/F8F9FA?text=Industrial+Blueprint');
-            background-size: cover;
-            background-position: center;
-            z-index: -1;
-        }
-        
-        .hero-content {
-            text-align: center;
-            max-width: 800px;
-            padding: 0 2rem;
-            z-index: 2;
-        }
-        
-        .hero h1 {
-            font-family: var(--font-heading);
-            font-size: clamp(2rem, 5vw, 4rem);
-            font-weight: 700;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-            line-height: 1.2; 
-        }
-        
-        .hero-subtitle {
-            font-size: 1.5rem;
+            gap: 1rem; /* Reduced gap to bring text closer to orb */
             margin-bottom: 2rem;
-            color: var(--text-secondary);
-            font-family: var(--font-body);
-            font-weight: 400;
         }
-        
-        .typed-container {
-            font-family: var(--font-body);
-            font-weight: 600;
+
+        .hero-title {
+            font-size: clamp(3rem, 6vw, 5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            background: linear-gradient(to bottom right, #ffffff 30%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+
+        .hero-subtitle {
             font-size: 1.2rem;
-            color: var(--accent-teal);
-            margin-bottom: 3rem;
-            min-height: 2rem;
-        }
-        
-        .cta-buttons {
+            color: var(--text-muted);
             display: flex;
+            align-items: center;
             gap: 1rem;
-            justify-content: center;
-            flex-wrap: wrap;
+            min-height: 1.6em;
         }
-        
-        .btn {
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 5px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            display: inline-flex;
+
+        .hero-scroll-indicator {
+            position: absolute;
+            bottom: 2rem;
+            left: 0;
+            color: var(--text-muted);
+            font-size: 0.8rem;
+            display: flex;
             align-items: center;
             gap: 0.5rem;
-            font-family: var(--font-heading);
+            animation: bounce 2s infinite;
         }
-        
-        .btn-primary {
-            background: var(--accent-teal);
-            color: var(--charcoal-dark);
-        }
-        
-        .btn-primary:hover {
-            background: var(--accent-teal-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-        
-        .btn-secondary {
-            background: transparent;
-            color: var(--text-primary);
-            border: 2px solid var(--text-secondary);
-        }
-        
-        .btn-secondary:hover {
-            background: var(--text-primary);
-            color: var(--charcoal-dark);
-            border-color: var(--text-primary);
-            transform: translateY(-2px);
-        }
-        
-        /* Achievement Section */
-        .achievements {
-            padding: 5rem 0;
-            background: var(--charcoal-light);
-        }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
-        .section-title {
-            font-family: var(--font-heading);
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 3rem;
-            color: var(--text-primary);
-        }
-        
-        .achievements-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 2rem;
-            margin-top: 3rem;
-        }
-        
-        .achievement-card {
-            background: var(--charcoal-dark);
-            border-radius: 10px;
-            padding: 2rem;
-            text-align: center;
-            transition: all 0.3s ease;
-            border: 1px solid var(--charcoal-light);
-        }
-        
-        .achievement-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.3);
-            border-color: var(--accent-teal);
-        }
-        
-        .achievement-number {
-            font-family: var(--font-heading);
-            font-size: 3rem;
-            font-weight: 700;
-            color: var(--accent-teal);
-            display: block;
-        }
-        
-        .achievement-label {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            margin-top: 0.5rem;
-        }
-        
-        /* Skills Preview */
-        .skills-preview {
-            padding: 5rem 0;
-            background: var(--charcoal-dark);
-        }
-        
-        .skills-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 3rem;
-            margin-top: 3rem;
-        }
-        
-        .skill-item {
-            background: var(--charcoal-light);
-            border-radius: 10px;
-            padding: 2rem;
-            transition: all 0.3s ease;
-        }
-        
-        .skill-item:hover {
-            background: #3A4C63;
-            transform: translateY(-3px);
-        }
-        
-        .skill-name {
-            font-family: var(--font-heading);
-            font-size: 1.3rem;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-        }
-        
-        .skill-bar {
-            height: 8px;
-            background: var(--charcoal-dark);
-            border-radius: 4px;
-            overflow: hidden;
-        }
-        
-        .skill-progress {
-            height: 100%;
-            background: var(--accent-teal);
-            border-radius: 4px;
-            transition: width 2s ease;
-            width: 0;
-        }
-        
-        /* Projects Carousel */
-        .projects-section {
-            padding: 5rem 0;
-            background: var(--charcoal-light);
-        }
-        
-        .project-card {
-            background: var(--charcoal-dark);
-            border-radius: 15px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            border: 1px solid var(--charcoal-light);
-        }
-        
-        .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border-color: var(--accent-teal);
-        }
-        
-        .project-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            background: var(--charcoal-light);
-        }
-        
-        .project-content {
-            padding: 1.5rem;
-        }
-        
-        .project-title {
-            font-family: var(--font-heading);
-            font-size: 1.3rem;
-            color: var(--accent-teal);
-            margin-bottom: 1rem;
-        }
-        
-        .project-description {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            min-height: 100px;
-        }
-	
-    	.cta-shortcut {
-		    background: var(--charcoal-dark);
-		    padding: 5rem 0;
-		    text-align: center;
-		    border-top: 1px solid var(--charcoal-light);
-       		border-bottom: 1px solid var(--charcoal-light);
-    	}
 
-    	.cta-shortcut .section-title {
-        	margin-bottom: 2rem;
-        	font-size: 2rem;
-        	color: var(--accent-teal);
-    	}
+        @keyframes bounce { 0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 40% {transform: translateY(-5px);} 60% {transform: translateY(-3px);} }
 
-    	.cta-shortcut .btn-primary {
-		    padding: 1rem 2rem;
-        	font-size: 1rem;
-   	    }
-	
-        /* Footer */
-        footer {
-            background: var(--charcoal-dark);
-            padding: 2rem 0;
-            text-align: center;
-            border-top: 1px solid var(--charcoal-light);
-        }
-        
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
-        .footer-text {
-            color: var(--text-secondary);
+        /* --- 5. SECTIONS & CARDS --- */
+        .section-header {
             font-size: 0.9rem;
-        }
-        
-        /* Animation Classes */
-        .reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease;
-        }
-        
-        .reveal.revealed {
-            opacity: 1;
-            transform: translateY(0);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
+            margin-bottom: 1.5rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            text-shadow: 0 0 10px rgba(77, 182, 172, 0.3);
         }
 
-	#particles-js {
-    		position: fixed;
-    		width: 100%;
-    		height: 100%;
-    		top: 0;
-    		left: 0;
-    		z-index: -1;
-    		background-color: var(--charcoal-dark);
-	}
+        .section-header::after {
+            content: '';
+            height: 1px;
+            flex-grow: 1;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            opacity: 0.3;
+            margin-left: 1rem;
+        }
+
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid rgba(255,255,255,0.15);
+            border-radius: var(--radius-card);
+            box-shadow: var(--glass-shadow);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .glass-card:hover {
+            box-shadow: 0 15px 40px rgba(0,0,0,0.4);
+        }
+
+         /* --- FEATURED PROJECT CARD --- */
+        .project-card {
+            display: flex; 
+            text-decoration: none;
+            background: var(--glass-bg);
+            border: 1px solid var(--glass-border);
+            border-radius: var(--radius-card);
+            overflow: hidden;
+            transition: transform 0.4s ease, border-color 0.4s ease;
+            cursor: pointer;
+        }
+
+        .project-card:hover {
+            transform: scale(1.01);
+            border-color: rgba(255,255,255,0.2);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.4);
+        }
+
+        .project-img-container {
+            flex: 2; 
+            position: relative;
+            overflow: hidden;
+            border-right: 1px solid var(--glass-border); 
+        }
+
+        .project-img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover; 
+            transition: transform 0.6s ease;
+        }
+
+        .project-card:hover .project-img { transform: scale(1.05); }
+
+        .project-content-split {
+            flex: 3; 
+            padding: 2.5rem;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative; 
+        }
+
+        .project-content-split::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(to right, rgba(0,0,0,0.3), transparent);
+            z-index: -1;
+        }
+
+        .project-title {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #fff;
+            margin-bottom: 0.5rem;
+        }
+        
+        .project-overlay {
+            position: absolute;
+            bottom: 0; left: 0; width: 100%;
+            background: linear-gradient(to top, rgba(0,0,0,0.9) 0%, rgba(0,0,0,0.6) 50%, transparent 100%);
+            padding: 2.5rem;
+            backdrop-filter: blur(2px); 
+        }
+
+        /* --- TAG STYLES --- */
+        .project-tag {
+            display: inline-block;
+            background: var(--primary);
+            color: #000;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            margin-bottom: 0.8rem;
+            text-transform: uppercase;
+            box-shadow: 0 0 15px var(--primary-glow);
+        }
+
+        /* Award Tag */
+        .award-tag {
+            display: inline-block;
+            background: var(--primary); /* Turqoise */
+            color: #000; 
+            padding: 6px 14px; 
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-bottom: 1rem;
+            text-transform: uppercase;
+            box-shadow: 0 0 20px var(--primary-glow); 
+            border: 1px solid rgba(255,255,255,0.1);
+            width: max-content; 
+        }
+
+        /* --- SECONDARY GRID --- */
+        .secondary-projects-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+        }
+        .small-project-card {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+            text-decoration: none;
+        }
+        .small-project-card:hover { transform: translateY(-5px); }
+        
+        .small-project-img-wrapper {
+            height: 200px;
+            overflow: hidden;
+            border-bottom: 1px solid var(--glass-border);
+        }
+        .small-project-content { padding: 1.5rem; }
+        .small-project-title { color: #fff; margin-bottom: 0.5rem; font-size: 1.2rem; font-weight: 600; }
+        .small-project-desc { color: var(--text-muted); font-size: 0.9rem; line-height: 1.5; }
+
+        /* --- INFO GRID --- */
+        .info-grid {
+            display: grid;
+            grid-template-columns: 1.5fr 1fr;
+            gap: 1.5rem;
+        }
+        .info-pad { padding: 2rem; }
+
+        .skills-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.6rem;
+            margin-top: 1rem;
+        }
+        .skill-pill {
+            padding: 6px 14px;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 100px;
+            font-size: 0.85rem;
+            color: #e2e8f0;
+            transition: all 0.2s;
+        }
+        .skill-pill:hover { 
+            background: rgba(77, 182, 172, 0.15); 
+            border-color: var(--primary); 
+            color: var(--primary); 
+            box-shadow: 0 0 10px var(--primary-glow);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1.5rem;
+            margin-top: 1.5rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255,255,255,0.1);
+        }
+        .stat-item small { display: block; color: var(--text-muted); font-size: 0.75rem; text-transform: uppercase; margin-bottom: 0.2rem;}
+        .stat-item span { font-size: 1.5rem; font-weight: 700; color: #fff; text-shadow: 0 2px 10px rgba(0,0,0,0.5); }
+
+        /* --- DOCK --- */
+        .dock-wrapper {
+            position: fixed;
+            bottom: 2rem;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 100;
+            width: auto;
+        }
+
+        .dock {
+            background: rgba(15, 20, 30, 0.6); 
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding: 0.8rem 1rem;
+            border-radius: var(--radius-dock);
+            display: flex;
+            gap: 1rem;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.5);
+        }
+
+        .dock-icon {
+            width: 50px; height: 50px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 16px;
+            color: var(--text-muted);
+            font-size: 1.3rem;
+            text-decoration: none;
+            background: rgba(255,255,255,0.03);
+            border: 1px solid transparent;
+            transition: all 0.2s cubic-bezier(0.2, 0.8, 0.2, 1);
+            position: relative;
+        }
+
+        .dock-icon:hover {
+            transform: translateY(-8px) scale(1.1);
+            background: rgba(255,255,255,0.1);
+            border-color: rgba(255,255,255,0.2);
+            color: #fff;
+        }
+
+        .dock-icon.active {
+            background: var(--primary);
+            color: #000;
+            box-shadow: 0 0 20px var(--primary-glow);
+        }
+
+        .dock-icon::before {
+            content: attr(data-title);
+            position: absolute;
+            top: -40px; left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.8); color: #fff;
+            padding: 4px 10px; border-radius: 6px;
+            font-size: 0.75rem; opacity: 0;
+            pointer-events: none; transition: 0.2s; white-space: nowrap;
+            backdrop-filter: blur(4px);
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+        .dock-icon:hover::before { opacity: 1; top: -50px; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .hero { justify-content: center; min-height: 85vh; }
+            .hero-top { flex-direction: column-reverse; align-items: center; gap: 2rem; text-align: center; }
+            
+            /* Adjust blob size on mobile */
+            .lava-orb-container { width: 140px; height: 140px; margin-right: 0; margin-bottom: 1rem; }
+            
+            .hero-title { font-size: 3rem; }
+            .hero-subtitle { justify-content: center; }
+
+            .project-card { flex-direction: column; }
+            .project-img-container { 
+                flex: none;
+                height: 250px; 
+                border-right: none;
+                border-bottom: 1px solid var(--glass-border);
+            }
+            .project-content-split { flex: none; padding: 2rem; }
+            
+            .info-grid, .secondary-projects-grid { grid-template-columns: 1fr; }
+            
+            .dock-wrapper { bottom: 1.5rem; width: 90%; }
+            .dock { justify-content: space-between; width: 100%; gap: 0; padding: 0.8rem; }
+            .dock-icon { width: 45px; height: 45px; }
+        }
     </style>
 </head>
 <body>
-    <svg style="display: none">
-        <filter id="glass-distortion">
-            <feTurbulence type="turbulence" baseFrequency="0.008" numOctaves="2" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="77" />
-        </filter>
-    </svg>
 
-    <nav class="glass-nav">
-        <div class="glass-filter"></div>
-        <div class="glass-overlay"></div>
-        <div class="glass-specular"></div>
-        <div class="glass-content">
-            <a href="index.html" class="glass-logo">AVdP</a>
-            <ul class="nav-list">
-                <li><a href="index.html" class="nav-item active">Home</a></li>
-                <li><a href="about.html" class="nav-item">About</a></li>
-                <li><a href="projects.html" class="nav-item">Projects</a></li>
-                <li><a href="contact.html" class="nav-item">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="mobile-menu">
-        <input type="checkbox" id="mobile-menu-toggle" class="dropdown-toggle">
-        
-        <label for="mobile-menu-toggle" class="mobile-hamburger">
-            <div class="glass-filter"></div>
-            <div class="glass-overlay"></div>
-            <div class="glass-specular"></div>
-            <div class="glass-content">
-                <a href="index.html" class="glass-logo">AVdP</a>
-                <div class="hamburger-icon">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-        </label>
-        
-        <div class="mobile-dropdown-content">
-            <div class="glass-filter"></div>
-            <div class="glass-overlay"></div>
-            <div class="glass-specular"></div>
-            <ul class="mobile-nav-list">
-                <li><a href="index.html" class="mobile-nav-item active">Home</a></li>
-                <li><a href="about.html" class="mobile-nav-item">About</a></li>
-                <li><a href="projects.html" class="mobile-nav-item">Projects</a></li>
-                <li><a href="contact.html" class="mobile-nav-item">Contact</a></li>
-            </ul>
-        </div>
-    </div>
-
+    <!-- 1. LIGHTWEIGHT BACKGROUND -->
     <div id="particles-js"></div>
 
-    <section id="home" class="hero">
-        <div class="hero-bg"></div>
-        <div class="hero-content">
-            <h1 class="split-text">Alexander<br>Van den Putte</h1>
-            <div class="hero-subtitle">Master's Student Industrial Engineering</div>
-            <div class="typed-container">
+    <div class="main-container">
+        
+        <!-- HERO SECTION -->
+        <section class="hero reveal">
+            <div class="hero-top">
+                <!-- 3D Canvas Container -->
+                <div id="lava-orb-container" class="lava-orb-container"></div>
+                
+                <div>
+                    <div style="color: var(--primary); font-weight: 600; margin-bottom: 0.5rem; letter-spacing: 2px; font-size: 0.9rem;">HELLO, I AM</div>
+                    <h1 class="hero-title">Alexander<br>Van den Putte</h1>
+                </div>
+            </div>
+            
+            <div class="hero-subtitle">
                 <span id="typed-text"></span>
             </div>
-            <div class="cta-buttons">
-                <a href="about.html" class="btn btn-primary">
-                    <span>View My CV</span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z"/>
-                    </svg>
-                </a>
-                <a href="contact.html" class="btn btn-secondary">
-                    <span>Get In Touch</span>
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                        <path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>
-                    </svg>
-                </a>
-            </div>
-        </div>
-    </section>
 
-    <section class="achievements">
-        <div class="container">
-            <h2 class="section-title reveal">Key Metrics</h2>
-            <div class="achievements-grid">
-                <div class="achievement-card reveal">
-                    <span class="achievement-number counter" data-target="1">0</span>
-                    <div class="achievement-label">Bachelor's Thesis Award</div>
-                </div>
-                <div class="achievement-card reveal">
-                    <span class="achievement-number counter" data-target="5">0</span>
-                    <div class="achievement-label">Industrial Placements</div>
-                </div>
-                <div class="achievement-card reveal">
-                    <span class="achievement-number counter" data-target="9">0</span>
-                    <div class="achievement-label">Key Technical Skills</div>
-                </div>
-                <div class="achievement-card reveal">
-                    <span class="achievement-number counter" data-target="2026">0</span>
-                    <div class="achievement-label">Expected Graduation</div>
-                </div>
+            <div class="hero-scroll-indicator">
+                SCROLL TO EXPLORE <i class="fas fa-chevron-down"></i>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <section class="skills-preview">
-        <div class="container">
-            <h2 class="section-title reveal">Technical Skills</h2>
-            <div class="skills-grid">
-                <div class="skill-item reveal">
-                    <div class="skill-name">MS365</div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" data-width="100"></div>
-                    </div>
+        <!-- THESIS SECTION -->
+        <section class="reveal">
+            <div class="section-header"><i class="fas fa-star"></i> Featured Thesis</div>
+            
+            <a href="projects.html" class="project-card">
+                <div class="project-img-container">
+                    <img src="resources/ornithopter.jpg" alt="Ornithopter" class="project-img" onerror="this.src='https://placehold.co/600x400/1a1a1a/4DB6AC?text=Ornithopter+Thesis'">
                 </div>
-                <div class="skill-item reveal">
-                    <div class="skill-name">Autodesk Inventor (CAD)</div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" data-width="95"></div>
-                    </div>
+                <div class="project-content-split">
+                    <span class="award-tag">Award Winner</span>
+                    <h2 class="project-title">Biomechanical Ornithopter</h2>
+                    <p style="color: #e2e8f0; max-width: 600px;">
+                        Designing and prototyping a robotic bird that precisely mimics biological flight mechanics. 
+                        Winner of "Pitch je STEM-project" 2025.
+                    </p>
                 </div>
-                <div class="skill-item reveal">
-                    <div class="skill-name">TIA Portal</div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" data-width="80"></div>
-                    </div>
-                </div>
-                <div class="skill-item reveal">
-                    <div class="skill-name">MATLAB/Simulink</div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" data-width="75"></div>
-                    </div>
-                </div>
-                <div class="skill-item reveal">
-                    <div class="skill-name">FEA (Abaqus)</div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" data-width="70"></div>
-                    </div>
-                </div>
-                <div class="skill-item reveal">
-                    <div class="skill-name">Python</div>
-                    <div class="skill-bar">
-                        <div class="skill-progress" data-width="60"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="projects-section">
-        <div class="container">
-            <h2 class="section-title reveal">Featured Projects</h2>
-            <div class="splide project-carousel reveal">
-                <div class="splide__track">
-                    <ul class="splide__list">
-                        <li class="splide__slide">
-                            <div class="project-card">
-                                <img src="resources/ornithopter.jpg" alt="STEM Project Winner" class="project-image">
-                                <div class="project-content">
-                                    <h3 class="project-title">Bachelor's Thesis: Ornithopter</h3>
-                                    <p class="project-description">Award-winning final year project. Designed and prototyped a biomechanical ornithopter to precisely mimic a bird's wing flap.</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="splide__slide">
-                            <div class="project-card">
-                                <img src="resources/prototyping.jpg" alt="Personal Projects" class="project-image">
-                                <div class="project-content">
-                                    <h3 class="project-title">Personal Prototyping</h3>
-                                    <p class="project-description">Using 3D printing, lasercutting, and electronics to invent new products, create custom solutions, and repair broken parts. A hands-on thinker and maker.</p>
-                                </div>
-                            </div>
-                        </li>
-                        <li class="splide__slide">
-                            <div class="project-card">
-                                <img src="resources/maakplek.jpg" alt="De Maakplek" class="project-image">
-                                <div class="project-content">
-                                    <h3 class="project-title">Volunteer at 'De Maakplek'</h3>
-                                    <p class="project-description">Volunteering at 'De Maakplek' in Westerlo, a public makerspace. I help people use technologies like 3D printers and lasercutters, and I develop workshops.</p>
-                                </div>
-                            </div>
-                        </li>
-                    </ul>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section class="cta-shortcut">
-        <div class="container">
-            <h2 class="section-title reveal">Ready to Connect?</h2>
-            <a href="contact.html" class="btn btn-primary reveal">
-                <span>Send Me a Message</span>
             </a>
-        </div>
-    </section>
+        </section>
 
-    <footer>
-        <div class="footer-content">
-            <p class="footer-text">&copy; 2025 Alexander Van den Putte. All rights reserved. | Industrial Engineering Portfolio</p>
-        </div>
-    </footer>
+        <!-- SECONDARY PROJECTS -->
+        <section class="reveal">
+            <div class="section-header"><i class="fas fa-hammer"></i> Maker Spirit</div>
+            <div class="secondary-projects-grid">
+                <a href="projects.html" class="glass-card small-project-card">
+                    <div class="small-project-img-wrapper">
+                        <img src="resources/prototyping.jpg" alt="Prototyping" class="project-img" onerror="this.src='https://placehold.co/600x400/1a1a1a/4DB6AC?text=Prototyping'">
+                    </div>
+                    <div class="small-project-content">
+                        <h3 class="small-project-title">Personal Prototyping</h3>
+                        <p class="small-project-desc">
+                            Using 3D printing, lasercutting, and electronics to invent new products and repair broken parts. A hands-on thinker and maker.
+                        </p>
+                    </div>
+                </a>
+                <a href="projects.html" class="glass-card small-project-card">
+                    <div class="small-project-img-wrapper">
+                        <img src="resources/maakplek.jpg" alt="Maakplek" class="project-img" onerror="this.src='https://placehold.co/600x400/1a1a1a/4DB6AC?text=De+Maakplek'">
+                    </div>
+                    <div class="small-project-content">
+                        <h3 class="small-project-title">Volunteer at 'De Maakplek'</h3>
+                        <p class="small-project-desc">
+                            Volunteering at a public makerspace in Westerlo. I help people use technologies like 3D printers and lasercutters, and develop workshops.
+                        </p>
+                    </div>
+                </a>
+            </div>
+        </section>
 
-    <script src="main.js"></script>
+        <!-- PROFILE & SKILLS -->
+        <section class="reveal">
+            <div class="section-header"><i class="fa-solid fa-gears"></i> The Engineer</div>
+            <div class="info-grid">
+                <div class="glass-card info-pad">
+                    <h3 style="font-size: 1.5rem; margin-bottom: 1rem; color: #fff;">Problem Solver & Maker.</h3>
+                    <p style="color: var(--text-muted); margin-bottom: 1.5rem;">
+                        I am an Industrial Engineering student at KU Leuven specializing in Electromechanics, with a focus on design and project management.
+			<br><br>I bridge the gap between mechanical design and digital control, building systems that are modular, efficient, and reliable.
+                    </p>
+                    <br><br><a href="about.html" style="color: var(--primary); text-decoration: none; font-weight: 600; display: flex; align-items: center; gap: 0.5rem;">
+                        Read Full Profile <i class="fas fa-arrow-right"></i>
+                    </a>
+                </div>
 
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+                <div class="glass-card info-pad">
+                    <div>
+                        <strong style="color: #fff; display: block; margin-bottom: 0.5rem;">Technical Arsenal</strong>
+                        <div class="skills-wrapper">
+                            <span class="skill-pill">Inventor</span>
+                            <span class="skill-pill">MS365</span>
+                            <span class="skill-pill">Python</span>
+                            <span class="skill-pill">TIA Portal</span>
+                            <span class="skill-pill">MATLAB</span>
+                            <span class="skill-pill">Abaqus</span>
+                        </div>
+                    </div>
+                    
+                    <div class="stats-grid">
+                        <div class="stat-item">
+                            <small>Thesis Award</small>
+                            <span class="counter" data-target="1">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <small>Placements</small>
+                            <span class="counter" data-target="5">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <small>Graduation</small>
+                            <span class="counter" data-target="2026">0</span>
+                        </div>
+                        <div class="stat-item">
+                            <small>Status</small>
+                            <span style="color: var(--primary); font-size: 1rem; text-transform: uppercase; font-weight: 800;">Open</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CALL TO ACTION -->
+        <section class="reveal" style="text-align: center; padding: 4rem 0;">
+            <h2 style="font-size: 2rem; margin-bottom: 1rem; color: #fff;">Ready to connect?</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">
+                contact me to start building something new together
+            </p>
+            <a href="contact.html" style="display: inline-block; padding: 1rem 3rem; background: var(--primary); color: #000; border-radius: 50px; text-decoration: none; font-weight: 700; transition: transform 0.2s; box-shadow: 0 0 20px var(--primary-glow);">
+                Let's Talk
+            </a>
+        </section>
+    </div>
+
+    <!-- DOCK NAVIGATION -->
+    <div class="dock-wrapper">
+        <nav class="dock">
+            <a href="index.html" class="dock-icon active" data-title="Home">
+                <i class="fas fa-home"></i>
+            </a>
+            <a href="about.html" class="dock-icon" data-title="About">
+                <i class="fas fa-user"></i>
+            </a>
+            <a href="projects.html" class="dock-icon" data-title="Projects">
+                <i class="fas fa-layer-group"></i>
+            </a>
+            <a href="contact.html" class="dock-icon" data-title="Contact">
+                <i class="fas fa-envelope"></i>
+            </a>
+            <div style="width: 1px; background: rgba(255,255,255,0.1); height: 30px; margin: auto 0.2rem;"></div>
+            <a href="https://www.linkedin.com/in/alexander-van-den-putte-6183b81a0/" target="_blank" class="dock-icon" data-title="LinkedIn">
+                <i class="fab fa-linkedin"></i>
+            </a>
+        </nav>
+    </div>
+
+    <!-- --- SCRIPTS --- -->
     <script>
-    particlesJS('particles-js', 
-      {
-        "particles": {
-          "number": { "value": 80, "density": { "enable": true, "value_area": 800 } },
-          "color": { "value": "#4DB6AC" },
-          "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 } },
-          "opacity": { "value": 0.5, "random": false, "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false } },
-          "size": { "value": 3, "random": true, "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false } },
-          "line_linked": { "enable": true, "distance": 150, "color": "#C0C5CC", "opacity": 0.4, "width": 1 },
-          "move": { "enable": true, "speed": 3, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 } }
-        },
-        "interactivity": {
-          "detect_on": "canvas",
-          "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
-          "modes": {
-            "grab": { "distance": 400, "line_linked": { "opacity": 1 } },
-            "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
-            "repulse": { "distance": 100, "duration": 0.4 },
-            "push": { "particles_nb": 4 },
-            "remove": { "particles_nb": 2 }
-          }
-        },
-        "retina_detect": true
-      }
-    );
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // 1. Particles
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": { "value": 40, "density": { "enable": true, "value_area": 800 } },
+                    "color": { "value": "#4DB6AC" },
+                    "shape": { "type": "circle" },
+                    "opacity": { "value": 0.2, "random": true },
+                    "size": { "value": 3, "random": true },
+                    "line_linked": { "enable": true, "distance": 150, "color": "#4DB6AC", "opacity": 0.1, "width": 1 },
+                    "move": { "enable": true, "speed": 1, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                    "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 0.5 } } }
+                },
+                "retina_detect": true
+            });
+
+            // 2. Typed.js
+            new Typed('#typed-text', {
+                strings: [
+                    'Master\'s Student @ KU Leuven.',
+                    'Specializing in Electromechanics.',
+                    'Problem-Solver & Innovator.',
+                    'Reliability Specialist.'
+                ],
+                typeSpeed: 40,
+                backSpeed: 25,
+                backDelay: 2000,
+                loop: true
+            });
+
+            // 3. Scroll Reveal
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                        const counters = entry.target.querySelectorAll('.counter');
+                        counters.forEach(counter => animateCounter(counter));
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(section => {
+                observer.observe(section);
+            });
+
+            function animateCounter(element) {
+                if(element.classList.contains('counted')) return;
+                element.classList.add('counted');
+                const target = parseInt(element.getAttribute('data-target'));
+                if (isNaN(target)) return;
+                let start = 0; let duration = 1500; 
+                if (target > 2000) { start = 2000; }
+                const stepTime = 20; const steps = duration / stepTime;
+                const increment = (target - start) / steps;
+                const timer = setInterval(() => {
+                    start += increment;
+                    if ((increment > 0 && start >= target) || (increment < 0 && start <= target)) {
+                        start = target; clearInterval(timer);
+                    }
+                    element.textContent = Math.floor(start);
+                }, stepTime);
+            }
+
+            // 4. Tilt
+            if (window.innerWidth > 768) {
+                VanillaTilt.init(document.querySelectorAll(".glass-card, .project-card"), {
+                    max: 3, speed: 400, glare: true, "max-glare": 0.1, scale: 1.01
+                });
+            }
+
+            // ------------------------------------------------------------
+            // 5. HIGH QUALITY 3D BLOB (Three.js + GLSL Shaders)
+            // ------------------------------------------------------------
+            const container = document.getElementById('lava-orb-container');
+            let scene, camera, renderer, blob, material;
+            const clock = new THREE.Clock(); // Frame-rate independent clock
+            
+            function initBlob() {
+                const width = container.clientWidth;
+                const height = container.clientHeight;
+
+                scene = new THREE.Scene();
+                
+                // Perspective Camera for 3D depth
+                camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+                camera.position.z = 3.5; // Updated to match tuner
+
+                renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+                renderer.setSize(width, height);
+                renderer.setPixelRatio(window.devicePixelRatio); // Crucial for "High Quality" crispness
+                container.appendChild(renderer.domElement);
+
+                // GLSL Vertex Shader: Simplex Noise displacement
+                // This physically moves the vertices of the sphere
+                const vertexShader = `
+                    uniform float time;
+                    uniform float roughness;
+                    uniform float density;
+                    varying vec2 vUv;
+                    varying vec3 vNormal;
+                    varying vec3 vPosition;
+                    varying float vDisplacement;
+
+                    // Classic Perlin 3D Noise 
+                    vec3 mod289(vec3 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                    vec4 mod289(vec4 x) { return x - floor(x * (1.0 / 289.0)) * 289.0; }
+                    vec4 permute(vec4 x) { return mod289(((x*34.0)+1.0)*x); }
+                    vec4 taylorInvSqrt(vec4 r) { return 1.79284291400159 - 0.85373472095314 * r; }
+                    float snoise(vec3 v) { 
+                        const vec2  C = vec2(1.0/6.0, 1.0/3.0) ;
+                        const vec4  D = vec4(0.0, 0.5, 1.0, 2.0);
+                        // First corner
+                        vec3 i  = floor(v + dot(v, C.yyy) );
+                        vec3 x0 = v - i + dot(i, C.xxx) ;
+                        // Other corners
+                        vec3 g = step(x0.yzx, x0.xyz);
+                        vec3 l = 1.0 - g;
+                        vec3 i1 = min( g.xyz, l.zxy );
+                        vec3 i2 = max( g.xyz, l.zxy );
+                        vec3 x1 = x0 - i1 + C.xxx;
+                        vec3 x2 = x0 - i2 + C.yyy; // 2.0*C.x = 1/3 = C.y
+                        vec3 x3 = x0 - D.yyy;      // -1.0+3.0*C.x = -0.5 = -D.y
+                        // Permutations
+                        i = mod289(i); 
+                        vec4 p = permute( permute( permute( 
+                                    i.z + vec4(0.0, i1.z, i2.z, 1.0 ))
+                                + i.y + vec4(0.0, i1.y, i2.y, 1.0 )) 
+                                + i.x + vec4(0.0, i1.x, i2.x, 1.0 ));
+                        // Gradients: 7x7 points over a square, mapped onto an octahedron.
+                        // The ring size 17*17 = 289 is close to a multiple of 49 (49*6 = 294)
+                        float n_ = 0.142857142857; // 1.0/7.0
+                        vec3  ns = n_ * D.wyz - D.xzx;
+                        vec4 j = p - 49.0 * floor(p * ns.z * ns.z);  //  mod(p,7*7)
+                        vec4 x_ = floor(j * ns.z);
+                        vec4 y_ = floor(j - 7.0 * x_ );    // mod(j,N)
+                        vec4 x = x_ *ns.x + ns.yyyy;
+                        vec4 y = y_ *ns.x + ns.yyyy;
+                        vec4 h = 1.0 - abs(x) - abs(y);
+                        vec4 b0 = vec4( x.xy, y.xy );
+                        vec4 b1 = vec4( x.zw, y.zw );
+                        vec4 s0 = floor(b0)*2.0 + 1.0;
+                        vec4 s1 = floor(b1)*2.0 + 1.0;
+                        vec4 sh = -step(h, vec4(0.0));
+                        vec4 a0 = b0.xzyw + s0.xzyw*sh.xxyy ;
+                        vec4 a1 = b1.xzyw + s1.xzyw*sh.zzww ;
+                        vec3 p0 = vec3(a0.xy,h.x);
+                        vec3 p1 = vec3(a0.zw,h.y);
+                        vec3 p2 = vec3(a1.xy,h.z);
+                        vec3 p3 = vec3(a1.zw,h.w);
+                        //Normalise gradients
+                        vec4 norm = taylorInvSqrt(vec4(dot(p0,p0), dot(p1,p1), dot(p2, p2), dot(p3,p3)));
+                        p0 *= norm.x;
+                        p1 *= norm.y;
+                        p2 *= norm.z;
+                        p3 *= norm.w;
+                        // Mix final noise value
+                        vec4 m = max(0.6 - vec4(dot(x0,x0), dot(x1,x1), dot(x2,x2), dot(x3,x3)), 0.0);
+                        m = m * m;
+                        return 42.0 * dot( m*m, vec4( dot(p0,x0), dot(p1,x1), 
+                                                    dot(p2,x2), dot(p3,x3) ) );
+                    }
+
+                    void main() {
+                        vUv = uv;
+                        vNormal = normal;
+                        
+                        // Noise determines how much to push the vertex out along its normal
+                        float noise = snoise(position * density + time);
+                        
+                        // Pass noise to fragment for coloring
+                        vDisplacement = noise;
+                        
+                        // Multiply by roughness to control spike height
+                        vec3 newPos = position + normal * noise * roughness;
+                        vPosition = newPos;
+                        
+                        gl_Position = projectionMatrix * modelViewMatrix * vec4(newPos, 1.0);
+                    }
+                `;
+
+                // GLSL Fragment Shader: "Solid Liquid" Look
+                // Calculates color, Fresnel glow, and gloss
+                const fragmentShader = `
+                    uniform vec3 colorBase;
+                    uniform vec3 colorDark;
+                    uniform vec3 colorHigh;
+                    
+                    uniform float fresnelPower;
+                    uniform float fresnelInt;
+                    uniform float specularInt;
+                    
+                    varying vec2 vUv;
+                    varying vec3 vNormal;
+                    varying vec3 vPosition;
+                    varying float vDisplacement;
+
+                    void main() {
+                        // 1. Base Color Mix based on noise displacement (Depth)
+                        // Deeper parts are darker, raised parts are lighter
+                        float mixFactor = smoothstep(-0.5, 0.5, vDisplacement);
+                        vec3 base = mix(colorDark, colorBase, mixFactor);
+
+                        // 2. Fresnel Effect (The Glowing Edge)
+                        // Calculates angle between view direction and surface normal
+                        vec3 viewDir = normalize(cameraPosition - vPosition);
+                        vec3 normal = normalize(vNormal);
+                        float fresnel = pow(1.0 - dot(viewDir, normal), fresnelPower);
+                        
+                        // 3. Specular Highlight (Glossiness)
+                        vec3 lightDir = normalize(vec3(1.0, 1.0, 1.0));
+                        float specular = pow(max(dot(reflect(-lightDir, normal), viewDir), 0.0), 16.0);
+
+                        // Combine layers
+                        vec3 finalColor = base;
+                        finalColor += colorHigh * fresnel * fresnelInt; // Add Rim Glow
+                        finalColor += vec3(1.0) * specular * specularInt; // Add White Highlight
+
+                        gl_FragColor = vec4(finalColor, 1.0);
+                    }
+                `;
+
+                // Use Icosahedron for smooth sphere base
+                // Detail level 64 makes it extremely high poly and smooth
+                const geometry = new THREE.IcosahedronGeometry(1, 64);
+
+                // --- UPDATED VALUES FROM USER SCREENSHOT ---
+                material = new THREE.ShaderMaterial({
+                    uniforms: {
+                        time: { value: 0.0 },
+                        
+                        // Shape
+                        roughness: { value: 0.13 },
+                        density: { value: 0.6 },
+                        
+                        // Colors
+                        colorBase: { value: new THREE.Color('#4DB6AC') }, 
+                        colorDark: { value: new THREE.Color('#3B8080') }, // Lighter shadow for less contrast
+                        colorHigh: { value: new THREE.Color('#61CABD') }, // Glow
+                        
+                        // Lighting
+                        fresnelPower: { value: 2 },
+                        fresnelInt: { value: 0.08 }, // Reduced glow
+                        specularInt: { value: 0.10 }, // Reduced gloss
+                    },
+                    vertexShader: vertexShader,
+                    fragmentShader: fragmentShader,
+                });
+
+                blob = new THREE.Mesh(geometry, material);
+                scene.add(blob);
+            }
+
+            function animateBlob() {
+                requestAnimationFrame(animateBlob);
+                
+                const delta = clock.getDelta(); // Time since last frame in seconds
+                
+                // Update time uniform to animate the noise
+                // Increased fluid movement speed to compensate for lack of rotation
+                material.uniforms.time.value += 0.3 * delta;
+                
+                renderer.render(scene, camera);
+            }
+
+            // Initialize
+            window.onload = function () {
+                initBlob();
+                animateBlob();
+            };
+
+            // Responsive resize
+            window.addEventListener('resize', () => {
+                if (renderer && container) {
+                    const w = container.clientWidth;
+                    const h = container.clientHeight;
+                    renderer.setSize(w, h);
+                    camera.aspect = w / h;
+                    camera.updateProjectionMatrix();
+                }
+            });
+        });
     </script>
-    
 </body>
 </html>

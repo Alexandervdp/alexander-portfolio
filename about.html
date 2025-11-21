@@ -2,1054 +2,754 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Me - Alexander Van den Putte</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>About | Alexander Van den Putte</title>
     
+    <!-- Typography: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/echarts/5.4.3/echarts.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/splitting@1.0.6/dist/splitting.css">
-    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.min.js"></script>
 
     <style>
         :root {
-            --charcoal-dark: #1D2A3A; /* Dark background */
-            --charcoal-light: #2A3B4F; /* Lighter card background */
-            --text-primary: #F8F9FA; /* Bright text */
-            --text-secondary: #C0C5CC; /* Subdued text */
-            --accent-teal: #4DB6AC; /* Main accent */
-            --accent-teal-dark: #26A69A; /* Hover */
-
-            --font-heading: 'Montserrat', sans-serif;
-            --font-body: 'Open Sans', sans-serif;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        body {
-            font-family: var(--font-body);
-            background: var(--charcoal-dark);
-            color: var(--text-primary);
-            line-height: 1.6;
-            overflow-x: hidden;
-        }
-        
-        /* Floating Island Glass Navigation Bar - DESKTOP */
-        .glass-nav {
-            --bg-color: rgba(29, 42, 58, 0.7);
-            --highlight: rgba(255, 255, 255, 0.2);
-            --text: #F8F9FA;
+            /* Brand Colors */
+            --primary: #4DB6AC;
+            --primary-dark: #004d40;
+            --primary-glow: rgba(77, 182, 172, 0.5);
             
+            /* Background Gradient Colors */
+            --bg-center: #172a45; /* Darkish Blue Center */
+            --bg-edge: #020202;   /* Deep Black Edge */
+            
+            /* Glass UI - Enhanced */
+            --glass-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-blur: 16px;
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            
+            /* Radius */
+            --radius-card: 24px;
+            --radius-dock: 24px;
+            
+            --text-white: #ffffff;
+            --text-muted: #94a3b8;
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            background: radial-gradient(circle at 50% 30%, var(--bg-center), var(--bg-edge) 80%);
+            background-attachment: fixed;
+            color: var(--text-white);
+            font-family: 'Inter', sans-serif;
+            overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.6;
+        }
+
+        /* --- 1. BACKGROUND --- */
+        #particles-js {
             position: fixed;
-            top: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 95%;
-            max-width: 800px;
-            border-radius: 16px;
-            overflow: hidden;
-            background: transparent;
-            z-index: 1000;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+            top: 0; left: 0; width: 100%; height: 100%;
+            z-index: -1;
+            opacity: 0.6; 
         }
 
-        .glass-filter,
-        .glass-overlay,
-        .glass-specular {
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
+        /* --- 2. LAYOUT --- */
+        .main-container {
+            max-width: 1100px; 
+            margin: 0 auto;
+            padding: 6rem 1.5rem 8rem; 
         }
 
-        .glass-filter {
-            z-index: 1;
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            filter: url(#glass-distortion) saturate(120%) brightness(1.1);
+        section {
+            margin-bottom: 5rem;
+            opacity: 0; 
+            transform: translateY(30px);
+            transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1);
         }
 
-        .glass-overlay {
-            z-index: 2;
-            background: var(--bg-color);
-        }
-
-        .glass-specular {
-            z-index: 3;
-            box-shadow: 
-                inset 1px 1px 0 var(--highlight),
-                inset -1px -1px 0 rgba(0, 0, 0, 0.1);
-        }
-
-        .glass-content {
-            position: relative;
-            z-index: 4;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .glass-logo {
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent-teal);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .glass-logo:hover {
-            color: var(--text-primary);
-            transform: scale(1.05);
-        }
-
-        .nav-list {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .nav-item {
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            font-family: var(--font-body);
-            white-space: nowrap;
-        }
-
-        .nav-item:hover {
-            background-color: rgba(77, 182, 172, 0.2);
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .nav-item.active {
-            background-color: rgba(77, 182, 172, 0.3);
-            color: var(--accent-teal);
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(77, 182, 172, 0.25);
-        }
-
-        /* Mobile Hamburger Menu */
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 95%;
-            max-width: 400px;
-            z-index: 1000;
-        }
-
-        .mobile-hamburger {
-            position: relative;
-            width: 100%;
-            border-radius: 16px;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .mobile-hamburger .glass-filter,
-        .mobile-hamburger .glass-overlay,
-        .mobile-hamburger .glass-specular {
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-        }
-
-        .mobile-hamburger .glass-filter {
-            z-index: 1;
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            filter: url(#glass-distortion) saturate(120%) brightness(1.1);
-        }
-
-        .mobile-hamburger .glass-overlay {
-            z-index: 2;
-            background: rgba(29, 42, 58, 0.7);
-        }
-
-        .mobile-hamburger .glass-specular {
-            z-index: 3;
-            box-shadow: 
-                inset 1px 1px 0 rgba(255, 255, 255, 0.2),
-                inset -1px -1px 0 rgba(0, 0, 0, 0.1);
-        }
-
-        .mobile-hamburger .glass-content {
-            position: relative;
-            z-index: 4;
-            padding: 1rem 2rem;
-            color: var(--text-primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: var(--font-heading);
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .hamburger-icon {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            transition: transform 0.3s ease;
-            justify-content: center;
-            align-items: center;
-            width: 20px;
-            height: 14px; 
-        }
-
-        .hamburger-icon span {
-            width: 20px;
-            height: 2px;
-            background: var(--text-primary);
-            border-radius: 2px;
-            transition: all 0.3s ease;
-            transform-origin: center;
-        }
-
-        /* Mobile Dropdown Menu */
-        .mobile-dropdown-content {
-            position: relative;
-            overflow: hidden;
-            max-height: 0;
-            transition: max-height 0.4s ease;
-            border-radius: 16px;
-            margin-top: 8px;
-        }
-
-        .mobile-dropdown-content .glass-filter,
-        .mobile-dropdown-content .glass-overlay,
-        .mobile-dropdown-content .glass-specular {
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-        }
-
-        .mobile-dropdown-content .glass-filter {
-            z-index: 1;
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            filter: url(#glass-distortion) saturate(120%) brightness(1.1);
-        }
-
-        .mobile-dropdown-content .glass-overlay {
-            z-index: 2;
-            background: rgba(29, 42, 58, 0.8);
-        }
-
-        .mobile-dropdown-content .glass-specular {
-            z-index: 3;
-            box-shadow: 
-                inset 1px 1px 0 rgba(255, 255, 255, 0.2),
-                inset -1px -1px 0 rgba(0, 0, 0, 0.1);
-        }
-
-        .mobile-nav-list {
-            position: relative;
-            z-index: 4;
-            list-style: none;
-            margin: 0;
-            padding: 1.5rem;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease 0.1s;
-        }
-
-        .mobile-nav-list li {
-            margin-bottom: 0.8rem;
-        }
-
-        .mobile-nav-list li:last-child {
-            margin-bottom: 0;
-        }
-
-        .mobile-nav-item {
-            color: var(--text-primary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            font-family: var(--font-body);
-            display: block;
-            text-align: right;
-        }
-
-        .mobile-nav-item:hover,
-        .mobile-nav-item.active {
-            background-color: rgba(77, 182, 172, 0.3);
-            color: var(--accent-teal);
-            transform: translateY(-2px);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Mobile Menu Toggle States */
-        #mobile-menu-toggle {
-            display: none;
-        }
-
-        #mobile-menu-toggle:checked ~ .mobile-hamburger .hamburger-icon span:nth-child(1) {
-            transform: translateY(6px) rotate(45deg);
-        }
-
-        #mobile-menu-toggle:checked ~ .mobile-hamburger .hamburger-icon span:nth-child(2) {
-            opacity: 0;
-            transform: scale(0);
-        }
-        
-        #mobile-menu-toggle:checked ~ .mobile-hamburger .hamburger-icon span:nth-child(3) {
-            transform: translateY(-6px) rotate(-45deg);
-        }
-
-        #mobile-menu-toggle:checked ~ .mobile-dropdown-content {
-            max-height: 300px;
-        }
-
-        #mobile-menu-toggle:checked ~ .mobile-dropdown-content .mobile-nav-list {
+        section.visible {
             opacity: 1;
             transform: translateY(0);
         }
 
-        /* Responsive Design - Mobile Only */
-        @media (max-width: 768px) {
-            .glass-nav {
-                display: none; 
-            }
-            
-            .mobile-menu {
-                display: block; 
-            }
-            
-            .main-content {
-                margin-top: 100px; 
-            }
-        }
+        /* --- 3. TYPOGRAPHY --- */
+        .page-header { text-align: center; margin-bottom: 4rem; }
 
-        /* Keep desktop styles for larger screens */
-        @media (min-width: 769px) {
-            .mobile-menu {
-                display: none; 
-            }
-            
-            .glass-nav {
-                display: block; 
-            }
-
-            .main-content {
-                margin-top: 100px; 
-            }
-        }
-        
-        /* Main Content */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
         .page-title {
-            font-family: var(--font-heading);
-            font-size: 3rem;
-            text-align: center;
-            margin-bottom: 3rem;
-            color: var(--text-primary);
-        }
-        
-        /* Personal Info Section */
-        .personal-info {
-            display: grid;
-            grid-template-columns: 1fr 2fr;
-            gap: 3rem;
-            margin-bottom: 4rem;
-            align-items: center;
-        }
-        
-        .profile-image {
-            width: 300px;
-            height: 300px;
-            border-radius: 50%;
-            object-fit: cover;
-            border: 5px solid var(--accent-teal);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
-            transition: all 0.3s ease;
-            background: var(--charcoal-light);
-        }
-        
-        .profile-image:hover {
-            transform: scale(1.05);
-            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
-        }
-        
-        .personal-details h2 {
-            font-family: var(--font-heading);
-            font-size: 2rem;
-            color: var(--accent-teal);
+            font-size: clamp(2.5rem, 5vw, 4rem);
+            font-weight: 800;
+            line-height: 1.1;
+            letter-spacing: -0.02em;
+            background: linear-gradient(to bottom right, #ffffff 30%, #94a3b8 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-shadow: 0 10px 30px rgba(0,0,0,0.2);
             margin-bottom: 1rem;
         }
-        
-        .personal-details p {
-            font-size: 1.1rem;
-            line-height: 1.8;
+
+        .section-header {
+            font-size: 0.9rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary);
             margin-bottom: 1.5rem;
-            color: var(--text-secondary);
-        }
-        
-        .cv-download-btn {
-            display: inline-flex;
+            display: flex;
             align-items: center;
             gap: 0.5rem;
-            padding: 1rem 2rem;
-            background: var(--accent-teal);
-            color: var(--charcoal-dark);
-            text-decoration: none;
-            border-radius: 5px;
-            font-weight: 600;
-            transition: all 0.3s ease;
-            border: none;
-            cursor: pointer;
-            font-family: var(--font-heading);
-        }
-        
-        .cv-download-btn:hover {
-            background: var(--accent-teal-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+            text-shadow: 0 0 10px rgba(77, 182, 172, 0.3);
         }
 
-        .cv-download-btn:disabled {
-            background: var(--text-secondary);
-            cursor: not-allowed;
+        .section-header::after {
+            content: ''; height: 1px; flex-grow: 1;
+            background: linear-gradient(90deg, var(--primary), transparent);
+            opacity: 0.3; margin-left: 1rem;
         }
 
-        /* Base Button Style */
-        .btn {
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 5px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-family: var(--font-heading);
+        /* --- 4. GLASS COMPONENTS --- */
+        .glass-card {
+            background: var(--glass-bg);
+            backdrop-filter: blur(var(--glass-blur));
+            -webkit-backdrop-filter: blur(var(--glass-blur));
+            border: 1px solid var(--glass-border);
+            border-top: 1px solid rgba(255,255,255,0.15);
+            border-radius: var(--radius-card);
+            box-shadow: var(--glass-shadow);
+            overflow: hidden;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            padding: 2.5rem;
+            height: 100%;
         }
-        
-        .btn-primary {
-            background: var(--accent-teal);
-            color: var(--charcoal-dark);
+
+        /* --- 5. PROFILE --- */
+        .profile-wrapper { display: flex; gap: 3rem; align-items: center; }
+
+        .profile-img-container {
+            flex-shrink: 0;
+            width: 250px; height: 250px;
+            border-radius: 24px;
+            overflow: hidden;
+            border: 2px solid rgba(255,255,255,0.1);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
         }
-        
-        .btn-primary:hover {
-            background: var(--accent-teal-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+
+        .profile-img {
+            width: 100%; height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
         }
-        
-        /* Base Card Style */
-        .card {
-            background: var(--charcoal-light);
-            border-radius: 15px;
-            padding: 2rem;
-            margin-bottom: 2rem;
-            border: 1px solid var(--charcoal-light);
+        .glass-card:hover .profile-img { transform: scale(1.05); }
+
+        .btn-download {
+            display: inline-flex; align-items: center; gap: 0.5rem;
+            padding: 0.8rem 2rem;
+            background: rgba(77, 182, 172, 0.1);
+            border: 1px solid var(--primary);
+            color: var(--primary);
+            border-radius: 50px;
+            text-decoration: none; font-weight: 600;
             transition: all 0.3s ease;
         }
-
-        .card:hover {
-            border-color: var(--accent-teal);
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
-        }
-        
-        .section-title {
-            font-family: var(--font-heading);
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 3rem;
-            color: var(--text-primary);
+        .btn-download:hover {
+            background: var(--primary); color: #000;
+            box-shadow: 0 0 20px var(--primary-glow);
         }
 
-        /* Skills Section */
-        .skills-section {
-            margin-bottom: 4rem;
-        }
-        
-        .skills-container {
+        /* --- 6. SKILLS BENTO --- */
+        .skills-bento {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 3rem;
-            align-items: center;
-        }
-        
-        .chart-container {
-            background: var(--charcoal-light);
-            border-radius: 15px;
-            padding: 2rem;
-            border: 1px solid var(--charcoal-light);
-        }
-        
-        #skills-chart {
-            width: 100%;
-            height: 400px;
-        }
-        
-        .skills-list {
-            display: grid;
             gap: 1.5rem;
         }
-        
-        .skill-category {
-            background: var(--charcoal-light);
-            border-radius: 10px;
-            padding: 1.5rem;
-            border: 1px solid var(--charcoal-light);
-            transition: all 0.3s ease;
+
+        .skill-list-container {
+            display: flex; flex-direction: column; justify-content: center;
         }
-        
-        .skill-category:hover {
-            border-color: var(--accent-teal);
-            transform: translateY(-3px);
+
+        .skill-category { margin-bottom: 2rem; }
+        .skill-category:last-child { margin-bottom: 0; }
+        .skill-category h3 { font-size: 1rem; color: #fff; margin-bottom: 0.8rem; font-weight: 600; }
+
+        .skill-pill {
+            display: inline-block;
+            padding: 6px 14px; margin: 0 4px 8px 0;
+            background: rgba(255,255,255,0.05);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 100px;
+            font-size: 0.85rem; color: #e2e8f0;
+            cursor: default; transition: all 0.2s;
         }
-        
-        .skill-category h3 {
-            font-family: var(--font-heading);
-            color: var(--accent-teal);
-            margin-bottom: 1rem;
-            font-size: 1.3rem;
+        .skill-pill:hover { 
+            background: rgba(77, 182, 172, 0.15); 
+            border-color: var(--primary); color: var(--primary); 
+            box-shadow: 0 0 10px var(--primary-glow);
         }
-        
-        .skill-tags {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
+
+        /* --- 7. EDUCATION & EXPERIENCE GRID --- */
+        .edu-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; }
+        .exp-grid { display: grid; grid-template-columns: 1fr; gap: 1.5rem; }
+
+        .timeline-card-content {
+            display: flex; flex-direction: column; height: 100%; justify-content: space-between;
         }
-        
-        .skill-tag {
-            background: var(--accent-teal);
-            color: var(--charcoal-dark);
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.9rem;
-            font-weight: 600;
-        }
-        
-        /* Education & Experience Sections */
-        .education-header, .experience-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 1rem;
-            flex-wrap: wrap;
-            gap: 1rem;
-        }
-        
-        .education-title, .experience-title {
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-            color: var(--accent-teal);
-            margin-bottom: 0.5rem;
-        }
-        
-        .education-period, .experience-period {
-            color: var(--text-secondary);
-            font-weight: 600;
+
+        .timeline-header { display: flex; align-items: flex-start; gap: 1.5rem; margin-bottom: 1.5rem; }
+
+        .timeline-logo {
             flex-shrink: 0;
-            margin-left: 1rem;
+            width: 80px; height: 80px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 16px;
+            overflow: hidden; 
+            border: 1px solid rgba(255,255,255,0.1);
+            padding: 0; 
+            display: flex;
+        }
+        
+        .timeline-logo img {
+            width: 100%; height: 100%;
+            object-fit: cover; 
+            border-radius: 0; 
+            display: block;
         }
 
-        .education-logo {
-            height: 100px;
-            width: auto;
-            border-radius: 10px;
-        }
+        .timeline-titles h3 { font-size: 1.1rem; color: #fff; margin-bottom: 0.3rem; line-height: 1.3; }
+        .timeline-meta { display: block; color: var(--primary); font-size: 0.8rem; font-weight: 700; text-transform: uppercase; margin-bottom: 0.3rem; }
+        .timeline-sub { display: block; color: var(--text-muted); font-size: 0.85rem; }
         
-        .education-institution, .experience-company {
-            font-size: 1.2rem;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-            font-weight: 600;
+        .timeline-desc {
+            color: #e2e8f0; font-size: 0.95rem; line-height: 1.6;
+            padding-top: 1rem; border-top: 1px solid rgba(255,255,255,0.05);
         }
-        
-        .education-details, .experience-description {
-            color: var(--text-secondary);
-            line-height: 1.6;
+
+        /* --- 8. EXPANDED PERSONAL SECTION --- */
+        .personal-intro {
+            margin-bottom: 2rem;
+            color: var(--text-muted);
+            font-size: 1.1rem;
+            line-height: 1.8;
+            max-width: 800px;
+            margin-left: auto; margin-right: auto;
+            text-align: center;
         }
-        
-        /* Awards Section */
-        .award-title {
-            font-family: var(--font-heading);
-            font-size: 1.3rem;
-            color: var(--accent-teal);
-            margin-bottom: 0.5rem;
+
+        .personal-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 1.5rem;
         }
-        
-        .award-organization {
-            color: var(--text-primary);
-            font-weight: 600;
-            margin-bottom: 0.5rem;
-        }
-        
-        .award-year {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-        
-        /* Languages Section */
-        .language-card {
-            background: var(--charcoal-light);
-            border-radius: 10px;
-            padding: 1rem 2rem;
-            margin-bottom: 1rem;
-            border: 1px solid var(--charcoal-light);
+
+        .hobby-card {
+            background: rgba(255,255,255,0.03);
+            border: 1px solid rgba(255,255,255,0.05);
+            padding: 2rem;
+            border-radius: 20px;
+            transition: transform 0.3s ease, background 0.3s;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
-            flex-wrap: wrap;
+            flex-direction: column;
+            height: 100%;
+        }
+
+        .hobby-card:hover {
+            transform: translateY(-5px);
+            background: rgba(255,255,255,0.06);
+            border-color: rgba(255,255,255,0.1);
+        }
+
+        .hobby-icon {
+            width: 50px; height: 50px;
+            background: rgba(77, 182, 172, 0.1);
+            color: var(--primary);
+            border-radius: 12px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 1.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .hobby-title { font-size: 1.2rem; color: #fff; font-weight: 700; margin-bottom: 0.5rem; }
+        .hobby-text { font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; }
+
+        /* --- 9. LANGUAGES (UPDATED TO FIT TAILORED) --- */
+        .lang-grid {
+            display: grid;
+            /* Changed from auto-fill to auto-fit to stretch items */
+            grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
             gap: 1rem;
         }
 
-        .language-name {
-            font-size: 1.1rem;
-            color: var(--text-primary);
-            font-weight: 600;
-        }
-
-        .language-level {
-            color: var(--accent-teal);
-            font-weight: 600;
-            font-family: var(--font-body);
-            text-align: right;
-        }
-
-        .language-level small {
-            display: block;
-            color: var(--text-secondary);
-            font-size: 0.85rem;
-            font-weight: 400;
-        }
-
-        /* Interests Section */
-        .interests-section .card {
-            background: var(--charcoal-light);
-        }
-        .interests-section p {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            line-height: 1.8;
-            text-align: center;
-        }
-
-        /* CTA Shortcut Styling */
-    	.cta-shortcut {
-		    background: var(--charcoal-dark);
-		    padding: 5rem 0;
-		    text-align: center;
-		    border-top: 1px solid var(--charcoal-light);
-       		border-bottom: 1px solid var(--charcoal-light);
-    	}
-
-    	.cta-shortcut .section-title {
-        	margin-bottom: 2rem;
-        	font-size: 2rem;
-        	color: var(--accent-teal);
-    	}
-
-    	.cta-shortcut .btn-primary {
-		    padding: 1rem 2rem;
-        	font-size: 1rem;
-   	    }
-        
-        /* Footer */
-        footer {
-            background: var(--charcoal-dark);
-            padding: 2rem 0;
-            text-align: center;
-            border-top: 1px solid var(--charcoal-light);
-        }
-        
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
-        .footer-text {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-        
-        /* Animation Classes */
-        .reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease;
-        }
-        
-        .reveal.revealed {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-	#particles-js {
-    		position: fixed;
-    		width: 100%;
-    		height: 100%;
-    		top: 0;
-    		left: 0;
-    		z-index: -1;
-    		background-color: var(--charcoal-dark);
-	}
-
-    /* UPDATED: Mobile layout for profile picture */
-    @media (max-width: 768px) {
-        .glass-nav {
-            display: none; 
-        }
-        .mobile-menu {
-            display: block; 
-        }
-        .main-content {
-            margin-top: 100px; 
-        }
-
-        .personal-info {
-            grid-template-columns: 1fr; /* Stack image on top of text */
-            text-align: center;
-        }
-        .profile-image {
-            width: 250px;
-            height: 250px;
-            margin: 0 auto 2rem; /* Center the image and add space below */
-        }
-        
-        .skills-container {
-            grid-template-columns: 1fr;
-        }
-        
-        .education-header,
-        .experience-header {
+        .lang-card {
+            background: rgba(255,255,255,0.03);
+            padding: 1.5rem; /* Increased padding for a fuller look */
+            border-radius: 16px;
+            border: 1px solid rgba(255,255,255,0.05);
+            transition: background 0.3s;
+            display: flex;
             flex-direction: column;
-            gap: 0.5rem;
+            justify-content: center;
         }
+        .lang-card:hover { background: rgba(255,255,255,0.07); }
+        .lang-card strong { display: block; color: #fff; font-size: 1.1rem; margin-bottom: 0.4rem; }
+        .lang-card span { display: block; color: var(--primary); font-size: 0.85rem; line-height: 1.2; font-weight: 500; }
+        .lang-card small { display: block; color: var(--text-muted); font-size: 0.75rem; margin-top: 0.5rem;}
 
-        .education-period, .experience-period {
-            margin-left: 0;
-            align-self: flex-start;
+        /* --- DOCK --- */
+        .dock-wrapper {
+            position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%);
+            z-index: 100; width: auto;
         }
-        
-        .page-title {
-            font-size: 2rem;
+        .dock {
+            background: rgba(15, 20, 30, 0.6); 
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255,255,255,0.1); border-top: 1px solid rgba(255,255,255,0.2);
+            padding: 0.8rem 1rem; border-radius: var(--radius-dock);
+            display: flex; gap: 1rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5);
         }
-    }
-    
-    @media (min-width: 769px) {
-        .mobile-menu {
-            display: none; 
+        .dock-icon {
+            width: 50px; height: 50px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 16px; color: var(--text-muted); font-size: 1.3rem;
+            text-decoration: none; background: rgba(255,255,255,0.03);
+            border: 1px solid transparent; transition: all 0.2s; position: relative;
         }
-        .glass-nav {
-            display: block; 
+        .dock-icon:hover {
+            transform: translateY(-8px) scale(1.1);
+            background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: #fff;
         }
-        .main-content {
-            margin-top: 100px; 
+        .dock-icon.active {
+            background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow);
         }
-    }
+        .dock-icon::before {
+            content: attr(data-title); position: absolute; top: -40px; left: 50%; transform: translateX(-50%);
+            background: rgba(0,0,0,0.8); color: #fff; padding: 4px 10px; border-radius: 6px;
+            font-size: 0.75rem; opacity: 0; pointer-events: none; transition: 0.2s; white-space: nowrap;
+            backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1);
+        }
+        .dock-icon:hover::before { opacity: 1; top: -50px; }
 
+        /* --- RESPONSIVE --- */
+        @media (max-width: 900px) {
+            .profile-wrapper { flex-direction: column; text-align: center; }
+            .skills-bento { grid-template-columns: 1fr; }
+            .edu-grid, .personal-grid { grid-template-columns: 1fr; }
+            .timeline-logo { margin: 0 auto; }
+            .timeline-header { flex-direction: column; align-items: center; text-align: center; gap: 1rem; }
+            .timeline-desc { text-align: center; }
+            .dock-wrapper { bottom: 1.5rem; width: 90%; }
+            .dock { justify-content: space-between; width: 100%; gap: 0; padding: 0.8rem; }
+            .dock-icon { width: 45px; height: 45px; }
+        }
     </style>
 </head>
 <body>
-    <svg style="display: none">
-        <filter id="glass-distortion">
-            <feTurbulence type="turbulence" baseFrequency="0.008" numOctaves="2" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="77" />
-        </filter>
-    </svg>
-
-    <nav class="glass-nav">
-        <div class="glass-filter"></div>
-        <div class="glass-overlay"></div>
-        <div class="glass-specular"></div>
-        <div class="glass-content">
-            <a href="index.html" class="glass-logo">AVdP</a>
-            <ul class="nav-list">
-                <li><a href="index.html" class="nav-item">Home</a></li>
-                <li><a href="about.html" class="nav-item active">About</a></li>
-                <li><a href="projects.html" class="nav-item">Projects</a></li>
-                <li><a href="contact.html" class="nav-item">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="mobile-menu">
-        <input type="checkbox" id="mobile-menu-toggle" class="dropdown-toggle">
-        
-        <label for="mobile-menu-toggle" class="mobile-hamburger">
-            <div class="glass-filter"></div>
-            <div class="glass-overlay"></div>
-            <div class="glass-specular"></div>
-            <div class="glass-content">
-                <a href="index.html" class="glass-logo">AVdP</a>
-                <div class="hamburger-icon">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-        </label>
-        
-        <div class="mobile-dropdown-content">
-            <div class="glass-filter"></div>
-            <div class="glass-overlay"></div>
-            <div class="glass-specular"></div>
-            <ul class="mobile-nav-list">
-                <li><a href="index.html" class="mobile-nav-item">Home</a></li>
-                <li><a href="about.html" class="mobile-nav-item active">About</a></li>
-                <li><a href="projects.html" class="mobile-nav-item">Projects</a></li>
-                <li><a href="contact.html" class="mobile-nav-item">Contact</a></li>
-            </ul>
-        </div>
-    </div>
 
     <div id="particles-js"></div>
 
-    <main class="main-content">
-        <div class="container">
-            <h1 class="page-title reveal">About Me</h1>
-            
-            <div id="cv-content">
-                <section class="personal-info reveal">
-                    <img src="resources/profielfoto.jpg" alt="Alexander Van den Putte" class="profile-image">
-                    <div class="personal-details">
-                        <h2>Driven to Solve, Motivated to Climb.</h2>
-                        <p>
-                            I am an ambitious and mentally strong Industrial Engineering student with a hands-on approach to problem-solving. My goal isn't just to get a job; it's to build a career in a challenging environment where I can make a tangible impact.
-                        </p>
-                        <p>
-                            I thrive on complexity and am driven to master new skills. I believe that with dedication, I can learn anything required to succeed and help a company achieve its goals. I am ready to work hard for the right opportunity and grow with a team that values reliability and innovation.
-                        </p>
-                        <a href="resources/CV_Alexander_Van_den_Putte.pdf" class="cv-download-btn" download>
-                            <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                                <path d="M14,2H6A2,2 0 0,0 4,4V20A2,2 0 0,0 6,22H18A2,2 0 0,0 20,20V8L14,2M18,20H6V4H13V9H18V20Z"/>
-                            </svg>
-                            Download CV (PDF)
-                        </a>
-                    </div>
-                </section>
+    <div class="main-container">
+        
+        <!-- HEADER -->
+        <div class="page-header reveal">
+            <h1 class="page-title">About Me</h1>
+            <p style="color: var(--primary); letter-spacing: 2px; font-weight: 600; font-size: 0.9rem;">
+                ENGINEER &bull; MAKER &bull; STUDENT
+            </p>
+        </div>
 
-                <section class="skills-section reveal">
-                    <h2 class="section-title">Technical Skills</h2>
-                    <div class="skills-container">
-                        <div class="chart-container">
-                            <div id="skills-chart"></div>
-                        </div>
-                        <div class="skills-list">
-                            <div class="skill-category">
-                                <h3>Design & CAD</h3>
-                                <div class="skill-tags">
-                                    <span class="skill-tag">Autodesk Inventor</span>
-                                    <span class="skill-tag">CAD/CAM/CAE</span>
-                                    <span class="skill-tag">Industrial & Product Design</span>
-                                </div>
-                            </div>
-                            <div class="skill-category">
-                                <h3>Programming & Analysis</h3>
-                                <div class="skill-tags">
-                                    <span class="skill-tag">Python</span>
-                                    <span class="skill-tag">MATLAB</span>
-                                    <span class="skill-tag">Simulink</span>
-                                    <span class="skill-tag">FEA (Abaqus)</span>
-                                    <span class="skill-tag">AI and CNN</span>
-                                </div>
-                            </div>
-                            <div class="skill-category">
-                                <h3>Engineering & Industrial</h3>
-                                <div class="skill-tags">
-                                    <span class="skill-tag">Electromechanics</span>
-                                    <span class="skill-tag">Control Systems</span>
-                                    <span class="skill-tag">TIA Portal</span>
-                                    <span class="skill-tag">HVAC</span>
-                                    <span class="skill-tag">Reliability & Maintenance</span>
-                                    <span class="skill-tag">Digital Twin</span>
-                                    <span class="skill-tag">Project Management</span>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </section>
-
-                <section class="education-section reveal">
-                    <h2 class="section-title">Education</h2>
-                    <div class="card">
-                        <div class="education-header">
-                            <div>
-                                <h3 class="education-title">Master of Science in Industrial Engineering</h3>
-                                <div class="education-institution">KU Leuven - Faculty of Industriële ingenieurswetenschappen (Ghent)</div>
-                            </div>
-                            <img src="resources/KUL_Gent.png" alt="KU Leuven Gent Logo" class="education-logo">
-                        </div>
-                        <div class="education-details">
-                            <strong>Period:</strong> 2025 - 2026 (Expected)
-                            <br>
-                            <strong>Specialization:</strong> Electromechanics, Design & Management
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="education-header">
-                            <div>
-                                <h3 class="education-title">Bachelor of Science in Industrial Engineering</h3>
-                                <div class="education-institution">KU Leuven - Campus Geel</div>
-                            </div>
-                            <img src="resources/KUL_Geel.png" alt="KU Leuven Geel Logo" class="education-logo">
-                        </div>
-                        <div class="education-details">
-                            <strong>Period:</strong> 2021 - 2025
-                            <br>
-                            <strong>Key Achievement:</strong> Award-Winning Bachelor's Thesis, "Biomechanical Ornithopter"
-                        </div>
-                    </div>
-                </section>
-
-                <section class="experience-section reveal">
-                    <h2 class="section-title">Experience</h2>
-                    <div class="card">
-                        <div class="experience-header">
-                            <div>
-                                <h3 class="experience-title">Volunteer & Workshop Host</h3>
-                                <div class="experience-company">De Maakplek (Westerlo)</div>
-                            </div>
-                            <div class="experience-period">Summer 2025 - Present</div>
-                        </div>
-                        <div class="experience-description">
-                            Volunteering in a public makerspace. I assist users with technologies like 3D printing, lasercutters, and Cricut, and I help develop and run workshops for the community.
-                        </div>
-                    </div>
-                    <div class="card">
-                        <div class="experience-header">
-                            <div>
-                                <h3 class="experience-title">Student Production Operator (Summer Placements)</h3>
-                                <div class="experience-company">Various Industrial Leaders</div>
-                            </div>
-                            <div class="experience-period">2021 - 2025 (Summers)</div>
-                        </div>
-                        <div class="experience-description">
-                            Held sequential summer jobs in production environments to gain practical insight into company operations, machine processes, and industrial logistics.
-                            <br>
-                            <strong>Companies:</strong> Smurfit Westrock (2025), Estée Lauder (2024), Keune&Nagel (2023), DAF Trucks (2021, 2022).
-                        </div>
-                    </div>
-                </section>
-
-                <section class="awards-section reveal">
-                    <h2 class="section-title">Awards & Recognition</h2>
-                    <div class="card">
-                        <h3 class="award-title">Winner - Pitch je STEM-project 2025</h3>
-                        <div class="award-organization">KU Leuven Campus Geel</div>
-                        <div class="award-year">2025</div>
-                    </div>
-                </section>
-
-                <section class="languages-section reveal">
-                    <h2 class="section-title">Languages</h2>
-                    <div class="language-card">
-                        <span class="language-name">Dutch</span>
-                        <span class="language-level">Native or bilingual proficiency</span>
-                    </div>
-                    <div class="language-card">
-                        <span class="language-name">English</span>
-                        <span class="language-level">Full professional proficiency</span>
-                    </div>
-                    <div class="language-card">
-                        <span class="language-name">French</span>
-                        <span class="language-level">Limited working proficiency</span>
-                    </div>
-                    <div class="language-card">
-                        <span class="language-name">German</span>
-                        <span class="language-level">Elementary proficiency</span>
-                    </div>
-                    <div class="language-card">
-                        <span class="language-name">Arabic</span>
-                        <span class="language-level">
-                            Elementary proficiency
-                            <small>Duolingo Score 23 (Nov 2025)</small>
-                        </span>
-                    </div>
-                </section>
-            </div> <section class="interests-section reveal">
-                <h2 class="section-title">Personal Interests</h2>
-                <div class="card">
+        <!-- PROFILE CARD -->
+        <section class="glass-card reveal">
+            <div class="profile-wrapper">
+                <div class="profile-img-container">
+                    <img src="resources/profielfoto.jpg" alt="Alexander Van den Putte" class="profile-img" onerror="this.src='https://placehold.co/400x400/172a45/4DB6AC?text=AVdP'">
+                </div>
+                <div class="profile-content">
+                    <h2>Driven to Solve, Motivated to Climb.</h2>
                     <p>
-                        When I'm not focused on engineering, I'm driven by a constant desire to learn and improve. I'm an avid reader of psychology and self-improvement books and enjoy challenging my mind with tactical games like chess and Valorant.
+                        I am an ambitious and mentally strong Industrial Engineering student with a hands-on approach to problem-solving. My goal isn't just to get a job; it's to build a career in a challenging environment where I can make a tangible impact.
+                    </p>
+                    <p>
+                        I thrive on complexity and am driven to master new skills. I believe that with dedication, I can learn anything required to succeed. I am ready to work hard for the right opportunity and grow with a team that values reliability and innovation.
+                    </p>
+                    <br><a href="resources/CV_Alexander_Van_den_Putte.pdf" class="btn-download" download>
+                        <i class="fas fa-file-pdf"></i> Download CV
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- SKILLS (RADAR CHART) -->
+        <section class="reveal">
+            <div class="section-header"><i class="fas fa-code-branch"></i> Technical Arsenal</div>
+            
+            <div class="skills-bento">
+                <!-- Dynamic Chart -->
+                <div class="glass-card" style="display: flex; align-items: center; justify-content: center;">
+                    <div id="skills-chart" style="width: 100%; height: 100%; min-height: 350px;"></div>
+                </div>
+                
+                <!-- Skills List -->
+                <div class="glass-card skill-list-container">
+                    <div class="skill-category">
+                        <h3><i class="fas fa-drafting-compass" style="color: var(--primary); margin-right: 8px;"></i> Design & CAD</h3>
+                        <div>
+                            <span class="skill-pill">Autodesk Inventor</span>
+                            <span class="skill-pill">CAD/CAM/CAE</span>
+                            <span class="skill-pill">Industrial Design</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h3><i class="fas fa-laptop-code" style="color: var(--primary); margin-right: 8px;"></i> Programming & Analysis</h3>
+                        <div>
+                            <span class="skill-pill">Python</span>
+                            <span class="skill-pill">MATLAB</span>
+                            <span class="skill-pill">Simulink</span>
+                            <span class="skill-pill">FEA (Abaqus)</span>
+                            <span class="skill-pill">AI & CNN</span>
+                        </div>
+                    </div>
+                    
+                    <div class="skill-category">
+                        <h3><i class="fas fa-cogs" style="color: var(--primary); margin-right: 8px;"></i> Engineering</h3>
+                        <div>
+                            <span class="skill-pill">Electromechanics</span>
+                            <span class="skill-pill">Control Systems</span>
+                            <span class="skill-pill">TIA Portal</span>
+                            <span class="skill-pill">Digital Twin</span>
+                            <span class="skill-pill">Project Management</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- EDUCATION -->
+        <section class="reveal">
+            <div class="section-header"><i class="fas fa-graduation-cap"></i> Education</div>
+            <div class="edu-grid">
+                <!-- Master's -->
+                <div class="glass-card">
+                    <div class="timeline-card-content">
+                        <div>
+                            <div class="timeline-header">
+                                <div class="timeline-logo">
+                                    <img src="resources/KUL_Gent.png" alt="KU Leuven" onerror="this.src='https://placehold.co/100?text=KUL'">
+                                </div>
+                                <div class="timeline-titles">
+                                    <span class="timeline-meta">2025 - 2026</span>
+                                    <h3>Master of Science in Industrial Engineering</h3>
+                                    <span class="timeline-sub">KU Leuven (Ghent)</span>
+                                </div>
+                            </div>
+                            <p class="timeline-desc">
+                                <strong>Specialization:</strong> Electromechanics, Design & Management.<br>
+                                Focus on flexible production systems and modular robotics.
+                                <br><br><strong>Thesis:</strong> A modular and compact conveyor system.<br>
+                                The design of a modular conveyor with fast change- and setup times.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                <!-- Bachelor's -->
+                <div class="glass-card">
+                    <div class="timeline-card-content">
+                        <div>
+                            <div class="timeline-header">
+                                <div class="timeline-logo">
+                                    <img src="resources/KUL_Geel.png" alt="KU Leuven" onerror="this.src='https://placehold.co/100?text=KUL'">
+                                </div>
+                                <div class="timeline-titles">
+                                    <span class="timeline-meta">2021 - 2025</span>
+                                    <h3>Bachelor of Science in Industrial Engineering</h3>
+                                    <span class="timeline-sub">KU Leuven (Geel)</span>
+                                </div>
+                            </div>
+                            <p class="timeline-desc">
+                                <strong>Key Achievement:</strong> Award-Winning Bachelor's Thesis.<br>
+                                "Biomechanical Ornithopter": Design and prototyping of a robotic bird.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- HONORS & AWARDS -->
+        <section class="reveal">
+            <div class="section-header"><i class="fas fa-trophy"></i> Honors & Awards</div>
+            <div class="glass-card">
+                <div class="timeline-header">
+                    <div class="timeline-logo">
+                        <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: rgba(77, 182, 172, 0.2);">
+                            <i class="fas fa-award" style="font-size: 2rem; color: var(--primary);"></i>
+                        </div>
+                    </div>
+                    <div class="timeline-titles">
+                        <span class="timeline-meta">2025</span>
+                        <h3>Winner - Pitch je STEM-project</h3>
+                        <span class="timeline-sub">KU Leuven Campus Geel</span>
+                    </div>
+                </div>
+                <div class="timeline-desc">
+                    Awarded for the best presentation and project pitch for the "Biomechanical Ornithopter" bachelor's thesis. Recognized for innovation and technical communication.
+                </div>
+            </div>
+        </section>
+
+        <!-- EXPERIENCE -->
+        <section class="reveal">
+            <div class="section-header"><i class="fas fa-briefcase"></i> Experience</div>
+            <div class="exp-grid">
+                <!-- Maakplek -->
+                <div class="glass-card">
+                    <div class="timeline-header">
+                        <div class="timeline-logo">
+                            <img src="resources/maakplek.jpg" alt="Maakplek" onerror="this.src='https://placehold.co/100?text=Work'">
+                        </div>
+                        <div class="timeline-titles">
+                            <span class="timeline-meta">2025 - Present</span>
+                            <h3>Volunteer & Workshop Host</h3>
+                            <span class="timeline-sub">De Maakplek (Westerlo)</span>
+                        </div>
+                    </div>
+                    <div class="timeline-desc">
+                        Volunteering in a public makerspace. I assist users with technologies like 3D printing, lasercutters, and Cricut, and I help develop and run workshops for the community to foster technical creativity.
+                    </div>
+                </div>
+                <!-- Industry -->
+                <div class="glass-card">
+                    <div class="timeline-header">
+                        <div class="timeline-logo">
+                            <div style="width: 100%; height: 100%; display: flex; align-items: center; justify-content: center; background: #1a2b3c;">
+                                <i class="fas fa-industry" style="font-size: 2rem; color: var(--primary);"></i>
+                            </div>
+                        </div>
+                        <div class="timeline-titles">
+                            <span class="timeline-meta">Summers 2021 - 2025</span>
+                            <h3>Student Production Operator</h3>
+                            <span class="timeline-sub">Smurfit Westrock, Estée Lauder, Keune&Nagel, DAF Trucks</span>
+                        </div>
+                    </div>
+                    <div class="timeline-desc">
+                        Held sequential summer jobs in production environments to gain practical insight into company operations, machine processes, and industrial logistics.
                         <br><br>
-                        This mindset extends to my hobbies: I love going on long, technical hikes, I'm a self thaught Bass player, managing and participating in coverband Offbeat and I've been a hands-on maker since I started 3D printing in 2015, constantly prototyping and building my own products and solutions.
+                        <strong style="color: var(--primary);">Roles:</strong>
+                        <ul style="margin-top: 0.5rem; margin-left: 1rem; list-style-type: disc; color: var(--text-muted);">
+                            <li>Smurfit Westrock (2025)</li>
+                            <li>Estée Lauder (2024)</li>
+                            <li>Keune&Nagel (2023)</li>
+                            <li>DAF Trucks (2021, 2022)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- PERSONAL INTERESTS -->
+        <section class="reveal">
+            <div class="section-header"><i class="fas fa-heart"></i> Personal Interests</div>
+            
+            <div class="personal-intro glass-card" style="margin-bottom: 2rem; text-align: left;">
+                <p>
+                    When I'm not focused on engineering, I'm driven by a constant desire to learn and improve. I'm an avid reader of psychology and self-improvement books and enjoy challenging my mind with tactical games like <strong>Chess</strong> and <strong>Valorant</strong>.
+                </p>
+            </div>
+
+            <div class="personal-grid">
+                <!-- Hobby 1 -->
+                <div class="hobby-card">
+                    <div class="hobby-icon"><i class="fas fa-hiking"></i></div>
+                    <h3 class="hobby-title">Technical Hiking</h3>
+                    <p class="hobby-text">
+                        I love disconnecting and challenging myself on long, technical trails. It builds endurance and clears the mind for new ideas.
                     </p>
                 </div>
-            </section>
-        </div>
-    </main>
-    
-    <section class="cta-shortcut">
-        <div class="container">
-            <h2 class="section-title reveal">Ready to Connect?</h2>
-            <a href="contact.html" class="btn btn-primary reveal">
-                <span>Send Me a Message</span>
+                <!-- Hobby 2 -->
+                <div class="hobby-card">
+                    <div class="hobby-icon"><i class="fas fa-guitar"></i></div>
+                    <h3 class="hobby-title">Bass Guitar</h3>
+                    <p class="hobby-text">
+                        Musician in the 'Offbeat' coverband. Playing bass requires rhythm, precision, and listening to the team—much like engineering.
+                    </p>
+                </div>
+                <!-- Hobby 3 -->
+                <div class="hobby-card">
+                    <div class="hobby-icon"><i class="fas fa-print"></i></div>
+                    <h3 class="hobby-title">Makerspace</h3>
+                    <p class="hobby-text">
+                        Since 2015, I've been prototyping with 3D printers. I love turning abstract concepts into physical reality.
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- LANGUAGES -->
+        <section class="reveal">
+            <div class="section-header"><i class="fas fa-language"></i> Languages</div>
+            <div class="glass-card">
+                <div class="lang-grid">
+                    <div class="lang-card">
+                        <strong>Dutch</strong>
+                        <span>Native / Bilingual</span>
+                    </div>
+                    <div class="lang-card">
+                        <strong>English</strong>
+                        <span>Full Professional</span>
+                    </div>
+                    <div class="lang-card">
+                        <strong>French</strong>
+                        <span>Limited Working</span>
+                    </div>
+                    <div class="lang-card">
+                        <strong>German</strong>
+                        <span>Elementary</span>
+                    </div>
+                    <div class="lang-card">
+                        <strong>Arabic</strong>
+                        <span>Elementary</span>
+                        <small>Duolingo 23 (Nov 2025)</small>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- CALL TO ACTION -->
+        <section class="reveal" style="text-align: center; padding: 4rem 0;">
+            <h2 style="font-size: 2rem; margin-bottom: 1rem; color: #fff;">Ready to connect?</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">
+                Contact me to start building something new together
+            </p>
+            <a href="contact.html" style="display: inline-block; padding: 1rem 3rem; background: var(--primary); color: #000; border-radius: 50px; text-decoration: none; font-weight: 700; transition: transform 0.2s; box-shadow: 0 0 20px var(--primary-glow);">
+                Let's Talk
             </a>
-        </div>
-    </section>
+        </section>
 
-    <footer>
-        <div class="footer-content">
-            <p class="footer-text">&copy; 2025 Alexander Van den Putte. All rights reserved. | Industrial Engineering Portfolio</p>
-        </div>
-    </footer>
+    </div>
 
-    <script src="main.js"></script>
+    <!-- DOCK NAVIGATION -->
+    <div class="dock-wrapper">
+        <nav class="dock">
+            <a href="index.html" class="dock-icon" data-title="Home"><i class="fas fa-home"></i></a>
+            <a href="about.html" class="dock-icon active" data-title="About"><i class="fas fa-user"></i></a>
+            <a href="projects.html" class="dock-icon" data-title="Projects"><i class="fas fa-layer-group"></i></a>
+            <a href="contact.html" class="dock-icon" data-title="Contact"><i class="fas fa-envelope"></i></a>
+            <div style="width: 1px; background: rgba(255,255,255,0.1); height: 30px; margin: auto 0.2rem;"></div>
+            <a href="https://www.linkedin.com/in/alexander-van-den-putte-6183b81a0/" target="_blank" class="dock-icon" data-title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        </nav>
+    </div>
 
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <!-- SCRIPTS -->
     <script>
-    particlesJS('particles-js', 
-      {
-        "particles": {
-          "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
-          "color": { "value": "#4DB6AC" },
-          "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 } },
-          "opacity": { "value": 0.2, "random": false, "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false } },
-          "size": { "value": 3, "random": true, "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false } },
-          "line_linked": { "enable": true, "distance": 150, "color": "#C0C5CC", "opacity": 0.15, "width": 1 },
-          "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 } }
-        },
-        "interactivity": {
-          "detect_on": "canvas",
-          "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
-          "modes": {
-            "grab": { "distance": 400, "line_linked": { "opacity": 1 } },
-            "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
-            "repulse": { "distance": 100, "duration": 0.4 },
-            "push": { "particles_nb": 4 },
-            "remove": { "particles_nb": 2 }
-          }
-        },
-        "retina_detect": true
-      }
-    );
-    </script>
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // 1. Particles
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": { "value": 40, "density": { "enable": true, "value_area": 800 } },
+                    "color": { "value": "#4DB6AC" },
+                    "shape": { "type": "circle" },
+                    "opacity": { "value": 0.2, "random": true },
+                    "size": { "value": 3, "random": true },
+                    "line_linked": { "enable": true, "distance": 150, "color": "#4DB6AC", "opacity": 0.1, "width": 1 },
+                    "move": { "enable": true, "speed": 1, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                    "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 0.5 } } }
+                },
+                "retina_detect": true
+            });
 
+            // 2. Scroll Reveal
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(section => {
+                observer.observe(section);
+            });
+
+            // 3. Tilt Effect
+            if (window.innerWidth > 768) {
+                VanillaTilt.init(document.querySelectorAll(".glass-card, .hobby-card"), {
+                    max: 3, speed: 400, glare: true, "max-glare": 0.1, scale: 1.01
+                });
+            }
+
+            // 4. SCALED RADAR CHART
+            const chartDom = document.getElementById('skills-chart');
+            if (chartDom) {
+                const myChart = echarts.init(chartDom);
+                const option = {
+                    color: ['#4DB6AC'],
+                    tooltip: {},
+                    radar: {
+                        indicator: [
+                            { name: 'Design (CAD)', max: 100, min: -50 },
+                            { name: 'Analysis (FEA)', max: 100, min: -50 },
+                            { name: 'Coding', max: 100, min: -50 },
+                            { name: 'Control (TIA)', max: 100, min: -50 },
+                            { name: 'Management', max: 100, min: -50 },
+                            { name: 'Innovation', max: 100, min: -50 }
+                        ],
+                        shape: 'circle',
+                        splitNumber: 4,
+                        axisName: {
+                            color: '#94a3b8',
+                            fontSize: 12,
+                            fontWeight: 'bold'
+                        },
+                        splitLine: {
+                            lineStyle: {
+                                color: [
+                                    'rgba(255, 255, 255, 0.05)', 'rgba(255, 255, 255, 0.05)',
+                                    'rgba(255, 255, 255, 0.05)', 'rgba(255, 255, 255, 0.05)'
+                                ]
+                            }
+                        },
+                        splitArea: {
+                            show: false
+                        },
+                        axisLine: {
+                            lineStyle: {
+                                color: 'rgba(255, 255, 255, 0.1)'
+                            }
+                        }
+                    },
+                    series: [{
+                        name: 'Skill Level',
+                        type: 'radar',
+                        data: [{
+                            value: [95, 75, 80, 85, 70, 90],
+                            name: 'Alexander'
+                        }],
+                        areaStyle: {
+                            color: new echarts.graphic.RadialGradient(0.5, 0.5, 1, [
+                                { offset: 0, color: 'rgba(77, 182, 172, 0.1)' },
+                                { offset: 1, color: 'rgba(77, 182, 172, 0.5)' }
+                            ])
+                        },
+                        lineStyle: {
+                            width: 2,
+                            color: '#4DB6AC'
+                        },
+                        symbol: 'none'
+                    }]
+                };
+                myChart.setOption(option);
+                window.addEventListener('resize', () => myChart.resize());
+            }
+        });
+    </script>
 </body>
 </html>

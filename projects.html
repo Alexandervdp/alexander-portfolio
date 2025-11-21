@@ -2,1055 +2,552 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Projects - Alexander Van den Putte</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Projects | Alexander Van den Putte</title>
     
+    <!-- Typography: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600;700&family=Open+Sans:wght@400;600&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
-    <link rel="stylesheet" href="https://unpkg.com/splitting@1.0.6/dist/splitting.css">
-    <script src="https://unpkg.com/splitting@1.0.6/dist/splitting.min.js"></script>
-    
+    <!-- Libraries -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+
     <style>
         :root {
-            --charcoal-dark: #1D2A3A;
-            --charcoal-light: #2A3B4F;
-            --text-primary: #F8F9FA;
-            --text-secondary: #C0C5CC;
-            --accent-teal: #4DB6AC;
-            --accent-teal-dark: #26A69A;
+            --primary: #4DB6AC;
+            --primary-dark: #004d40;
+            --primary-glow: rgba(77, 182, 172, 0.5);
+            --bg-center: #172a45;
+            --bg-edge: #020202;
+            --glass-bg: linear-gradient(145deg, rgba(255, 255, 255, 0.07) 0%, rgba(255, 255, 255, 0.02) 100%);
+            --glass-border: rgba(255, 255, 255, 0.1);
+            --glass-blur: 16px;
+            --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.3);
+            --radius-card: 24px;
+            --radius-dock: 24px;
+            --text-white: #ffffff;
+            --text-muted: #94a3b8;
+        }
 
-            --font-heading: 'Montserrat', sans-serif;
-            --font-body: 'Open Sans', sans-serif;
-        }
-        
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
         body {
-            font-family: var(--font-body);
-            background: var(--charcoal-dark);
-            color: var(--text-primary);
-            line-height: 1.6;
+            background: radial-gradient(circle at 50% 30%, var(--bg-center), var(--bg-edge) 80%);
+            background-attachment: fixed;
+            color: var(--text-white);
+            font-family: 'Inter', sans-serif;
             overflow-x: hidden;
+            min-height: 100vh;
+            line-height: 1.6;
         }
+
+        #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.6; }
+
+        .main-container { max-width: 1100px; margin: 0 auto; padding: 6rem 1.5rem 8rem; }
+
+        section { margin-bottom: 5rem; opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
+        section.visible { opacity: 1; transform: translateY(0); }
+
+        /* Typography */
+        .page-header { text-align: center; margin-bottom: 4rem; }
+        .page-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; background: linear-gradient(to bottom right, #ffffff 30%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 1rem; }
+        .page-subtitle { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
         
-        /* Floating Island Glass Navigation Bar - DESKTOP */
-        .glass-nav {
-            --bg-color: rgba(29, 42, 58, 0.7);
-            --highlight: rgba(255, 255, 255, 0.2);
-            --text: #F8F9FA;
-            
-            position: fixed;
-            top: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 95%;
-            max-width: 800px;
-            border-radius: 16px;
-            overflow: hidden;
-            background: transparent;
-            z-index: 1000;
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.3);
+        /* Standard Left-Aligned Header */
+        .section-header { 
+            font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; 
+            color: var(--primary); margin-bottom: 1.5rem; 
+            display: flex; align-items: center; gap: 0.5rem; 
+            text-shadow: 0 0 10px rgba(77, 182, 172, 0.3); 
+        }
+        .section-header::after { 
+            content: ''; height: 1px; flex-grow: 1; 
+            background: linear-gradient(90deg, var(--primary), transparent); 
+            opacity: 0.3; margin-left: 1rem; 
         }
 
-        .glass-filter,
-        .glass-overlay,
-        .glass-specular {
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-        }
-
-        .glass-filter {
-            z-index: 1;
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            filter: url(#glass-distortion) saturate(120%) brightness(1.1);
-        }
-
-        .glass-overlay {
-            z-index: 2;
-            background: var(--bg-color);
-        }
-
-        .glass-specular {
-            z-index: 3;
-            box-shadow: 
-                inset 1px 1px 0 var(--highlight),
-                inset -1px -1px 0 rgba(0, 0, 0, 0.1);
-        }
-
-        .glass-content {
-            position: relative;
-            z-index: 4;
-            padding: 1rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .glass-logo {
-            font-family: var(--font-heading);
-            font-size: 1.5rem;
-            font-weight: 700;
-            color: var(--accent-teal);
-            text-decoration: none;
-            transition: all 0.3s ease;
-        }
-
-        .glass-logo:hover {
-            color: var(--text-primary);
-            transform: scale(1.05);
-        }
-
-        .nav-list {
-            list-style: none;
-            margin: 0;
-            padding: 0;
-            display: flex;
-            gap: 0.5rem;
-        }
-
-        .nav-item {
-            color: var(--text);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            padding: 0.4rem 0.8rem;
-            border-radius: 6px;
-            transition: all 0.3s ease;
-            font-family: var(--font-body);
-            white-space: nowrap;
-        }
-
-        .nav-item:hover {
-            background-color: rgba(77, 182, 172, 0.2);
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
-        }
-
-        .nav-item.active {
-            background-color: rgba(77, 182, 172, 0.3);
-            color: var(--accent-teal);
-            transform: translateY(-1px);
-            box-shadow: 0 2px 8px rgba(77, 182, 172, 0.25);
-        }
-
-        /* Mobile Hamburger Menu */
-        .mobile-menu {
-            display: none;
-            position: fixed;
-            top: 1rem;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 95%;
-            max-width: 400px;
-            z-index: 1000;
-        }
-
-        .mobile-hamburger {
-            position: relative;
-            width: 100%;
-            border-radius: 16px;
-            overflow: hidden;
-            cursor: pointer;
-        }
-
-        .mobile-hamburger .glass-filter,
-        .mobile-hamburger .glass-overlay,
-        .mobile-hamburger .glass-specular {
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-        }
-
-        .mobile-hamburger .glass-filter {
-            z-index: 1;
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            filter: url(#glass-distortion) saturate(120%) brightness(1.1);
-        }
-
-        .mobile-hamburger .glass-overlay {
-            z-index: 2;
-            background: rgba(29, 42, 58, 0.7);
-        }
-
-        .mobile-hamburger .glass-specular {
-            z-index: 3;
-            box-shadow: 
-                inset 1px 1px 0 rgba(255, 255, 255, 0.2),
-                inset -1px -1px 0 rgba(0, 0, 0, 0.1);
-        }
-
-        .mobile-hamburger .glass-content {
-            position: relative;
-            z-index: 4;
-            padding: 1rem 2rem;
-            color: var(--text-primary);
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-family: var(--font-heading);
-            font-weight: 600;
-            font-size: 1.1rem;
-        }
-
-        .hamburger-icon {
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-            transition: transform 0.3s ease;
+        /* Centered Header Specially for Timeline */
+        .section-header.centered {
             justify-content: center;
-            align-items: center;
-            width: 20px;
-            height: 14px; 
-        }
-
-        .hamburger-icon span {
-            width: 20px;
-            height: 2px;
-            background: var(--text-primary);
-            border-radius: 2px;
-            transition: all 0.3s ease;
-            transform-origin: center;
-        }
-
-        /* Mobile Dropdown Menu */
-        .mobile-dropdown-content {
-            position: relative;
-            overflow: hidden;
-            max-height: 0;
-            transition: max-height 0.4s ease;
-            border-radius: 16px;
-            margin-top: 8px;
-        }
-
-        .mobile-dropdown-content .glass-filter,
-        .mobile-dropdown-content .glass-overlay,
-        .mobile-dropdown-content .glass-specular {
-            position: absolute;
-            inset: 0;
-            border-radius: inherit;
-        }
-
-        .mobile-dropdown-content .glass-filter {
-            z-index: 1;
-            backdrop-filter: blur(20px) saturate(180%);
-            -webkit-backdrop-filter: blur(20px) saturate(180%);
-            filter: url(#glass-distortion) saturate(120%) brightness(1.1);
-        }
-
-        .mobile-dropdown-content .glass-overlay {
-            z-index: 2;
-            background: rgba(29, 42, 58, 0.8);
-        }
-
-        .mobile-dropdown-content .glass-specular {
-            z-index: 3;
-            box-shadow: 
-                inset 1px 1px 0 rgba(255, 255, 255, 0.2),
-                inset -1px -1px 0 rgba(0, 0, 0, 0.1);
-        }
-
-        .mobile-nav-list {
-            position: relative;
-            z-index: 4;
-            list-style: none;
-            margin: 0;
-            padding: 1.5rem;
-            opacity: 0;
-            transform: translateY(-10px);
-            transition: all 0.3s ease 0.1s;
-        }
-
-        .mobile-nav-list li {
-            margin-bottom: 0.8rem;
-        }
-
-        .mobile-nav-list li:last-child {
-            margin-bottom: 0;
-        }
-
-        .mobile-nav-item {
-            color: var(--text-primary);
-            text-decoration: none;
-            font-weight: 600;
-            font-size: 16px;
-            padding: 1rem 1.5rem;
-            border-radius: 10px;
-            transition: all 0.3s ease;
-            font-family: var(--font-body);
-            display: block;
-            text-align: right;
-        }
-
-        .mobile-nav-item:hover,
-        .mobile-nav-item.active {
-            background-color: rgba(77, 182, 172, 0.3);
-            color: var(--accent-teal);
-            transform: translateY(-2px);
-            box-shadow: 0 2px 6px rgba(0, 0, 0, 0.2);
-        }
-
-        /* Mobile Menu Toggle States */
-        #mobile-menu-toggle {
-            display: none;
-        }
-
-        #mobile-menu-toggle:checked ~ .mobile-hamburger .hamburger-icon span:nth-child(1) {
-            transform: translateY(6px) rotate(45deg);
-        }
-
-        #mobile-menu-toggle:checked ~ .mobile-hamburger .hamburger-icon span:nth-child(2) {
-            opacity: 0;
-            transform: scale(0);
-        }
-        
-        #mobile-menu-toggle:checked ~ .mobile-hamburger .hamburger-icon span:nth-child(3) {
-            transform: translateY(-6px) rotate(-45deg);
-        }
-
-        #mobile-menu-toggle:checked ~ .mobile-dropdown-content {
-            max-height: 300px;
-        }
-
-        #mobile-menu-toggle:checked ~ .mobile-dropdown-content .mobile-nav-list {
-            opacity: 1;
-            transform: translateY(0);
-        }
-
-        /* Responsive Design - Mobile Only */
-        @media (max-width: 768px) {
-            .glass-nav {
-                display: none; 
-            }
-            
-            .mobile-menu {
-                display: block; 
-            }
-            
-            .main-content {
-                margin-top: 100px; 
-            }
-        }
-
-        /* Keep desktop styles for larger screens */
-        @media (min-width: 769px) {
-            .mobile-menu {
-                display: none; 
-            }
-            
-            .glass-nav {
-                display: block; 
-            }
-
-            .main-content {
-                margin-top: 100px; 
-            }
-        }
-
-        /* Main Content */
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
-        .page-title {
-            font-family: var(--font-heading);
-            font-size: 3rem;
-            text-align: center;
-            margin-bottom: 1rem;
-            color: var(--text-primary);
-        }
-        
-        .page-subtitle {
-            text-align: center;
-            font-size: 1.2rem;
-            color: var(--text-secondary);
             margin-bottom: 3rem;
         }
-        
-        .section-title {
-            font-family: var(--font-heading);
-            font-size: 2.5rem;
-            text-align: center;
-            margin-bottom: 3rem;
-            color: var(--text-primary);
+        .section-header.centered::before { 
+            content: ''; height: 1px; width: 50px; 
+            background: linear-gradient(90deg, transparent, var(--primary)); 
+            opacity: 0.3; 
         }
 
-        /* Base Button Style */
-        .btn {
-            padding: 1rem 2rem;
-            border: none;
-            border-radius: 5px;
-            font-weight: 600;
-            text-decoration: none;
-            transition: all 0.3s ease;
-            cursor: pointer;
-            display: inline-flex;
-            align-items: center;
-            gap: 0.5rem;
-            font-family: var(--font-heading);
-        }
-        
-        .btn-primary {
-            background: var(--accent-teal);
-            color: var(--charcoal-dark);
-        }
-        
-        .btn-primary:hover {
-            background: var(--accent-teal-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
-        }
-        
-        /* Featured Project */
-        .featured-project {
-            background: var(--charcoal-light);
-            border-radius: 20px;
-            padding: 3rem;
-            margin-bottom: 4rem;
-            position: relative;
-            overflow: hidden;
-            border: 1px solid var(--charcoal-light);
-        }
-        
-        .featured-content {
-            position: relative;
-            z-index: 1;
-        }
-        
-        .featured-badge {
-            background: var(--accent-teal);
-            color: var(--charcoal-dark);
-            padding: 0.5rem 1rem;
-            border-radius: 20px;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 1rem;
-            font-size: 0.9rem;
-        }
-        
-        .featured-title {
-            font-family: var(--font-heading);
-            font-size: 2.5rem;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-        }
-        
-        .featured-description {
-            font-size: 1.1rem;
-            color: var(--text-secondary);
-            line-height: 1.8;
-            margin-bottom: 2rem;
-        }
-        
-        .featured-highlights {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-            gap: 1.5rem;
-            margin-bottom: 2rem;
-        }
-        
-        .highlight-item {
-            background: var(--charcoal-dark);
-            border-radius: 10px;
-            padding: 1.5rem;
-            border: 1px solid var(--charcoal-light);
-        }
-        
-        .highlight-title {
-            font-family: var(--font-heading);
-            color: var(--accent-teal);
-            margin-bottom: 0.5rem;
-        }
-        
-        .highlight-text {
-            color: var(--text-secondary);
-            font-size: 0.95rem;
-        }
+        /* Glass Card */
+        .glass-card { background: var(--glass-bg); backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur)); border: 1px solid var(--glass-border); border-top: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-card); box-shadow: var(--glass-shadow); overflow: hidden; padding: 2.5rem; }
 
-        /* Timeline Section */
-        .timeline-section {
-            margin-bottom: 4rem;
-        }
-        
-        .timeline {
+        /* Hero Project */
+        .hero-project { position: relative; }
+        .hero-badge { display: inline-block; background: var(--primary); color: #000; font-weight: 700; font-size: 0.8rem; padding: 6px 12px; border-radius: 50px; margin-bottom: 1.5rem; box-shadow: 0 0 15px var(--primary-glow); }
+        .hero-content h2 { font-size: 2rem; margin-bottom: 1rem; color: #fff; }
+        .hero-desc { color: var(--text-muted); margin-bottom: 2rem; font-size: 1.05rem; line-height: 1.7; }
+        .highlights-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 1.5rem; }
+        .highlight-item { background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.05); border-radius: 16px; padding: 1.5rem; }
+        .highlight-item h4 { color: var(--primary); margin-bottom: 0.5rem; font-size: 1rem;}
+        .highlight-item p { color: #e2e8f0; font-size: 0.9rem; line-height: 1.5;}
+
+        /* --- CENTERED CIRCUIT TIMELINE --- */
+        .timeline-wrapper {
             position: relative;
-            max-width: 800px;
+            max-width: 1000px;
             margin: 0 auto;
+            padding: 2rem 0;
         }
-        
-        .timeline::before {
+
+        /* Continuous Center Line */
+        .timeline-wrapper::before {
             content: '';
             position: absolute;
+            top: 0;
+            bottom: 0;
             left: 50%;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.1) 10%, rgba(255, 255, 255, 0.1) 90%, transparent);
             transform: translateX(-50%);
-            width: 4px;
-            height: 100%;
-            background: var(--accent-teal);
-            border-radius: 2px;
+            z-index: 0;
         }
-        
-        .timeline-item {
+
+        .timeline-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 4rem;
             position: relative;
-            margin-bottom: 3rem;
-            cursor: default;
-            transition: all 0.3s ease;
+            width: 100%;
         }
-        
-        .timeline-item:nth-child(odd) .timeline-content-wrapper {
-            margin-right: 55%;
-            text-align: right;
-        }
-        
-        .timeline-item:nth-child(even) .timeline-content-wrapper {
-            margin-left: 55%;
-            text-align: left;
-        }
-        
-        .timeline-marker {
+
+        /* The Node (Dot) */
+        .timeline-node {
             position: absolute;
             left: 50%;
-            top: 0;
-            transform: translateX(-50%);
-            width: 20px;
-            height: 20px;
-            background: var(--accent-teal);
-            border: 4px solid var(--charcoal-dark);
+            width: 16px; height: 16px;
             border-radius: 50%;
+            background: var(--charcoal-dark);
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
             z-index: 2;
-            transition: all 0.3s ease;
-        }
-        
-        .timeline-item:hover .timeline-marker {
-            transform: translateX(-50%) scale(1.3);
-            box-shadow: 0 0 20px var(--accent-teal);
-        }
-        
-        .timeline-content-wrapper {
-            background: var(--charcoal-light);
-            border-radius: 15px;
-            padding: 2rem;
-            border: 1px solid var(--charcoal-light);
-            transition: all 0.3s ease;
-        }
-        
-        .timeline-item:hover .timeline-content-wrapper {
-            border-color: var(--accent-teal);
-            transform: translateY(-5px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
-        }
-        
-        .timeline-date {
-            font-family: var(--font-heading);
-            color: var(--accent-teal);
-            font-weight: 600;
-            font-size: 1.1rem;
-            margin-bottom: 0.5rem;
-        }
-        
-        .timeline-title {
-            font-size: 1.3rem;
-            color: var(--text-primary);
-            margin-bottom: 1rem;
-            font-weight: 600;
-        }
-        
-        .timeline-description {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 1rem;
-        }
-        
-        /* Projects Grid */
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
-            gap: 2rem;
-            margin-bottom: 4rem;
-        }
-        
-        .project-card {
-            background: var(--charcoal-light);
-            border-radius: 15px;
-            overflow: hidden;
-            transition: all 0.3s ease;
-            border: 1px solid var(--charcoal-light);
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-            border-color: var(--accent-teal);
-        }
-        
-        .project-image {
-            width: 100%;
-            height: 200px;
-            object-fit: cover;
-            transition: all 0.3s ease;
-            background-color: var(--charcoal-dark);
-        }
-        
-        .project-card:hover .project-image {
-            transform: scale(1.05);
-        }
-        
-        .project-content {
-            padding: 2rem;
-            flex-grow: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .project-title {
-            font-family: var(--font-heading);
-            font-size: 1.4rem;
-            color: var(--accent-teal);
-            margin-bottom: 1rem;
-        }
-        
-        .project-category {
-            background: var(--accent-teal);
-            color: var(--charcoal-dark);
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
-            display: inline-block;
-            margin-bottom: 1rem;
-            align-self: flex-start;
-        }
-        
-        .project-description {
-            color: var(--text-secondary);
-            line-height: 1.6;
-            margin-bottom: 1.5rem;
-            flex-grow: 1;
-        }
-        
-        .project-tech {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 0.5rem;
-        }
-        
-        .tech-tag {
-            background: var(--charcoal-dark);
-            color: var(--text-primary);
-            padding: 0.3rem 0.8rem;
-            border-radius: 15px;
-            font-size: 0.8rem;
-            font-weight: 600;
+            transform: translateX(-50%);
+            background: #172a45; /* Match bg to hide line behind */
         }
 
-        /* CTA Shortcut Styling */
-    	.cta-shortcut {
-		    background: var(--charcoal-dark);
-		    padding: 5rem 0;
-		    text-align: center;
-		    border-top: 1px solid var(--charcoal-light);
-       		border-bottom: 1px solid var(--charcoal-light);
-    	}
+        .timeline-node.pulse { animation: pulse-teal 2s infinite; }
+        @keyframes pulse-teal { 0% { box-shadow: 0 0 0 0 rgba(77, 182, 172, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(77, 182, 172, 0); } 100% { box-shadow: 0 0 0 0 rgba(77, 182, 172, 0); } }
 
-    	.cta-shortcut .section-title {
-        	margin-bottom: 2rem;
-        	font-size: 2rem;
-        	color: var(--accent-teal);
-    	}
-
-    	.cta-shortcut .btn-primary {
-		    padding: 1rem 2rem;
-        	font-size: 1rem;
-   	    }
-        
-        /* Footer */
-        footer {
-            background: var(--charcoal-dark);
-            padding: 2rem 0;
-            text-align: center;
-            border-top: 1px solid var(--charcoal-light);
-        }
-        
-        .footer-content {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 2rem;
-        }
-        
-        .footer-text {
-            color: var(--text-secondary);
-            font-size: 0.9rem;
-        }
-        
-        /* Animation Classes */
-        .reveal {
-            opacity: 0;
-            transform: translateY(50px);
-            transition: all 0.8s ease;
-        }
-        
-        .reveal.revealed {
-            opacity: 1;
-            transform: translateY(0);
+        /* Card Container (Half Width) */
+        .timeline-content {
+            width: 50%;
+            position: relative;
+            padding: 0 3rem; /* Space from center line */
         }
 
-	#particles-js {
-    		position: fixed;
-    		width: 100%;
-    		height: 100%;
-    		top: 0;
-    		left: 0;
-    		z-index: -1;
-    		background-color: var(--charcoal-dark);
-	}
-    
-    /* Responsive Design - Mobile Only */
-    @media (max-width: 768px) {
-        .glass-nav {
-            display: none; 
-        }
-        .mobile-menu {
-            display: block; 
-        }
-        .main-content {
-            margin-top: 100px; 
-        }
-
-        .page-title {
-            font-size: 2rem;
-        }
-        
-        .timeline::before {
-            left: 20px;
-        }
-        
-        .timeline-item:nth-child(odd) .timeline-content-wrapper,
-        .timeline-item:nth-child(even) .timeline-content-wrapper {
-            margin-left: 60px;
-            margin-right: 0;
+        /* Alternating Logic */
+        .timeline-row:nth-child(odd) .timeline-content {
+            margin-left: auto; /* Push to right */
             text-align: left;
         }
         
-        .timeline-marker {
-            left: 20px;
-            transform: translateX(-50%);
+        .timeline-row:nth-child(even) .timeline-content {
+            margin-right: auto; /* Push to left */
+            text-align: right;
         }
-        
-        .projects-grid {
-            grid-template-columns: 1fr;
-        }
-        
-        .featured-title {
-            font-size: 2rem;
-        }
-        
-        .featured-highlights {
-            grid-template-columns: 1fr;
-        }
-    }
 
-    @media (min-width: 769px) {
-        .mobile-menu {
-            display: none; 
+        /* Reverse layout for Even items (Card on Left) */
+        .timeline-row:nth-child(even) {
+            flex-direction: row-reverse;
         }
-        .glass-nav {
-            display: block; 
+
+        /* Timeline Card Styling */
+        .t-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+            width: fit-content;
+            /* Prevent cards from being too small or too wide */
+            min-width: 300px;
+            max-width: 100%;
         }
-        .main-content {
-            margin-top: 100px; 
+
+        /* Align cards to the spine */
+        .timeline-row:nth-child(odd) .t-card { margin-right: auto; } 
+        .timeline-row:nth-child(even) .t-card { margin-left: auto; }
+
+        /* Horizontal Connector */
+        .t-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 3rem; /* Reaches to center padding */
+            height: 1px;
+            background: linear-gradient(90deg, var(--primary), rgba(255,255,255,0.1));
+            opacity: 0.5;
         }
-    }
+
+        /* Connector Positioning based on side */
+        .timeline-row:nth-child(odd) .t-card::before {
+            left: -3rem;
+        }
+        .timeline-row:nth-child(even) .t-card::before {
+            right: -3rem;
+            background: linear-gradient(-90deg, var(--primary), rgba(255,255,255,0.1));
+        }
+
+        /* Hover Effects */
+        .timeline-row:hover .timeline-node { transform: translateX(-50%) scale(1.3); background: var(--primary); }
+        .timeline-row:hover .t-card { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); transform: translateY(-3px); }
+
+        /* Text Styles */
+        .t-date { display: block; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--primary); margin-bottom: 0.5rem; }
+        .t-title { font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 0.2rem; }
+        .t-loc { font-size: 0.9rem; color: var(--text-muted); }
+
+        /* --- PROJECT GALLERY --- */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+        .project-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-card); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s ease, border-color 0.3s ease; text-decoration: none; height: 100%; }
+        .project-card:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .project-img-box { height: 220px; overflow: hidden; border-bottom: 1px solid rgba(255,255,255,0.05); position: relative; }
+        .project-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .project-card:hover .project-img { transform: scale(1.05); }
+        .project-body { padding: 2rem; display: flex; flex-direction: column; flex-grow: 1;}
+        .project-cat { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 0.5rem; }
+        .project-title { font-size: 1.4rem; color: #fff; font-weight: 700; margin-bottom: 1rem; }
+        .project-desc { color: #e2e8f0; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; flex-grow: 1; }
+        .tag-container { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .tech-pill { padding: 4px 12px; background: rgba(255,255,255,0.05); border-radius: 50px; font-size: 0.75rem; color: var(--primary); border: 1px solid rgba(77, 182, 172, 0.2); }
+
+        /* --- DOCK --- */
+        .dock-wrapper { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 100; width: auto; }
+        .dock { background: rgba(15, 20, 30, 0.6); backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px); border: 1px solid rgba(255,255,255,0.1); border-top: 1px solid rgba(255,255,255,0.2); padding: 0.8rem 1rem; border-radius: var(--radius-dock); display: flex; gap: 1rem; box-shadow: 0 20px 40px rgba(0,0,0,0.5); }
+        .dock-icon { width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; border-radius: 16px; color: var(--text-muted); font-size: 1.3rem; text-decoration: none; background: rgba(255,255,255,0.03); border: 1px solid transparent; transition: all 0.2s; position: relative; }
+        .dock-icon:hover { transform: translateY(-8px) scale(1.1); background: rgba(255,255,255,0.1); border-color: rgba(255,255,255,0.2); color: #fff; }
+        .dock-icon.active { background: var(--primary); color: #000; box-shadow: 0 0 20px var(--primary-glow); }
+        .dock-icon::before { content: attr(data-title); position: absolute; top: -40px; left: 50%; transform: translateX(-50%); background: rgba(0,0,0,0.8); color: #fff; padding: 4px 10px; border-radius: 6px; font-size: 0.75rem; opacity: 0; pointer-events: none; transition: 0.2s; white-space: nowrap; backdrop-filter: blur(4px); border: 1px solid rgba(255,255,255,0.1); }
+        .dock-icon:hover::before { opacity: 1; top: -50px; }
+
+        /* --- RESPONSIVE --- */
+        @media (max-width: 768px) {
+            .main-container { padding-top: 4rem; }
+            .highlights-grid { grid-template-columns: 1fr; }
+            .projects-grid { grid-template-columns: 1fr; }
+            .dock-wrapper { bottom: 1.5rem; width: 90%; }
+            .dock { justify-content: space-between; width: 100%; gap: 0; padding: 0.8rem; }
+            
+            /* Timeline Mobile Reset */
+            .timeline-wrapper::before { left: 20px; } /* Move line to left */
+            .timeline-row { flex-direction: column !important; align-items: flex-start; margin-bottom: 3rem; }
+            .timeline-node { left: 20px; top: 24px; transform: translateX(-50%); } /* Position dot at top left */
+            .timeline-row:hover .timeline-node { transform: translateX(-50%) scale(1.3); }
+            
+            .timeline-content { width: 100%; padding: 0 0 0 3.5rem; margin: 0 !important; text-align: left !important; }
+            .t-card { width: 100%; min-width: auto; }
+            
+            /* Connector on Mobile */
+            .t-card::before { width: 1.5rem; left: -1.5rem; top: 24px; right: auto; background: var(--primary); }
+            .timeline-row:nth-child(even) .t-card::before { left: -1.5rem; right: auto; background: var(--primary); }
+        }
     </style>
 </head>
 <body>
-    <svg style="display: none">
-        <filter id="glass-distortion">
-            <feTurbulence type="turbulence" baseFrequency="0.008" numOctaves="2" result="noise" />
-            <feDisplacementMap in="SourceGraphic" in2="noise" scale="77" />
-        </filter>
-    </svg>
-
-    <nav class="glass-nav">
-        <div class="glass-filter"></div>
-        <div class="glass-overlay"></div>
-        <div class="glass-specular"></div>
-        <div class="glass-content">
-            <a href="index.html" class="glass-logo">AVdP</a>
-            <ul class="nav-list">
-                <li><a href="index.html" class="nav-item">Home</a></li>
-                <li><a href="about.html" class="nav-item">About</a></li>
-                <li><a href="projects.html" class="nav-item active">Projects</a></li>
-                <li><a href="contact.html" class="nav-item">Contact</a></li>
-            </ul>
-        </div>
-    </nav>
-
-    <div class="mobile-menu">
-        <input type="checkbox" id="mobile-menu-toggle" class="dropdown-toggle">
-        
-        <label for="mobile-menu-toggle" class="mobile-hamburger">
-            <div class="glass-filter"></div>
-            <div class="glass-overlay"></div>
-            <div class="glass-specular"></div>
-            <div class="glass-content">
-                <a href="index.html" class="glass-logo">AVdP</a>
-                <div class="hamburger-icon">
-                    <span></span>
-                    <span></span>
-                    <span></span>
-                </div>
-            </div>
-        </label>
-        
-        <div class="mobile-dropdown-content">
-            <div class="glass-filter"></div>
-            <div class="glass-overlay"></div>
-            <div class="glass-specular"></div>
-            <ul class="mobile-nav-list">
-                <li><a href="index.html" class="mobile-nav-item">Home</a></li>
-                <li><a href="about.html" class="mobile-nav-item">About</a></li>
-                <li><a href="projects.html" class="mobile-nav-item active">Projects</a></li>
-                <li><a href="contact.html" class="mobile-nav-item">Contact</a></li>
-            </ul>
-        </div>
-    </div>
 
     <div id="particles-js"></div>
 
-    <main class="main-content">
-        <div class="container">
-            <h1 class="page-title reveal">My Projects</h1>
-            <p class="page-subtitle reveal">Hands-on experience in design, prototyping, and engineering</p>
-            
-            <section class="featured-project reveal">
-                <div class="featured-content">
-                    <div class="featured-badge">🏆 Award-Winning Bachelor's Thesis</div>
-                    <h2 class="featured-title">Bachelor's Thesis: Biomechanical Ornithopter</h2>
-                    <p class="featured-description">
-                        As my final year Bachelor's project, my colleague (Tibo Opdebeeck) and I took on the challenge of biomechanically replicating a bird's flight. The result was an award-winning ornithopter (a robotic bird).
-                        <br><br>
-                        We developed multiple prototypes that simulated the complex wing flap as accurately as possible, combining mechanics, electronics, and aerodynamics to turn an idea into a working prototype. All components were custom-designed, 3D-printed, and lasercut by us. By combining knowledge from these different domains, we arrived at a functional and well-thought-out technological solution.
+    <div class="main-container">
+        
+        <!-- HEADER -->
+        <div class="page-header reveal">
+            <h1 class="page-title">Projects & Timeline</h1>
+            <p class="page-subtitle">
+                Hands-on experience in design, prototyping, and engineering. A gallery of what I've built and where I've been.
+            </p>
+        </div>
+
+        <!-- FEATURED PROJECT -->
+        <section class="reveal">
+            <div class="section-header"><i class="fas fa-star"></i> Featured Thesis</div>
+            <div class="glass-card hero-project">
+                <span class="hero-badge"><i class="fas fa-trophy"></i> Award Winner</span>
+                <div class="hero-content">
+                    <h2>Biomechanical Ornithopter</h2>
+                    <p class="hero-desc">
+                        As my final year Bachelor's project, my colleague (Tibo Opdebeeck) and I took on the challenge of biomechanically replicating a bird's flight. We developed multiple prototypes that simulated the complex wing flap as accurately as possible, combining mechanics, electronics, and aerodynamics. All components were custom-designed, 3D-printed, and lasercut by us.
                     </p>
                     
-                    <div class="featured-highlights">
+                    <div class="highlights-grid">
                         <div class="highlight-item">
-                            <h4 class="highlight-title">Innovation</h4>
-                            <p class="highlight-text">Simulated biomechanics of a bird's wing flap using integrated mechanics, electronics, and aerodynamics.</p>
+                            <h4><i class="fas fa-lightbulb"></i> Innovation</h4>
+                            <p>Simulated biomechanics using integrated mechanics, electronics, and aerodynamics.</p>
                         </div>
                         <div class="highlight-item">
-                            <h4 class="highlight-title">Rapid Prototyping</h4>
-                            <p class="highlight-text">All components were personally designed, 3D-printed, and lasercut to create multiple working prototypes.</p>
+                            <h4><i class="fas fa-cogs"></i> Rapid Prototyping</h4>
+                            <p>Personally designed, 3D-printed, and lasercut components for rapid iteration.</p>
                         </div>
                         <div class="highlight-item">
-                            <h4 class="highlight-title">Recognition</h4>
-                            <p class="highlight-text">Winners of the "Pitch je STEM-project 2025" competition at KU Leuven, Campus Geel.</p>
+                            <h4><i class="fas fa-award"></i> Recognition</h4>
+                            <p>Winners of "Pitch je STEM-project 2025" at KU Leuven, Campus Geel.</p>
                         </div>
                     </div>
                 </div>
-            </section>
+            </div>
+        </section>
 
-            <section class="timeline-section reveal">
-                <h2 class="section-title">Career & Education Timeline</h2>
-                <div class="timeline">
-                    <div class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content-wrapper">
-                            <div class="timeline-date">2015</div>
-                            <h3 class="timeline-title">Began 3D Printing & Prototyping</h3>
-                            <p class="timeline-description">Started working with 3D printers, sparking a long-term passion for personal design and fabrication.</p>
-                        </div>
-                    </div>
-                    
-                    <div class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content-wrapper">
-                            <div class="timeline-date">2021 - 2025</div>
-                            <h3 class="timeline-title">Bachelor of Science: Industrial Engineering</h3>
-                            <p class="timeline-description">KU Leuven, Campus Geel</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content-wrapper">
-                            <div class="timeline-date">Summer 2021</div>
-                            <h3 class="timeline-title">Student Production Operator</h3>
-                            <p class="timeline-description">DAF Trucks</p>
-                        </div>
-                    </div>
-
-                    <div class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content-wrapper">
-                            <div class="timeline-date">Summer 2022</div>
-                            <h3 class="timeline-title">Student Production Operator</h3>
-                            <p class="timeline-description">DAF Trucks</p>
-                        </div>
-                    </div>
-
-                    <div class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content-wrapper">
-                            <div class="timeline-date">Summer 2023</div>
-                            <h3 class="timeline-title">Student Production Operator</h3>
-                            <p class="timeline-description">Keune & Nagel</p>
-                        </div>
-                    </div>
-
-                    <div class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content-wrapper">
-                            <div class="timeline-date">Summer 2024</div>
-                            <h3 class="timeline-title">Student Production Operator</h3>
-                            <p class="timeline-description">Estée Lauder</p>
-                        </div>
-                    </div>
-
-                    <div class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content-wrapper">
-                            <div class="timeline-date">2025</div>
-                            <h3 class="timeline-title">Won "Pitch je STEM-project" (Bachelor's Thesis)</h3>
-                            <p class="timeline-description">KU Leuven, Campus Geel</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content-wrapper">
-                            <div class="timeline-date">Summer 2025</div>
-                            <h3 class="timeline-title">Student Production Operator</h3>
-                            <p class="timeline-description">Smurfit Westrock</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content-wrapper">
-                            <div class="timeline-date">Summer 2025 - Present</div>
-                            <h3 class="timeline-title">Volunteer & Workshop Host</h3>
-                            <p class="timeline-description">De Maakplek, Westerlo</p>
-                        </div>
-                    </div>
-                    <div class="timeline-item">
-                        <div class="timeline-marker"></div>
-                        <div class="timeline-content-wrapper">
-                            <div class="timeline-date">2025 - 2026 (Expected)</div>
-                            <h3 class="timeline-title">Master of Science: Industrial Engineering</h3>
-                            <p class="timeline-description">KU Leuven, Gent</p>
-                        </div>
-                    </div>
-
-                </div>
-            </section>
-
-            <section class="projects-section reveal">
-                <h2 class="section-title">Personal Prototyping Gallery</h2>
-                <p class="page-subtitle">A place to showcase what I build. Here I will add projects with brief explanations of the process and the result.</p>
-
-                <div class="projects-grid">
-                    <div class="project-card" data-category="design">
-                        <img src="resources/scratch_a_cat.jpg" alt="scratch a cat" class="project-image">
-                        <div class="project-content">
-                            <div class="project-category">Personal Project</div>
-                            <h3 class="project-title">Scratch A Cat</h3>
-                            <p class="project-description">A product that works as a cat massager, can be filled with a herb blend to attracts and relaxes your cat.</p>
-                            <div class="project-tech">
-                                <span class="tech-tag">3D Printing</span>
-				<span class="tech-tag">CAD</span>
-                                <span class="tech-tag">Prototyping</span>
-				<span class="tech-tag">product development</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="project-card" data-category="design">
-                        <img src="resources/guitar_pedal.jpg" alt="Placeholder Project" class="project-image">
-                        <div class="project-content">
-                            <div class="project-category">Personal Project</div>
-                            <h3 class="project-title">Modular Guitar Pedal</h3>
-                            <p class="project-description">A fully worked out conceptual Guitar Pedal, where each effect can be inserted like the nostalgic Nintendo 64.</p>
-                            <div class="project-tech">
-                                <span class="tech-tag">CAD/CAM</span>
-                                <span class="tech-tag">Prototyping</span>
-				<span class="tech-tag">Collaboration</span>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div class="project-card" data-category="design">
-                        <img src="resources/LED_lamp.jpg" alt="Placeholder Project" class="project-image">
-                        <div class="project-content">
-                            <div class="project-category">Personal Project</div>
-                            <h3 class="project-title">Decorational LED Lamp</h3>
-                            <p class="project-description">A beautiful decorational lamp, based on Arabic design. Remotely controlled LEDs via wifi.</p>
-                            <div class="project-tech">
-                                <span class="tech-tag">Product Design</span>
-                                <span class="tech-tag">Prototyping</span>
-				<span class="tech-tag">CAD</span>
-				<span class="tech-tag">3D Printing</span>
-                            </div>
+        <!-- CENTERED TIMELINE -->
+        <section class="reveal">
+            <div class="section-header centered"><i class="fas fa-history"></i> The Journey</div>
+            
+            <div class="timeline-wrapper">
+                
+                <!-- 1. Future -->
+                <div class="timeline-row">
+                    <div class="timeline-node pulse"></div>
+                    <div class="timeline-content">
+                        <div class="t-card">
+                            <span class="t-date">2025 - 2026 (Expected)</span>
+                            <h3 class="t-title">Master of Science: Industrial Engineering</h3>
+                            <div class="t-loc">KU Leuven, Gent</div>
                         </div>
                     </div>
                 </div>
-            </section>
-        </div>
-    </main>
 
-    <section class="cta-shortcut">
-        <div class="container">
-            <h2 class="section-title reveal">Ready to Connect?</h2>
-            <a href="contact.html" class="btn btn-primary reveal">
-                <span>Send Me a Message</span>
+                <!-- 2. Present -->
+                <div class="timeline-row">
+                    <div class="timeline-node pulse"></div>
+                    <div class="timeline-content">
+                        <div class="t-card">
+                            <span class="t-date">2025 - Present</span>
+                            <h3 class="t-title">Volunteer & Workshop Host</h3>
+                            <div class="t-loc">De Maakplek, Westerlo</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Award -->
+                <div class="timeline-row">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="t-card">
+                            <span class="t-date">2025</span>
+                            <h3 class="t-title">Won "Pitch je STEM-project"</h3>
+                            <div class="t-loc">Bachelor's Thesis Award</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 4. Summer 25 -->
+                <div class="timeline-row">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="t-card">
+                            <span class="t-date">Summer 2025</span>
+                            <h3 class="t-title">Student Production Operator</h3>
+                            <div class="t-loc">Smurfit Westrock</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 5. Summer 24 -->
+                <div class="timeline-row">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="t-card">
+                            <span class="t-date">Summer 2024</span>
+                            <h3 class="t-title">Student Production Operator</h3>
+                            <div class="t-loc">Estée Lauder</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 6. Summer 23 -->
+                <div class="timeline-row">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="t-card">
+                            <span class="t-date">Summer 2023</span>
+                            <h3 class="t-title">Student Production Operator</h3>
+                            <div class="t-loc">Keune & Nagel</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 7. Summer 21/22 -->
+                <div class="timeline-row">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="t-card">
+                            <span class="t-date">Summer 2021 - 2022</span>
+                            <h3 class="t-title">Student Production Operator</h3>
+                            <div class="t-loc">DAF Trucks</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 8. Bachelor -->
+                <div class="timeline-row">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="t-card">
+                            <span class="t-date">2021 - 2025</span>
+                            <h3 class="t-title">Bachelor of Science</h3>
+                            <div class="t-loc">KU Leuven, Campus Geel</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 9. Start -->
+                <div class="timeline-row">
+                    <div class="timeline-node"></div>
+                    <div class="timeline-content">
+                        <div class="t-card">
+                            <span class="t-date">2015</span>
+                            <h3 class="t-title">Began 3D Printing & Prototyping</h3>
+                            <div class="t-loc">The spark of my passion.</div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </section>
+
+        <!-- GALLERY GRID -->
+        <section class="reveal">
+            <div class="section-header"><i class="fas fa-hammer"></i> Prototyping Gallery</div>
+            <div class="projects-grid">
+                
+                <!-- Project 1 -->
+                <a href="#" class="project-card">
+                    <div class="project-img-box">
+                        <img src="resources/scratch_a_cat.jpg" alt="Scratch A Cat" class="project-img" onerror="this.src='https://placehold.co/600x400/172a45/4DB6AC?text=Cat+Project'">
+                    </div>
+                    <div class="project-body">
+                        <span class="project-cat">Personal Project</span>
+                        <h3 class="project-title">Scratch A Cat</h3>
+                        <p class="project-desc">
+                            A product designed as a cat massager. It can be filled with a herb blend to attract and relax your pet.
+                        </p>
+                        <div class="tag-container">
+                            <span class="tech-pill">3D Printing</span>
+                            <span class="tech-pill">CAD</span>
+                            <span class="tech-pill">Product Dev</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 2 -->
+                <a href="#" class="project-card">
+                    <div class="project-img-box">
+                        <img src="resources/guitar_pedal.jpg" alt="Guitar Pedal" class="project-img" onerror="this.src='https://placehold.co/600x400/172a45/4DB6AC?text=Guitar+Pedal'">
+                    </div>
+                    <div class="project-body">
+                        <span class="project-cat">Concept</span>
+                        <h3 class="project-title">Modular Guitar Pedal</h3>
+                        <p class="project-desc">
+                            A fully conceptualized Guitar Pedal where each effect module can be inserted like a nostalgic Nintendo 64 cartridge.
+                        </p>
+                        <div class="tag-container">
+                            <span class="tech-pill">CAD/CAM</span>
+                            <span class="tech-pill">Prototyping</span>
+                            <span class="tech-pill">Collaboration</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 3 -->
+                <a href="#" class="project-card">
+                    <div class="project-img-box">
+                        <img src="resources/LED_lamp.jpg" alt="LED Lamp" class="project-img" onerror="this.src='https://placehold.co/600x400/172a45/4DB6AC?text=LED+Lamp'">
+                    </div>
+                    <div class="project-body">
+                        <span class="project-cat">Personal Project</span>
+                        <h3 class="project-title">Decorational LED Lamp</h3>
+                        <p class="project-desc">
+                            A beautiful decorative lamp based on Arabic design patterns. Features remotely controlled LEDs via WiFi integration.
+                        </p>
+                        <div class="tag-container">
+                            <span class="tech-pill">Product Design</span>
+                            <span class="tech-pill">IoT</span>
+                            <span class="tech-pill">3D Printing</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- CTA -->
+        <section class="reveal" style="text-align: center; padding: 4rem 0;">
+            <h2 style="font-size: 2rem; margin-bottom: 1rem; color: #fff;">Ready to connect?</h2>
+            <p style="color: var(--text-muted); margin-bottom: 2rem;">
+                Contact me to start building something new together
+            </p>
+            <a href="contact.html" style="display: inline-block; padding: 1rem 3rem; background: var(--primary); color: #000; border-radius: 50px; text-decoration: none; font-weight: 700; transition: transform 0.2s; box-shadow: 0 0 20px var(--primary-glow);">
+                Let's Talk
             </a>
-        </div>
-    </section>
+        </section>
+    </div>
 
-    <footer>
-        <div class="footer-content">
-            <p class="footer-text">&copy; 2025 Alexander Van den Putte. All rights reserved. | Industrial Engineering Portfolio</p>
-        </div>
-    </footer>
+    <!-- DOCK NAVIGATION -->
+    <div class="dock-wrapper">
+        <nav class="dock">
+            <a href="index.html" class="dock-icon" data-title="Home"><i class="fas fa-home"></i></a>
+            <a href="about.html" class="dock-icon" data-title="About"><i class="fas fa-user"></i></a>
+            <a href="projects.html" class="dock-icon active" data-title="Projects"><i class="fas fa-layer-group"></i></a>
+            <a href="contact.html" class="dock-icon" data-title="Contact"><i class="fas fa-envelope"></i></a>
+            <div style="width: 1px; background: rgba(255,255,255,0.1); height: 30px; margin: auto 0.2rem;"></div>
+            <a href="https://www.linkedin.com/in/alexander-van-den-putte-6183b81a0/" target="_blank" class="dock-icon" data-title="LinkedIn"><i class="fab fa-linkedin"></i></a>
+        </nav>
+    </div>
 
-    <script src="main.js"></script>
-
-    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <!-- SCRIPTS -->
     <script>
-    particlesJS('particles-js', 
-      {
-        "particles": {
-          "number": { "value": 60, "density": { "enable": true, "value_area": 800 } },
-          "color": { "value": "#4DB6AC" },
-          "shape": { "type": "circle", "stroke": { "width": 0, "color": "#000000" }, "polygon": { "nb_sides": 5 } },
-          "opacity": { "value": 0.2, "random": false, "anim": { "enable": false, "speed": 1, "opacity_min": 0.1, "sync": false } },
-          "size": { "value": 3, "random": true, "anim": { "enable": false, "speed": 40, "size_min": 0.1, "sync": false } },
-          "line_linked": { "enable": true, "distance": 150, "color": "#C0C5CC", "opacity": 0.15, "width": 1 },
-          "move": { "enable": true, "speed": 2, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false, "attract": { "enable": false, "rotateX": 600, "rotateY": 1200 } }
-        },
-        "interactivity": {
-          "detect_on": "canvas",
-          "events": { "onhover": { "enable": true, "mode": "repulse" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
-          "modes": {
-            "grab": { "distance": 400, "line_linked": { "opacity": 1 } },
-            "bubble": { "distance": 400, "size": 40, "duration": 2, "opacity": 8, "speed": 3 },
-            "repulse": { "distance": 100, "duration": 0.4 },
-            "push": { "particles_nb": 4 },
-            "remove": { "particles_nb": 2 }
-          }
-        },
-        "retina_detect": true
-      }
-    );
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // 1. Particles
+            particlesJS("particles-js", {
+                "particles": {
+                    "number": { "value": 40, "density": { "enable": true, "value_area": 800 } },
+                    "color": { "value": "#4DB6AC" },
+                    "shape": { "type": "circle" },
+                    "opacity": { "value": 0.2, "random": true },
+                    "size": { "value": 3, "random": true },
+                    "line_linked": { "enable": true, "distance": 150, "color": "#4DB6AC", "opacity": 0.1, "width": 1 },
+                    "move": { "enable": true, "speed": 1, "direction": "none", "random": false, "straight": false, "out_mode": "out", "bounce": false }
+                },
+                "interactivity": {
+                    "detect_on": "canvas",
+                    "events": { "onhover": { "enable": true, "mode": "grab" }, "onclick": { "enable": true, "mode": "push" }, "resize": true },
+                    "modes": { "grab": { "distance": 140, "line_linked": { "opacity": 0.5 } } }
+                },
+                "retina_detect": true
+            });
+
+            // 2. Scroll Reveal
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('visible');
+                    }
+                });
+            }, { threshold: 0.1 });
+
+            document.querySelectorAll('.reveal').forEach(section => {
+                observer.observe(section);
+            });
+
+            // 3. Tilt Effect
+            if (window.innerWidth > 768) {
+                VanillaTilt.init(document.querySelectorAll(".glass-card, .project-card, .t-card"), {
+                    max: 3, speed: 400, glare: true, "max-glare": 0.1, scale: 1.01
+                });
+            }
+        });
     </script>
 </body>
 </html>
