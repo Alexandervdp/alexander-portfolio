@@ -5,11 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Projects | Alexander Van den Putte</title>
     
+    <!-- Typography: Inter -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
+    <!-- Libraries -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/vanilla-tilt/1.7.0/vanilla-tilt.min.js"></script>
     <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
 
@@ -44,7 +46,7 @@
 
         #particles-js { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; opacity: 0.6; }
 
-        .main-container { max-width: 1200px; margin: 0 auto; padding: 6rem 1.5rem 8rem; }
+        .main-container { max-width: 1100px; margin: 0 auto; padding: 6rem 1.5rem 8rem; }
 
         section { margin-bottom: 5rem; opacity: 0; transform: translateY(30px); transition: all 0.8s cubic-bezier(0.2, 0.8, 0.2, 1); }
         section.visible { opacity: 1; transform: translateY(0); }
@@ -54,6 +56,7 @@
         .page-title { font-size: clamp(2.5rem, 5vw, 4rem); font-weight: 800; line-height: 1.1; letter-spacing: -0.02em; background: linear-gradient(to bottom right, #ffffff 30%, #94a3b8 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-bottom: 1rem; }
         .page-subtitle { color: var(--text-muted); font-size: 1.1rem; max-width: 600px; margin: 0 auto; }
         
+        /* Standard Left-Aligned Header */
         .section-header { 
             font-size: 0.9rem; text-transform: uppercase; letter-spacing: 1px; 
             color: var(--primary); margin-bottom: 1.5rem; 
@@ -66,10 +69,18 @@
             opacity: 0.3; margin-left: 1rem; 
         }
 
-        .section-header.centered { justify-content: center; margin-bottom: 3rem; }
-        .section-header.centered::before { content: ''; height: 1px; width: 50px; background: linear-gradient(90deg, transparent, var(--primary)); opacity: 0.3; }
+        /* Centered Header Specially for Timeline */
+        .section-header.centered {
+            justify-content: center;
+            margin-bottom: 3rem;
+        }
+        .section-header.centered::before { 
+            content: ''; height: 1px; width: 50px; 
+            background: linear-gradient(90deg, transparent, var(--primary)); 
+            opacity: 0.3; 
+        }
 
-        /* Glass Card Base */
+        /* Glass Card */
         .glass-card { background: var(--glass-bg); backdrop-filter: blur(var(--glass-blur)); -webkit-backdrop-filter: blur(var(--glass-blur)); border: 1px solid var(--glass-border); border-top: 1px solid rgba(255,255,255,0.15); border-radius: var(--radius-card); box-shadow: var(--glass-shadow); overflow: hidden; padding: 2.5rem; }
 
         /* Hero Project */
@@ -82,73 +93,136 @@
         .highlight-item h4 { color: var(--primary); margin-bottom: 0.5rem; font-size: 1rem;}
         .highlight-item p { color: #e2e8f0; font-size: 0.9rem; line-height: 1.5;}
 
-        /* --- CAROUSEL STYLES --- */
-        .carousel-wrapper { position: relative; width: 100%; height: 620px; perspective: 1000px; margin-top: 2rem; }
-        .card-track { position: relative; width: 100%; height: 100%; -webkit-mask-image: linear-gradient(to right, transparent 0%, black 10%, black 90%, transparent 100%); }
-
-        .project-card {
-            /* Adjusted width back to 32% to prevent overlap, kept height at 580px */
-            position: absolute; width: 32%; height: 580px;
-            background: var(--glass-bg); backdrop-filter: blur(16px);
-            border: 1px solid var(--glass-border); border-radius: var(--radius-card);
-            display: flex; flex-direction: column; text-decoration: none; overflow: hidden;
-            transition: all 0.6s cubic-bezier(0.25, 0.8, 0.25, 1);
-            opacity: 0; pointer-events: none;
-            /* Default hidden state */
-            left: 34%; transform: scale(0.8); z-index: 1;
+        /* --- CENTERED CIRCUIT TIMELINE --- */
+        .timeline-wrapper {
+            position: relative;
+            max-width: 1000px;
+            margin: 0 auto;
+            padding: 2rem 0;
         }
 
-        /* Slots for Circular Logic - Recalculated for 32% Width */
-        .slot-0 { left: -25%; transform: scale(0.7); opacity: 0; z-index: 0; }
-        .slot-1 { left: 1%; transform: scale(0.9); opacity: 0.7; z-index: 4; pointer-events: auto; cursor: pointer; } /* Left Side */
-        .slot-2 { left: 34%; transform: scale(1); opacity: 1; z-index: 5; pointer-events: auto; box-shadow: 0 10px 40px rgba(0,0,0,0.5); border-color: var(--primary); } /* Center */
-        .slot-3 { left: 67%; transform: scale(0.9); opacity: 0.7; z-index: 4; pointer-events: auto; cursor: pointer; } /* Right Side */
-        .slot-4 { left: 95%; transform: scale(0.7); opacity: 0; z-index: 0; }
-
-        .project-img-box { height: 220px; overflow: hidden; border-bottom: 1px solid rgba(255,255,255,0.05); flex-shrink: 0; }
-        .project-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s; }
-        .project-card:hover .project-img { transform: scale(1.05); }
-        
-        .project-body { padding: 1.8rem; display: flex; flex-direction: column; flex-grow: 1; }
-        .project-title { font-size: 1.3rem; color: #fff; margin-bottom: 0.8rem; font-weight: 700; }
-        
-        /* Line clamp for description */
-        .project-desc { 
-            font-size: 0.95rem; color: var(--text-muted); line-height: 1.6; 
-            overflow: hidden; display: -webkit-box; -webkit-line-clamp: 6; 
-            -webkit-box-orient: vertical; margin-bottom: 1rem; 
+        /* Continuous Center Line */
+        .timeline-wrapper::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            left: 50%;
+            width: 2px;
+            background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.1) 10%, rgba(255, 255, 255, 0.1) 90%, transparent);
+            transform: translateX(-50%);
+            z-index: 0;
         }
-        
-        .tag-container { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: auto; }
-        .tech-pill { padding: 4px 10px; background: rgba(255,255,255,0.05); border-radius: 50px; font-size: 0.7rem; color: var(--primary); border: 1px solid rgba(77, 182, 172, 0.2); }
 
-        .nav-button { position: absolute; top: 50%; transform: translateY(-50%); z-index: 100; width: 50px; height: 50px; border-radius: 50%; background: rgba(23, 42, 69, 0.9); border: 1px solid rgba(255,255,255,0.2); color: var(--primary); display: flex; align-items: center; justify-content: center; cursor: pointer; transition: 0.2s; box-shadow: 0 4px 15px rgba(0,0,0,0.3); }
-        .nav-button:hover { background: var(--primary); color: #000; box-shadow: 0 0 15px var(--primary-glow); }
-        .prev-btn { left: 0px; }
-        .next-btn { right: 0px; }
+        .timeline-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 4rem;
+            position: relative;
+            width: 100%;
+        }
 
-        /* --- TIMELINE --- */
-        .timeline-wrapper { position: relative; max-width: 1000px; margin: 0 auto; padding: 2rem 0; }
-        .timeline-wrapper::before { content: ''; position: absolute; top: 0; bottom: 0; left: 50%; width: 2px; background: linear-gradient(to bottom, transparent, rgba(255, 255, 255, 0.1) 10%, rgba(255, 255, 255, 0.1) 90%, transparent); transform: translateX(-50%); z-index: 0; }
-        .timeline-row { display: flex; justify-content: center; align-items: center; margin-bottom: 4rem; position: relative; width: 100%; }
-        .timeline-node { position: absolute; left: 50%; width: 16px; height: 16px; border-radius: 50%; background: #172a45; border: 2px solid var(--primary); box-shadow: 0 0 10px var(--primary-glow); z-index: 2; transform: translateX(-50%); }
+        /* The Node (Dot) */
+        .timeline-node {
+            position: absolute;
+            left: 50%;
+            width: 16px; height: 16px;
+            border-radius: 50%;
+            background: var(--charcoal-dark);
+            border: 2px solid var(--primary);
+            box-shadow: 0 0 10px var(--primary-glow);
+            z-index: 2;
+            transform: translateX(-50%);
+            background: #172a45; /* Match bg to hide line behind */
+        }
+
         .timeline-node.pulse { animation: pulse-teal 2s infinite; }
         @keyframes pulse-teal { 0% { box-shadow: 0 0 0 0 rgba(77, 182, 172, 0.7); } 70% { box-shadow: 0 0 0 10px rgba(77, 182, 172, 0); } 100% { box-shadow: 0 0 0 0 rgba(77, 182, 172, 0); } }
-        .timeline-content { width: 50%; position: relative; padding: 0 3rem; }
-        .timeline-row:nth-child(odd) .timeline-content { margin-left: auto; text-align: left; }
-        .timeline-row:nth-child(even) .timeline-content { margin-right: auto; text-align: right; }
-        .timeline-row:nth-child(even) { flex-direction: row-reverse; }
-        .t-card { background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.05); border-radius: 16px; padding: 1.5rem 2rem; position: relative; transition: all 0.3s ease; width: fit-content; min-width: 300px; max-width: 100%; }
+
+        /* Card Container (Half Width) */
+        .timeline-content {
+            width: 50%;
+            position: relative;
+            padding: 0 3rem; /* Space from center line */
+        }
+
+        /* Alternating Logic */
+        .timeline-row:nth-child(odd) .timeline-content {
+            margin-left: auto; /* Push to right */
+            text-align: left;
+        }
+        
+        .timeline-row:nth-child(even) .timeline-content {
+            margin-right: auto; /* Push to left */
+            text-align: right;
+        }
+
+        /* Reverse layout for Even items (Card on Left) */
+        .timeline-row:nth-child(even) {
+            flex-direction: row-reverse;
+        }
+
+        /* Timeline Card Styling */
+        .t-card {
+            background: rgba(255, 255, 255, 0.03);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 1.5rem 2rem;
+            position: relative;
+            transition: all 0.3s ease;
+            width: fit-content;
+            /* Prevent cards from being too small or too wide */
+            min-width: 300px;
+            max-width: 100%;
+        }
+
+        /* Align cards to the spine */
         .timeline-row:nth-child(odd) .t-card { margin-right: auto; } 
         .timeline-row:nth-child(even) .t-card { margin-left: auto; }
-        .t-card::before { content: ''; position: absolute; top: 50%; width: 3rem; height: 1px; background: linear-gradient(90deg, var(--primary), rgba(255,255,255,0.1)); opacity: 0.5; }
-        .timeline-row:nth-child(odd) .t-card::before { left: -3rem; }
-        .timeline-row:nth-child(even) .t-card::before { right: -3rem; background: linear-gradient(-90deg, var(--primary), rgba(255,255,255,0.1)); }
+
+        /* Horizontal Connector */
+        .t-card::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            width: 3rem; /* Reaches to center padding */
+            height: 1px;
+            background: linear-gradient(90deg, var(--primary), rgba(255,255,255,0.1));
+            opacity: 0.5;
+        }
+
+        /* Connector Positioning based on side */
+        .timeline-row:nth-child(odd) .t-card::before {
+            left: -3rem;
+        }
+        .timeline-row:nth-child(even) .t-card::before {
+            right: -3rem;
+            background: linear-gradient(-90deg, var(--primary), rgba(255,255,255,0.1));
+        }
+
+        /* Hover Effects */
         .timeline-row:hover .timeline-node { transform: translateX(-50%) scale(1.3); background: var(--primary); }
         .timeline-row:hover .t-card { border-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.05); transform: translateY(-3px); }
+
+        /* Text Styles */
         .t-date { display: block; font-size: 0.75rem; font-weight: 700; letter-spacing: 1px; text-transform: uppercase; color: var(--primary); margin-bottom: 0.5rem; }
         .t-title { font-size: 1.1rem; font-weight: 600; color: #fff; margin-bottom: 0.2rem; }
         .t-loc { font-size: 0.9rem; color: var(--text-muted); }
+
+        /* --- PROJECT GALLERY --- */
+        .projects-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 2rem; }
+        .project-card { background: var(--glass-bg); border: 1px solid var(--glass-border); border-radius: var(--radius-card); overflow: hidden; display: flex; flex-direction: column; transition: transform 0.3s ease, border-color 0.3s ease; text-decoration: none; height: 100%; }
+        .project-card:hover { transform: translateY(-8px); border-color: rgba(255,255,255,0.3); box-shadow: 0 20px 40px rgba(0,0,0,0.4); }
+        .project-img-box { height: 220px; overflow: hidden; border-bottom: 1px solid rgba(255,255,255,0.05); position: relative; }
+        .project-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .project-card:hover .project-img { transform: scale(1.05); }
+        .project-body { padding: 2rem; display: flex; flex-direction: column; flex-grow: 1;}
+        .project-cat { font-size: 0.75rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 1px; margin-bottom: 0.5rem; }
+        .project-title { font-size: 1.4rem; color: #fff; font-weight: 700; margin-bottom: 1rem; }
+        .project-desc { color: #e2e8f0; font-size: 0.95rem; line-height: 1.6; margin-bottom: 1.5rem; flex-grow: 1; }
+        .tag-container { display: flex; flex-wrap: wrap; gap: 0.5rem; }
+        .tech-pill { padding: 4px 12px; background: rgba(255,255,255,0.05); border-radius: 50px; font-size: 0.75rem; color: var(--primary); border: 1px solid rgba(77, 182, 172, 0.2); }
 
         /* --- DOCK --- */
         .dock-wrapper { position: fixed; bottom: 2rem; left: 50%; transform: translateX(-50%); z-index: 100; width: auto; }
@@ -163,20 +237,20 @@
         @media (max-width: 768px) {
             .main-container { padding-top: 4rem; }
             .highlights-grid { grid-template-columns: 1fr; }
+            .projects-grid { grid-template-columns: 1fr; }
             .dock-wrapper { bottom: 1.5rem; width: 90%; }
             .dock { justify-content: space-between; width: 100%; gap: 0; padding: 0.8rem; }
             
-            /* Carousel Mobile */
-            .project-card { width: 85%; }
-            .slot-1, .slot-3 { opacity: 0; pointer-events: none; }
-            .slot-2 { left: 7.5%; width: 85%; }
-
             /* Timeline Mobile Reset */
-            .timeline-wrapper::before { left: 20px; }
+            .timeline-wrapper::before { left: 20px; } /* Move line to left */
             .timeline-row { flex-direction: column !important; align-items: flex-start; margin-bottom: 3rem; }
-            .timeline-node { left: 20px; top: 24px; transform: translateX(-50%); }
+            .timeline-node { left: 20px; top: 24px; transform: translateX(-50%); } /* Position dot at top left */
+            .timeline-row:hover .timeline-node { transform: translateX(-50%) scale(1.3); }
+            
             .timeline-content { width: 100%; padding: 0 0 0 3.5rem; margin: 0 !important; text-align: left !important; }
             .t-card { width: 100%; min-width: auto; }
+            
+            /* Connector on Mobile */
             .t-card::before { width: 1.5rem; left: -1.5rem; top: 24px; right: auto; background: var(--primary); }
             .timeline-row:nth-child(even) .t-card::before { left: -1.5rem; right: auto; background: var(--primary); }
         }
@@ -188,6 +262,7 @@
 
     <div class="main-container">
         
+        <!-- HEADER -->
         <div class="page-header reveal">
             <h1 class="page-title">Projects & Timeline</h1>
             <p class="page-subtitle">
@@ -195,6 +270,7 @@
             </p>
         </div>
 
+        <!-- FEATURED PROJECT -->
         <section class="reveal">
             <div class="section-header"><i class="fas fa-star"></i> Featured Thesis</div>
             <div class="glass-card hero-project">
@@ -223,68 +299,13 @@
             </div>
         </section>
 
-        <section class="reveal">
-            <div class="section-header"><i class="fas fa-hammer"></i> Project Gallery</div>
-            
-            <div class="carousel-wrapper" id="carousel-section">
-                <div class="nav-button prev-btn" id="btnPrev"><i class="fas fa-chevron-left"></i></div>
-                <div class="nav-button next-btn" id="btnNext"><i class="fas fa-chevron-right"></i></div>
-                <div class="card-track" id="track">
-                    
-                    <div class="project-card">
-                        <div class="project-img-box"><img src="resources/Tank.jpg" class="project-img" onerror="this.src='https://placehold.co/400x250/172a45/4DB6AC?text=Hybrid+Tank'"></div>
-                        <div class="project-body">
-                            <h3 class="project-title">Hybrid PE-HD Tank</h3>
-                            <p class="project-desc">The design of a 50 000 liter water tank made out of PE-HD. Reinforced with steel beams for structural strength according to the DVS2205 standard. The design is verified by hand calculations and finite element analysis.</p>
-                            <div class="tag-container"><span class="tech-pill">SolidWorks</span><span class="tech-pill">FEA</span><span class="tech-pill">KU Leuven</span></div>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <div class="project-img-box"><img src="resources/scratch_a_cat.jpg" class="project-img" onerror="this.src='https://placehold.co/400x250/172a45/4DB6AC?text=Scratch+A+Cat'"></div>
-                        <div class="project-body">
-                            <h3 class="project-title">Scratch A Cat</h3>
-                            <p class="project-desc">A product designed as a cat massager. It can be filled with a herb blend to attract and relax your pet. By working together with Coccoon 2440 and Gentrepreneur, I managed to learn more about creating a business.</p>
-                            <div class="tag-container"><span class="tech-pill">3D Printing</span><span class="tech-pill">Product Design</span></div>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <div class="project-img-box"><img src="resources/guitar_pedal.jpg" class="project-img" onerror="this.src='https://placehold.co/400x250/172a45/4DB6AC?text=Modular+Pedal'"></div>
-                        <div class="project-body">
-                            <h3 class="project-title">Modular Guitar Pedal</h3>
-                            <p class="project-desc">A fully conceptualized Guitar Pedal where each effect module can be inserted like a nostalgic Nintendo 64 cartridge. The concept is created in collaboration with a FIIW EE student.</p>
-                            <div class="tag-container"><span class="tech-pill">CAD/CAM</span><span class="tech-pill">Prototyping</span><span class="tech-pill">IoT</span></div>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <div class="project-img-box"><img src="resources/LED_lamp.jpg" class="project-img" onerror="this.src='https://placehold.co/400x250/172a45/4DB6AC?text=LED+Lamp'"></div>
-                        <div class="project-body">
-                            <h3 class="project-title">Arabic LED Lamp</h3>
-                            <p class="project-desc">A beautiful decorative lamp based on Arabic design patterns. Features remotely controlled LEDs via WiFi integration.</p>
-                            <div class="tag-container"><span class="tech-pill">IoT</span><span class="tech-pill">CAD</span><span class="tech-pill">3D Printing</span></div>
-                        </div>
-                    </div>
-
-                    <div class="project-card">
-                        <div class="project-img-box"><img src="resources/Europal.jpg" class="project-img" onerror="this.src='https://placehold.co/400x250/172a45/4DB6AC?text=AI+Vision'"></div>
-                        <div class="project-body">
-                            <h3 class="project-title">AI Vision Integration Europal</h3>
-                            <p class="project-desc">For the IAP course at KU Leuven, I collaborated with business students to propose AI camera integration for a sustainable, efficient production environment.</p>
-                            <div class="tag-container"><span class="tech-pill">Industry 4.0</span><span class="tech-pill">Digital Factory</span><span class="tech-pill">Collaboration</span></div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </section>
-
+        <!-- CENTERED TIMELINE -->
         <section class="reveal">
             <div class="section-header centered"><i class="fas fa-history"></i> The Journey</div>
             
             <div class="timeline-wrapper">
                 
+                <!-- 1. Future -->
                 <div class="timeline-row">
                     <div class="timeline-node pulse"></div>
                     <div class="timeline-content">
@@ -296,6 +317,7 @@
                     </div>
                 </div>
 
+                <!-- 2. Present -->
                 <div class="timeline-row">
                     <div class="timeline-node pulse"></div>
                     <div class="timeline-content">
@@ -307,6 +329,7 @@
                     </div>
                 </div>
 
+                <!-- 3. Award -->
                 <div class="timeline-row">
                     <div class="timeline-node"></div>
                     <div class="timeline-content">
@@ -318,6 +341,7 @@
                     </div>
                 </div>
 
+                <!-- 4. Summer 25 -->
                 <div class="timeline-row">
                     <div class="timeline-node"></div>
                     <div class="timeline-content">
@@ -329,6 +353,7 @@
                     </div>
                 </div>
 
+                <!-- 5. Summer 24 -->
                 <div class="timeline-row">
                     <div class="timeline-node"></div>
                     <div class="timeline-content">
@@ -340,6 +365,7 @@
                     </div>
                 </div>
 
+                <!-- 6. Summer 23 -->
                 <div class="timeline-row">
                     <div class="timeline-node"></div>
                     <div class="timeline-content">
@@ -351,6 +377,7 @@
                     </div>
                 </div>
 
+                <!-- 7. Summer 21/22 -->
                 <div class="timeline-row">
                     <div class="timeline-node"></div>
                     <div class="timeline-content">
@@ -362,6 +389,7 @@
                     </div>
                 </div>
 
+                <!-- 8. Bachelor -->
                 <div class="timeline-row">
                     <div class="timeline-node"></div>
                     <div class="timeline-content">
@@ -373,6 +401,7 @@
                     </div>
                 </div>
 
+                <!-- 9. Start -->
                 <div class="timeline-row">
                     <div class="timeline-node"></div>
                     <div class="timeline-content">
@@ -387,6 +416,72 @@
             </div>
         </section>
 
+        <!-- GALLERY GRID -->
+        <section class="reveal">
+            <div class="section-header"><i class="fas fa-hammer"></i> Prototyping Gallery</div>
+            <div class="projects-grid">
+                
+                <!-- Project 1 -->
+                <a href="#" class="project-card">
+                    <div class="project-img-box">
+                        <img src="resources/scratch_a_cat.jpg" alt="Scratch A Cat" class="project-img" onerror="this.src='https://placehold.co/600x400/172a45/4DB6AC?text=Cat+Project'">
+                    </div>
+                    <div class="project-body">
+                        <span class="project-cat">Personal Project</span>
+                        <h3 class="project-title">Scratch A Cat</h3>
+                        <p class="project-desc">
+                            A product designed as a cat massager. It can be filled with a herb blend to attract and relax your pet.
+                        </p>
+                        <div class="tag-container">
+                            <span class="tech-pill">3D Printing</span>
+                            <span class="tech-pill">CAD</span>
+                            <span class="tech-pill">Product Dev</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 2 -->
+                <a href="#" class="project-card">
+                    <div class="project-img-box">
+                        <img src="resources/guitar_pedal.jpg" alt="Guitar Pedal" class="project-img" onerror="this.src='https://placehold.co/600x400/172a45/4DB6AC?text=Guitar+Pedal'">
+                    </div>
+                    <div class="project-body">
+                        <span class="project-cat">Concept</span>
+                        <h3 class="project-title">Modular Guitar Pedal</h3>
+                        <p class="project-desc">
+                            A fully conceptualized Guitar Pedal where each effect module can be inserted like a nostalgic Nintendo 64 cartridge.
+                        </p>
+                        <div class="tag-container">
+                            <span class="tech-pill">CAD/CAM</span>
+                            <span class="tech-pill">Prototyping</span>
+                            <span class="tech-pill">Collaboration</span>
+                        </div>
+                    </div>
+                </a>
+
+                <!-- Project 3 -->
+                <a href="#" class="project-card">
+                    <div class="project-img-box">
+                        <img src="resources/LED_lamp.jpg" alt="LED Lamp" class="project-img" onerror="this.src='https://placehold.co/600x400/172a45/4DB6AC?text=LED+Lamp'">
+                    </div>
+                    <div class="project-body">
+                        <span class="project-cat">Personal Project</span>
+                        <h3 class="project-title">Decorational LED Lamp</h3>
+                        <p class="project-desc">
+                            A beautiful decorative lamp based on Arabic design patterns. Features remotely controlled LEDs via WiFi integration.
+                        </p>
+                        <div class="tag-container">
+                            <span class="tech-pill">Product Design</span>
+                            <span class="tech-pill">IoT</span>
+                            <span class="tech-pill">3D Printing</span>
+                        </div>
+                    </div>
+                </a>
+
+            </div>
+        </section>
+
+        <!-- CTA -->
         <section class="reveal" style="text-align: center; padding: 4rem 0;">
             <h2 style="font-size: 2rem; margin-bottom: 1rem; color: #fff;">Ready to connect?</h2>
             <p style="color: var(--text-muted); margin-bottom: 2rem;">
@@ -398,6 +493,7 @@
         </section>
     </div>
 
+    <!-- DOCK NAVIGATION -->
     <div class="dock-wrapper">
         <nav class="dock">
             <a href="index.html" class="dock-icon" data-title="Home"><i class="fas fa-home"></i></a>
@@ -409,74 +505,11 @@
         </nav>
     </div>
 
+    <!-- SCRIPTS -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             
-            // --- CAROUSEL LOGIC ---
-            const cards = Array.from(document.querySelectorAll('.project-card'));
-            const btnPrev = document.getElementById('btnPrev');
-            const btnNext = document.getElementById('btnNext');
-            const total = cards.length;
-            let currentIndex = 0; 
-            let autoplayInterval;
-
-            function updateCards() {
-                cards.forEach((card, index) => {
-                    card.classList.remove('slot-0', 'slot-1', 'slot-2', 'slot-3', 'slot-4');
-                    
-                    // Circular Logic
-                    // 0 = Center, 1 = Right, Total-1 = Left
-                    let position = (index - currentIndex + total) % total;
-                    
-                    if (position === 0) {
-                        card.classList.add('slot-2'); // Center
-                    } else if (position === 1) {
-                        card.classList.add('slot-3'); // Right
-                    } else if (position === total - 1) {
-                        card.classList.add('slot-1'); // Left
-                    } else {
-                        card.classList.add('slot-4'); // Hidden/Behind
-                    }
-                });
-            }
-
-            function performMove(direction) {
-                currentIndex = (currentIndex + direction + total) % total;
-                updateCards();
-            }
-
-            // Updated to 5000ms (5 seconds)
-            function startAutoplay() {
-                if (autoplayInterval) clearInterval(autoplayInterval);
-                autoplayInterval = setInterval(() => { performMove(1); }, 5000);
-            }
-
-            function stopAutoplay() {
-                if (autoplayInterval) {
-                    clearInterval(autoplayInterval);
-                    autoplayInterval = null;
-                }
-            }
-
-            if(btnNext && btnPrev) {
-                btnNext.addEventListener('click', () => { stopAutoplay(); performMove(1); });
-                btnPrev.addEventListener('click', () => { stopAutoplay(); performMove(-1); });
-                
-                // Allow clicking side cards to navigate
-                cards.forEach((card, index) => {
-                    card.addEventListener('click', () => {
-                        let distance = (index - currentIndex + total) % total;
-                        if (distance === 1) { stopAutoplay(); performMove(1); } // Right card
-                        if (distance === total - 1) { stopAutoplay(); performMove(-1); } // Left card
-                    });
-                });
-
-                // Init Carousel
-                updateCards();
-                startAutoplay();
-            }
-
-            // --- PARTICLES ---
+            // 1. Particles
             particlesJS("particles-js", {
                 "particles": {
                     "number": { "value": 40, "density": { "enable": true, "value_area": 800 } },
@@ -495,7 +528,7 @@
                 "retina_detect": true
             });
 
-            // --- SCROLL REVEAL ---
+            // 2. Scroll Reveal
             const observer = new IntersectionObserver((entries) => {
                 entries.forEach(entry => {
                     if (entry.isIntersecting) {
@@ -508,10 +541,9 @@
                 observer.observe(section);
             });
 
-            // --- TILT EFFECT ---
-            // Applied to cards, ignoring carousel cards as they move with CSS transform
+            // 3. Tilt Effect
             if (window.innerWidth > 768) {
-                VanillaTilt.init(document.querySelectorAll(".glass-card, .t-card"), {
+                VanillaTilt.init(document.querySelectorAll(".glass-card, .project-card, .t-card"), {
                     max: 3, speed: 400, glare: true, "max-glare": 0.1, scale: 1.01
                 });
             }
