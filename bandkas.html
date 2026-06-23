@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+<html lang="nl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BandKas Live - Mil, Sam, leks & sander</title>
+    <style>
+        :root {
+            --bg-color: #121212;
+            --surface-color: #1e1e1e;
+            --primary-color: #bb86fc;
+            --text-color: #e0e0e0;
+            --border-color: #333;
+            --positive: #03dac6;
+            --negative: #cf6679;
+        }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        #login-screen {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 80vh;
+            width: 100%;
+        }
+        .login-card {
+            background-color: var(--surface-color);
+            padding: 40px;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            text-align: center;
+            max-width: 300px;
+            width: 100%;
+        }
+        .login-card input {
+            font-size: 1.5em;
+            text-align: center;
+            letter-spacing: 5px;
+            margin-bottom: 20px;
+            width: 100%;
+            padding: 10px;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .login-card button {
+            width: 100%;
+            padding: 10px;
+            background-color: var(--primary-color);
+            color: #000;
+            font-weight: bold;
+            cursor: pointer;
+            border: none;
+            border-radius: 4px;
+        }
+        .error-msg {
+            color: var(--negative);
+            font-size: 0.9em;
+            margin-bottom: 15px;
+            display: none;
+        }
+
+        #app-container {
+            display: none;
+            width: 100%;
+            max-width: 900px;
+        }
+        h1, h2 { border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        .sync-status {
+            font-size: 0.85em;
+            color: #888;
+            text-align: right;
+            margin-top: -10px;
+            margin-bottom: 20px;
+        }
+        .dashboard { display: flex; gap: 20px; margin-bottom: 30px; flex-wrap: wrap; }
+        .card {
+            background-color: var(--surface-color);
+            padding: 20px;
+            border-radius: 8px;
+            flex: 1;
+            min-width: 250px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+        }
+        .bandkas-balance { font-size: 2em; font-weight: bold; color: var(--primary-color); }
+        .balance-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 1.1em; }
+        .positive { color: var(--positive); }
+        .negative { color: var(--negative); }
+        .transaction-form {
+            background-color: var(--surface-color);
+            padding: 20px;
+            border-radius: 8px;
+            display: grid;
+            grid-template-columns: 1fr 2fr 1fr 1fr auto;
+            gap: 15px;
+            align-items: end;
+            margin-bottom: 30px;
+            overflow-x: auto;
+        }
+        label { display: block; margin-bottom: 5px; font-size: 0.9em; }
+        .transaction-form input, .transaction-form select, .transaction-form button {
+            width: 100%; padding: 10px; background-color: var(--bg-color); color: var(--text-color);
+            border: 1px solid var(--border-color); border-radius: 4px; box-sizing: border-box;
+        }
+        .transaction-form button { background-color: var(--primary-color); color: #000; font-weight: bold; cursor: pointer; border: none; }
+        .transaction-form button:hover { background-color: #9965f4; }
+        .transaction-form button:disabled { background-color: #555; cursor: not-allowed; }
+        .table-container { width: 100%; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; background-color: var(--surface-color); border-radius: 8px; overflow: hidden; min-width: 600px; }
+        th, td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
+        th { background-color: #2c2c2c; }
+        .checkbox-group { display: flex; gap: 10px; font-size: 0.85em; flex-wrap: wrap; }
+        .checkbox-group label { display: flex; align-items: center; gap: 5px; margin: 0; cursor: pointer; }
+        .delete-btn { background-color: var(--negative); color: white; padding: 5px 10px; font-size: 0.8em; border: none; cursor: pointer; border-radius: 4px; }
+    </style>
+</head>
+<body>
+
+<div id="login-screen">
+    <form id="login-form" class="login-card">
+        <h2>Toegang Vereist</h2>
+        <p style="font-size: 0.9em; color: #aaa; margin-bottom: 20px;">Voer de bandkas pincode in.</p>
+        <div id="error-msg" class="error-msg">Onjuiste pincode.</div>
+        <input type="password" id="pin-input" maxlength="4" placeholder="••••" autocomplete="off" required>
+        <button type="submit">Ontgrendelen</button>
+    </form>
+</div>
+
+<div id="app-container">
+    <h1>BandKas Live Dashboard (Firebase)</h1>
+    <div class="sync-status" id="sync-indicator">Verbinden met server...</div>
+    
+    <div class="dashboard">
+        <div class="card">
+            <h2>Gezamenlijke Bandkas</h2>
+            <div class="bandkas-balance" id="bandkas-display">€0.00</div>
+            <p style="font-size: 0.85em; color: #888;">Geld verdiend met optredens/merch. Kan gekozen worden als betaalwijze.</p>
+        </div>
+        <div class="card">
+            <h2>Persoonlijke Balansen</h2>
+            <div id="balances-display"></div>
+            <p style="font-size: 0.85em; color: #888;">Groen = Krijgt geld / Rood = Moet betalen</p>
+        </div>
+    </div>
+
+    <form id="transaction-form" class="transaction-form">
+        <div>
+            <label for="type">Type</label>
+            <select id="type" required>
+                <option value="uitgave">Uitgave</option>
+                <option value="inkomst">Inkomst (Gage, Merch)</option>
+            </select>
+        </div>
+        <div>
+            <label for="desc">Beschrijving</label>
+            <input type="text" id="desc" placeholder="Bv. Repetitieruimte..." required>
+        </div>
+        <div>
+            <label for="amount">Bedrag (€)</label>
+            <input type="number" id="amount" step="0.01" min="0.01" required>
+        </div>
+        <div id="payer-container">
+            <label for="payer">Betaald door</label>
+            <select id="payer">
+                <option value="Mil">Mil</option>
+                <option value="Sam">Sam</option>
+                <option value="leks">leks</option>
+                <option value="sander">sander</option>
+                <option value="Bandkas">Bandkas</option>
+            </select>
+        </div>
+        <div>
+            <button type="submit" id="submit-btn">Toevoegen</button>
+        </div>
+    </form>
+
+    <h2>Chronologisch Overzicht (Live)</h2>
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th>Datum</th><th>Item</th><th>Bedrag</th><th>Betaald door</th><th>Terugbetaald door</th><th>Actie</th>
+                </tr>
+            </thead>
+            <tbody id="transactions-table"></tbody>
+        </table>
+    </div>
+</div>
+
+<script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
+    import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
+
+    // ==========================================
+    // VUL HIER JOUW FIREBASE CONFIGURATIE IN
+    // Kopieer dit exact vanuit je Firebase Console (Stap 3/4)
+    // ==========================================
+    const firebaseConfig = {
+        apiKey: "AIzaSyCsUp88mNt0qOnsnidSx9z5iNOemYu7d5Q",
+   	authDomain: "bandkas-gravitor.firebaseapp.com",
+    	projectId: "bandkas-gravitor",
+    	storageBucket: "bandkas-gravitor.firebasestorage.app",
+    	messagingSenderId: "378685801163",
+    	appId: "1:378685801163:web:9af738ac843746cf58514e",
+    	measurementId: "G-V1H5TB312M"
+    };
+    // ==========================================
+
+    const TARGET_PIN = '2025';
+    const members = ['Mil', 'Sam', 'leks', 'sander'];
+    
+    let app, db, dbRef;
+    let transactions = [];
+
+    // UI Elementen
+    const loginScreen = document.getElementById('login-screen');
+    const appContainer = document.getElementById('app-container');
+    const loginForm = document.getElementById('login-form');
+    const pinInput = document.getElementById('pin-input');
+    const errorMsg = document.getElementById('error-msg');
+    
+    const form = document.getElementById('transaction-form');
+    const typeSelect = document.getElementById('type');
+    const payerContainer = document.getElementById('payer-container');
+    const syncIndicator = document.getElementById('sync-indicator');
+    const submitBtn = document.getElementById('submit-btn');
+
+    typeSelect.addEventListener('change', (e) => {
+        payerContainer.style.display = e.target.value === 'inkomst' ? 'none' : 'block';
+    });
+
+    // Auth & Init Logica
+    if (sessionStorage.getItem('bandkas_auth') === 'true') {
+        initFirebase();
+    }
+
+    loginForm.addEventListener('submit', function(e) {
+        e.preventDefault(); 
+        if (pinInput.value === TARGET_PIN) {
+            sessionStorage.setItem('bandkas_auth', 'true');
+            initFirebase();
+        } else {
+            errorMsg.style.display = 'block';
+            pinInput.value = '';
+        }
+    });
+
+    function initFirebase() {
+        loginScreen.style.display = 'none';
+        appContainer.style.display = 'block';
+
+        if(firebaseConfig.apiKey === "VUL_HIER_IN") {
+            syncIndicator.innerText = "LET OP: Vul eerst je Firebase Config in!";
+            syncIndicator.style.color = "var(--negative)";
+            return;
+        }
+
+        try {
+            app = initializeApp(firebaseConfig);
+            db = getDatabase(app);
+            dbRef = ref(db, 'bandkas_data');
+            
+            // Firebase Live Listener (vervangt de setInterval)
+            onValue(dbRef, (snapshot) => {
+                const data = snapshot.val();
+                transactions = data ? data : [];
+                syncIndicator.innerText = "Real-time verbonden";
+                syncIndicator.style.color = "var(--positive)";
+                renderApp();
+            }, (error) => {
+                syncIndicator.innerText = "Connectie verbroken: " + error.message;
+                syncIndicator.style.color = "var(--negative)";
+            });
+
+        } catch (error) {
+            syncIndicator.innerText = "Firebase setup fout: " + error.message;
+            syncIndicator.style.color = "var(--negative)";
+        }
+    }
+
+    // Data Mutatie Logica
+    async function saveDataToCloud() {
+        submitBtn.disabled = true;
+        syncIndicator.innerText = "Opslaan...";
+        syncIndicator.style.color = "#ffaa00";
+
+        try {
+            await set(dbRef, transactions);
+            // We hoeven niet handmatig te renderen of de status terug te zetten, 
+            // de 'onValue' listener hierboven triggert automatisch als de data succesvol is aangepast!
+        } catch (error) {
+            syncIndicator.innerText = "Fout bij opslaan: " + error.message;
+            syncIndicator.style.color = "var(--negative)";
+            console.error(error);
+        } finally {
+            submitBtn.disabled = false;
+        }
+    }
+
+    form.addEventListener('submit', async (e) => {
+        e.preventDefault();
+        const type = document.getElementById('type').value;
+        const desc = document.getElementById('desc').value;
+        const amount = parseFloat(document.getElementById('amount').value);
+        const payer = type === 'inkomst' ? 'Extern' : document.getElementById('payer').value;
+
+        const transaction = {
+            id: Date.now() + Math.random(),
+            date: new Date().toLocaleDateString('nl-BE'),
+            type: type,
+            desc: desc,
+            amount: amount,
+            payer: payer,
+            paidStatus: { Mil: false, Sam: false, leks: false, sander: false }
+        };
+
+        transactions.push(transaction);
+        form.reset();
+        payerContainer.style.display = 'block';
+        await saveDataToCloud();
+    });
+
+    // We hangen deze functies nu aan het window object omdat <script type="module"> scope isoleert
+    window.togglePaidStatus = async function(txId, member) {
+        const tx = transactions.find(t => t.id === txId);
+        if(tx) {
+            tx.paidStatus[member] = !tx.paidStatus[member];
+            await saveDataToCloud();
+        }
+    }
+
+    window.deleteTransaction = async function(txId) {
+        if(confirm("Weet je zeker dat je dit item wilt verwijderen?")) {
+            transactions = transactions.filter(t => t.id !== txId);
+            await saveDataToCloud();
+        }
+    }
+
+    function renderApp() {
+        let bandkasBalance = 0;
+        let memberBalances = { Mil: 0, Sam: 0, leks: 0, sander: 0 };
+
+        transactions.forEach(t => {
+            if (t.type === 'inkomst') {
+                bandkasBalance += t.amount;
+            } else if (t.type === 'uitgave') {
+                if (t.payer === 'Bandkas') {
+                    bandkasBalance -= t.amount;
+                } else {
+                    const splitAmount = t.amount / 4;
+                    memberBalances[t.payer] += (t.amount - splitAmount);
+                    members.forEach(m => {
+                        if (m !== t.payer) {
+                            if (!t.paidStatus[m]) memberBalances[m] -= splitAmount;
+                            else memberBalances[t.payer] -= splitAmount;
+                        }
+                    });
+                }
+            }
+        });
+
+        document.getElementById('bandkas-display').innerText = `€${bandkasBalance.toFixed(2)}`;
+        document.getElementById('balances-display').innerHTML = members.map(m => {
+            const bal = memberBalances[m];
+            const colorClass = bal > 0 ? 'positive' : (bal < 0 ? 'negative' : '');
+            return `<div class="balance-item"><span>${m}</span><span class="${colorClass}">${bal > 0 ? '+' : ''}€${bal.toFixed(2)}</span></div>`;
+        }).join('');
+
+        const tbody = document.getElementById('transactions-table');
+        tbody.innerHTML = '';
+        [...transactions].reverse().forEach(t => {
+            const tr = document.createElement('tr');
+            let checkboxesHTML = '-';
+            if (t.type === 'uitgave' && t.payer !== 'Bandkas') {
+                checkboxesHTML = `<div class="checkbox-group">` + members.filter(m => m !== t.payer).map(m => 
+                    `<label><input type="checkbox" onchange="window.togglePaidStatus(${t.id}, '${m}')" ${t.paidStatus[m] ? 'checked' : ''}>${m}</label>`
+                ).join('') + `</div>`;
+            }
+            tr.innerHTML = `<td>${t.date}</td><td><strong>${t.desc}</strong></td><td style="${t.type === 'inkomst' ? 'color: var(--positive);' : ''}">${t.type === 'inkomst' ? '+' : '-'}€${t.amount.toFixed(2)}</td><td>${t.payer}</td><td>${checkboxesHTML}</td><td><button class="delete-btn" onclick="window.deleteTransaction(${t.id})">X</button></td>`;
+            tbody.appendChild(tr);
+        });
+    }
+</script>
+</body>
+</html>
