@@ -218,6 +218,9 @@
     	measurementId: "G-V1H5TB312M"
     };
     // ==========================================
+    // Initialize Firebase
+    const app = initializeApp(firebaseConfig);
+    const analytics = getAnalytics(app);
 
     const TARGET_PIN = '2025';
     const members = ['Mil', 'Sam', 'leks', 'sander'];
