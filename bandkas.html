@@ -3,16 +3,17 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BandKas Live - Mil, Sam, leks & sander</title>
+    <title>Gravitor Bandkas</title>
     <style>
         :root {
-            --bg-color: #121212;
-            --surface-color: #1e1e1e;
-            --primary-color: #bb86fc;
-            --text-color: #e0e0e0;
+            /* Gravitor Theme Colors */
+            --bg-color: #0a0a0a;
+            --surface-color: #171717;
+            --primary-color: #d4af37; /* Distressed Gold */
+            --text-color: #e8e8e8;
             --border-color: #333;
-            --positive: #03dac6;
-            --negative: #cf6679;
+            --positive: #5cb85c;
+            --negative: #d9534f;
         }
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
@@ -26,6 +27,18 @@
             min-height: 100vh;
         }
         
+        .logo-container {
+            width: 100%;
+            max-width: 400px;
+            margin: 0 auto 20px auto;
+            text-align: center;
+        }
+        .logo-container img {
+            max-width: 100%;
+            height: auto;
+            filter: drop-shadow(0px 4px 6px rgba(0,0,0,0.6));
+        }
+
         #login-screen {
             display: flex;
             flex-direction: column;
@@ -37,8 +50,9 @@
         .login-card {
             background-color: var(--surface-color);
             padding: 40px;
-            border-radius: 8px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            box-shadow: 0 8px 20px rgba(0,0,0,0.8);
             text-align: center;
             max-width: 300px;
             width: 100%;
@@ -51,9 +65,9 @@
             width: 100%;
             padding: 10px;
             background-color: var(--bg-color);
-            color: var(--text-color);
+            color: var(--primary-color);
             border: 1px solid var(--border-color);
-            border-radius: 4px;
+            border-radius: 2px;
             box-sizing: border-box;
         }
         .login-card button {
@@ -64,7 +78,8 @@
             font-weight: bold;
             cursor: pointer;
             border: none;
-            border-radius: 4px;
+            border-radius: 2px;
+            text-transform: uppercase;
         }
         .error-msg {
             color: var(--negative);
@@ -78,7 +93,13 @@
             width: 100%;
             max-width: 900px;
         }
-        h1, h2 { border-bottom: 1px solid var(--border-color); padding-bottom: 10px; }
+        h1, h2 { 
+            border-bottom: 1px solid var(--border-color); 
+            padding-bottom: 10px; 
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--primary-color);
+        }
         .sync-status {
             font-size: 0.85em;
             color: #888;
@@ -90,19 +111,35 @@
         .card {
             background-color: var(--surface-color);
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
             flex: 1;
             min-width: 250px;
-            box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.5);
         }
-        .bandkas-balance { font-size: 2em; font-weight: bold; color: var(--primary-color); }
-        .balance-item { display: flex; justify-content: space-between; margin-bottom: 10px; font-size: 1.1em; }
-        .positive { color: var(--positive); }
-        .negative { color: var(--negative); }
+        .bandkas-balance { font-size: 2.2em; font-weight: bold; color: var(--primary-color); margin-top: 10px; }
+        .balance-item { 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center;
+            margin-bottom: 15px; 
+            padding-bottom: 10px;
+            border-bottom: 1px solid #222;
+        }
+        .balance-item:last-child { border-bottom: none; margin-bottom: 0; padding-bottom: 0; }
+        
+        .member-info { display: flex; flex-direction: column; }
+        .member-name { font-size: 1.1em; font-weight: bold; }
+        .member-iban { font-size: 0.75em; color: #777; font-family: monospace; margin-top: 3px; }
+        
+        .positive { color: var(--positive); font-weight: bold; }
+        .negative { color: var(--negative); font-weight: bold; }
+        
         .transaction-form {
             background-color: var(--surface-color);
             padding: 20px;
-            border-radius: 8px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
             display: grid;
             grid-template-columns: 1fr 2fr 1fr 1fr auto;
             gap: 15px;
@@ -110,29 +147,44 @@
             margin-bottom: 30px;
             overflow-x: auto;
         }
-        label { display: block; margin-bottom: 5px; font-size: 0.9em; }
+        label { display: block; margin-bottom: 5px; font-size: 0.85em; color: #aaa; text-transform: uppercase; }
         .transaction-form input, .transaction-form select, .transaction-form button {
             width: 100%; padding: 10px; background-color: var(--bg-color); color: var(--text-color);
-            border: 1px solid var(--border-color); border-radius: 4px; box-sizing: border-box;
+            border: 1px solid var(--border-color); border-radius: 2px; box-sizing: border-box;
         }
-        .transaction-form button { background-color: var(--primary-color); color: #000; font-weight: bold; cursor: pointer; border: none; }
-        .transaction-form button:hover { background-color: #9965f4; }
+        .transaction-form input:focus, .transaction-form select:focus {
+            outline: 1px solid var(--primary-color);
+        }
+        .transaction-form button { 
+            background-color: var(--primary-color); 
+            color: #000; 
+            font-weight: bold; 
+            cursor: pointer; 
+            border: none; 
+            text-transform: uppercase;
+        }
+        .transaction-form button:hover { background-color: #e6c55c; }
         .transaction-form button:disabled { background-color: #555; cursor: not-allowed; }
+        
         .table-container { width: 100%; overflow-x: auto; }
-        table { width: 100%; border-collapse: collapse; background-color: var(--surface-color); border-radius: 8px; overflow: hidden; min-width: 600px; }
+        table { width: 100%; border-collapse: collapse; background-color: var(--surface-color); border-radius: 4px; overflow: hidden; min-width: 600px; border: 1px solid var(--border-color); }
         th, td { padding: 15px; text-align: left; border-bottom: 1px solid var(--border-color); }
-        th { background-color: #2c2c2c; }
+        th { background-color: #111; color: var(--primary-color); text-transform: uppercase; font-size: 0.9em; }
         .checkbox-group { display: flex; gap: 10px; font-size: 0.85em; flex-wrap: wrap; }
-        .checkbox-group label { display: flex; align-items: center; gap: 5px; margin: 0; cursor: pointer; }
-        .delete-btn { background-color: var(--negative); color: white; padding: 5px 10px; font-size: 0.8em; border: none; cursor: pointer; border-radius: 4px; }
+        .checkbox-group label { display: flex; align-items: center; gap: 5px; margin: 0; cursor: pointer; color: #aaa; }
+        .delete-btn { background-color: var(--negative); color: white; padding: 5px 10px; font-size: 0.8em; border: none; cursor: pointer; border-radius: 2px; font-weight: bold; }
     </style>
 </head>
 <body>
 
+<div class="logo-container">
+    <img src="gravitor_logo.png" alt="Gravitor Logo">
+</div>
+
 <div id="login-screen">
     <form id="login-form" class="login-card">
-        <h2>Toegang Vereist</h2>
-        <p style="font-size: 0.9em; color: #aaa; margin-bottom: 20px;">Voer de bandkas pincode in.</p>
+        <h2 style="border:none; color:var(--text-color);">TOEGANG VEREIST</h2>
+        <p style="font-size: 0.9em; color: #777; margin-bottom: 20px;">Voer de crew pincode in.</p>
         <div id="error-msg" class="error-msg">Onjuiste pincode.</div>
         <input type="password" id="pin-input" maxlength="4" placeholder="••••" autocomplete="off" required>
         <button type="submit">Ontgrendelen</button>
@@ -140,40 +192,40 @@
 </div>
 
 <div id="app-container">
-    <h1>BandKas Live Dashboard</h1>
     <div class="sync-status" id="sync-indicator">Verbinden met Firebase...</div>
     
     <div class="dashboard">
         <div class="card">
             <h2>Gezamenlijke Bandkas</h2>
+            <p style="font-size: 0.85em; color: #888;">Geld verdiend met optredens of merch. Wordt gebruikt voor onkosten en aflossingen.</p>
             <div class="bandkas-balance" id="bandkas-display">€0.00</div>
-            <p style="font-size: 0.85em; color: #888;">Geld verdiend met optredens/merch. Kan gekozen worden als betaalwijze.</p>
         </div>
         <div class="card">
             <h2>Persoonlijke Balansen</h2>
             <div id="balances-display"></div>
-            <p style="font-size: 0.85em; color: #888;">Groen = Krijgt geld / Rood = Moet betalen</p>
+            <p style="font-size: 0.85em; color: #888; margin-top: 15px;">Groen = Krijgt nog geld / Rood = Moet betalen</p>
         </div>
     </div>
 
     <form id="transaction-form" class="transaction-form">
         <div>
-            <label for="type">Type</label>
+            <label for="type">Type Actie</label>
             <select id="type" required>
-                <option value="uitgave">Uitgave</option>
+                <option value="uitgave">Uitgave (BOM / Onkosten)</option>
                 <option value="inkomst">Inkomst (Gage, Merch)</option>
+                <option value="aflossing" style="color: var(--primary-color); font-weight: bold;">Aflossing (Kas betaalt lid)</option>
             </select>
         </div>
         <div>
             <label for="desc">Beschrijving</label>
-            <input type="text" id="desc" placeholder="Bv. Repetitieruimte..." required>
+            <input type="text" id="desc" placeholder="Bv. Snaren, Benzine, Optreden X..." required>
         </div>
         <div>
             <label for="amount">Bedrag (€)</label>
             <input type="number" id="amount" step="0.01" min="0.01" required>
         </div>
         <div id="payer-container">
-            <label for="payer">Betaald door</label>
+            <label for="payer">Wie betaalt/ontvangt?</label>
             <select id="payer">
                 <option value="Mil">Mil</option>
                 <option value="Sam">Sam</option>
@@ -187,12 +239,12 @@
         </div>
     </form>
 
-    <h2>Chronologisch Overzicht (Live)</h2>
+    <h2>Chronologisch Overzicht</h2>
     <div class="table-container">
         <table>
             <thead>
                 <tr>
-                    <th>Datum</th><th>Item</th><th>Bedrag</th><th>Betaald door</th><th>Terugbetaald door</th><th>Actie</th>
+                    <th>Datum</th><th>Item / Beschrijving</th><th>Bedrag</th><th>Door / Aan</th><th>Status / Vink af</th><th>Actie</th>
                 </tr>
             </thead>
             <tbody id="transactions-table"></tbody>
@@ -204,7 +256,7 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-    // De komma is hier toegevoegd, de overtollige analytics zijn verwijderd.
+    // FIREBASE CONFIGURATIE (Laat ongewijzigd)
     const firebaseConfig = {
         apiKey: "AIzaSyCsUp88mNt0qOnsnidSx9z5iNOemYu7d5Q",
         authDomain: "bandkas-gravitor.firebaseapp.com",
@@ -218,6 +270,14 @@
     const TARGET_PIN = '2025';
     const members = ['Mil', 'Sam', 'leks', 'sander'];
     
+    // Bankrekeningnummers Mapping
+    const memberIBANs = {
+        'Mil': 'BE00 0000 0000 0000',
+        'Sam': 'BE00 0000 0000 0000',
+        'leks': 'BE56 7360 1697 7488',
+        'sander': 'BE00 0000 0000 0000'
+    };
+    
     let app, db, dbRef;
     let transactions = [];
 
@@ -230,11 +290,32 @@
     const form = document.getElementById('transaction-form');
     const typeSelect = document.getElementById('type');
     const payerContainer = document.getElementById('payer-container');
+    const payerLabel = document.querySelector('label[for="payer"]');
+    const payerSelect = document.getElementById('payer');
     const syncIndicator = document.getElementById('sync-indicator');
     const submitBtn = document.getElementById('submit-btn');
 
+    // UI Logica voor het formulier
     typeSelect.addEventListener('change', (e) => {
-        payerContainer.style.display = e.target.value === 'inkomst' ? 'none' : 'block';
+        if (e.target.value === 'inkomst') {
+            payerContainer.style.display = 'none';
+        } else if (e.target.value === 'uitgave') {
+            payerContainer.style.display = 'block';
+            payerLabel.innerText = 'Betaald door';
+            // Zorg dat 'Bandkas' een optie is bij uitgaven
+            if (!Array.from(payerSelect.options).some(opt => opt.value === 'Bandkas')) {
+                const opt = document.createElement('option');
+                opt.value = 'Bandkas'; opt.text = 'Bandkas';
+                payerSelect.appendChild(opt);
+            }
+        } else if (e.target.value === 'aflossing') {
+            payerContainer.style.display = 'block';
+            payerLabel.innerText = 'Geld overgemaakt naar';
+            // Verwijder 'Bandkas' als optie bij een aflossing (Kas kan niet aan zichzelf aflossen)
+            Array.from(payerSelect.options).forEach(opt => {
+                if(opt.value === 'Bandkas') opt.remove();
+            });
+        }
     });
 
     if (sessionStorage.getItem('bandkas_auth') === 'true') {
@@ -268,11 +349,11 @@
                 } else {
                     transactions = [];
                 }
-                syncIndicator.innerText = "Real-time verbonden met Firebase";
+                syncIndicator.innerText = "Systeem gesynchroniseerd";
                 syncIndicator.style.color = "var(--positive)";
                 renderApp();
             }, (error) => {
-                syncIndicator.innerText = "Database leesfout: " + error.message;
+                syncIndicator.innerText = "Database fout: " + error.message;
                 syncIndicator.style.color = "var(--negative)";
             });
 
@@ -286,14 +367,13 @@
         if (!dbRef) return;
         submitBtn.disabled = true;
         syncIndicator.innerText = "Opslaan...";
-        syncIndicator.style.color = "#ffaa00";
+        syncIndicator.style.color = "var(--primary-color)";
 
         try {
             await set(dbRef, transactions);
         } catch (error) {
             syncIndicator.innerText = "Schrijffout: " + error.message;
             syncIndicator.style.color = "var(--negative)";
-            alert("Fout bij opslaan! Controleer of je de database wel op 'Testmodus' hebt gezet (Rules op true).");
         } finally {
             submitBtn.disabled = false;
         }
@@ -318,7 +398,16 @@
 
         transactions.push(transaction);
         form.reset();
+        
+        // Reset form UI back to default 'uitgave' state
         payerContainer.style.display = 'block';
+        payerLabel.innerText = 'Betaald door';
+        if (!Array.from(payerSelect.options).some(opt => opt.value === 'Bandkas')) {
+            const opt = document.createElement('option');
+            opt.value = 'Bandkas'; opt.text = 'Bandkas';
+            payerSelect.appendChild(opt);
+        }
+
         await saveDataToCloud();
     });
 
@@ -346,11 +435,11 @@
 
         transactions.forEach(t => {
             if (!t) return; 
+            const amount = Number(t.amount) || 0;
             
             if (t.type === 'inkomst') {
-                bandkasBalance += Number(t.amount) || 0;
+                bandkasBalance += amount;
             } else if (t.type === 'uitgave') {
-                const amount = Number(t.amount) || 0;
                 if (t.payer === 'Bandkas') {
                     bandkasBalance -= amount;
                 } else {
@@ -369,6 +458,19 @@
                         }
                     });
                 }
+            } else if (t.type === 'aflossing') {
+                // LOGICA: Bandkas verliest het geld, de ontvanger zijn "krediet" daalt, 
+                // en de overige 3 leden zien hun "schuld" evenredig dalen.
+                bandkasBalance -= amount;
+                if (memberBalances.hasOwnProperty(t.payer)) {
+                    memberBalances[t.payer] -= amount;
+                }
+                const splitRest = amount / 3;
+                members.forEach(m => {
+                    if (m !== t.payer && memberBalances.hasOwnProperty(m)) {
+                        memberBalances[m] += splitRest;
+                    }
+                });
             }
         });
 
@@ -376,7 +478,13 @@
         document.getElementById('balances-display').innerHTML = members.map(m => {
             const bal = memberBalances[m] || 0;
             const colorClass = bal > 0 ? 'positive' : (bal < 0 ? 'negative' : '');
-            return `<div class="balance-item"><span>${m}</span><span class="${colorClass}">${bal > 0 ? '+' : ''}€${bal.toFixed(2)}</span></div>`;
+            return `<div class="balance-item">
+                        <div class="member-info">
+                            <span class="member-name">${m}</span>
+                            <span class="member-iban">${memberIBANs[m]}</span>
+                        </div>
+                        <span class="${colorClass}">${bal > 0 ? '+' : ''}€${bal.toFixed(2)}</span>
+                    </div>`;
         }).join('');
 
         const tbody = document.getElementById('transactions-table');
@@ -386,13 +494,39 @@
             if (!t) return;
             const tr = document.createElement('tr');
             let checkboxesHTML = '-';
-            if (t.type === 'uitgave' && t.payer !== 'Bandkas') {
-                checkboxesHTML = `<div class="checkbox-group">` + members.filter(m => m !== t.payer).map(m => {
-                    const isChecked = t.paidStatus && t.paidStatus[m] ? 'checked' : '';
-                    return `<label><input type="checkbox" onchange="window.togglePaidStatus(${t.id}, '${m}')" ${isChecked}>${m}</label>`;
-                }).join('') + `</div>`;
+            
+            // Render specific UI elements based on transaction type
+            let typeColor = '';
+            let amountPrefix = '';
+            let descriptionPrefix = '';
+
+            if (t.type === 'inkomst') {
+                typeColor = 'color: var(--positive);';
+                amountPrefix = '+';
+            } else if (t.type === 'aflossing') {
+                typeColor = 'color: var(--primary-color);';
+                amountPrefix = '-';
+                descriptionPrefix = '<span style="font-size:0.8em; padding:2px 4px; background:var(--primary-color); color:#000; border-radius:2px; margin-right:8px;">AFLOSSING</span> ';
+                checkboxesHTML = '<i style="color:#777; font-size:0.85em;">Automatisch verrekend</i>';
+            } else {
+                // Standaard Uitgave
+                amountPrefix = '-';
+                if (t.payer !== 'Bandkas') {
+                    checkboxesHTML = `<div class="checkbox-group">` + members.filter(m => m !== t.payer).map(m => {
+                        const isChecked = t.paidStatus && t.paidStatus[m] ? 'checked' : '';
+                        return `<label><input type="checkbox" onchange="window.togglePaidStatus(${t.id}, '${m}')" ${isChecked}>${m}</label>`;
+                    }).join('') + `</div>`;
+                }
             }
-            tr.innerHTML = `<td>${t.date}</td><td><strong>${t.desc}</strong></td><td style="${t.type === 'inkomst' ? 'color: var(--positive);' : ''}">${t.type === 'inkomst' ? '+' : '-'}€${(Number(t.amount) || 0).toFixed(2)}</td><td>${t.payer}</td><td>${checkboxesHTML}</td><td><button class="delete-btn" onclick="window.deleteTransaction(${t.id})">X</button></td>`;
+
+            tr.innerHTML = `
+                <td style="color:#888; font-size:0.9em;">${t.date}</td>
+                <td><strong>${descriptionPrefix}${t.desc}</strong></td>
+                <td style="${typeColor} font-weight:bold;">${amountPrefix}€${(Number(t.amount) || 0).toFixed(2)}</td>
+                <td>${t.payer}</td>
+                <td>${checkboxesHTML}</td>
+                <td><button class="delete-btn" onclick="window.deleteTransaction(${t.id})">X</button></td>
+            `;
             tbody.appendChild(tr);
         });
     }
