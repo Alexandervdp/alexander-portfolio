@@ -140,8 +140,8 @@
 </div>
 
 <div id="app-container">
-    <h1>BandKas Live Dashboard (Firebase)</h1>
-    <div class="sync-status" id="sync-indicator">Verbinden met server...</div>
+    <h1>BandKas Live Dashboard</h1>
+    <div class="sync-status" id="sync-indicator">Verbinden met Firebase...</div>
     
     <div class="dashboard">
         <div class="card">
@@ -204,24 +204,16 @@
     import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-app.js";
     import { getDatabase, ref, onValue, set } from "https://www.gstatic.com/firebasejs/10.8.1/firebase-database.js";
 
-    // ==========================================
-    // VUL HIER JOUW FIREBASE CONFIGURATIE IN
-    // Kopieer dit exact vanuit je Firebase Console (Stap 3/4)
-    // ==========================================
+    // De komma is hier toegevoegd, de overtollige analytics zijn verwijderd.
     const firebaseConfig = {
         apiKey: "AIzaSyCsUp88mNt0qOnsnidSx9z5iNOemYu7d5Q",
-   	authDomain: "bandkas-gravitor.firebaseapp.com",
-	databaseURL: "https://bandkas-gravitor-default-rtdb.europe-west1.firebasedatabase.app/"
-    	projectId: "bandkas-gravitor",
-    	storageBucket: "bandkas-gravitor.firebasestorage.app",
-    	messagingSenderId: "378685801163",
-    	appId: "1:378685801163:web:9af738ac843746cf58514e",
-    	measurementId: "G-V1H5TB312M"
+        authDomain: "bandkas-gravitor.firebaseapp.com",
+        databaseURL: "https://bandkas-gravitor-default-rtdb.europe-west1.firebasedatabase.app/",
+        projectId: "bandkas-gravitor",
+        storageBucket: "bandkas-gravitor.firebasestorage.app",
+        messagingSenderId: "378685801163",
+        appId: "1:378685801163:web:9af738ac843746cf58514e"
     };
-    // ==========================================
-    // Initialize Firebase
-    const app = initializeApp(firebaseConfig);
-    const analytics = getAnalytics(app);
 
     const TARGET_PIN = '2025';
     const members = ['Mil', 'Sam', 'leks', 'sander'];
@@ -229,7 +221,6 @@
     let app, db, dbRef;
     let transactions = [];
 
-    // UI Elementen
     const loginScreen = document.getElementById('login-screen');
     const appContainer = document.getElementById('app-container');
     const loginForm = document.getElementById('login-form');
@@ -246,7 +237,6 @@
         payerContainer.style.display = e.target.value === 'inkomst' ? 'none' : 'block';
     });
 
-    // Auth & Init Logica
     if (sessionStorage.getItem('bandkas_auth') === 'true') {
         initFirebase();
     }
@@ -254,7 +244,6 @@
     loginForm.addEventListener('submit', function(e) {
         e.preventDefault(); 
         if (pinInput.value === TARGET_PIN) {
-            sessionStorage.setItem('bandkas_auth', 'true');
             initFirebase();
         } else {
             errorMsg.style.display = 'block';
@@ -263,52 +252,48 @@
     });
 
     function initFirebase() {
-        loginScreen.style.display = 'none';
-        appContainer.style.display = 'block';
-
-        if(firebaseConfig.apiKey === "VUL_HIER_IN") {
-            syncIndicator.innerText = "LET OP: Vul eerst je Firebase Config in!";
-            syncIndicator.style.color = "var(--negative)";
-            return;
-        }
-
         try {
             app = initializeApp(firebaseConfig);
             db = getDatabase(app);
             dbRef = ref(db, 'bandkas_data');
             
-            // Firebase Live Listener (vervangt de setInterval)
+            sessionStorage.setItem('bandkas_auth', 'true');
+            loginScreen.style.display = 'none';
+            appContainer.style.display = 'block';
+
             onValue(dbRef, (snapshot) => {
                 const data = snapshot.val();
-                transactions = data ? data : [];
-                syncIndicator.innerText = "Real-time verbonden";
+                if (data) {
+                    transactions = Array.isArray(data) ? data : Object.values(data);
+                } else {
+                    transactions = [];
+                }
+                syncIndicator.innerText = "Real-time verbonden met Firebase";
                 syncIndicator.style.color = "var(--positive)";
                 renderApp();
             }, (error) => {
-                syncIndicator.innerText = "Connectie verbroken: " + error.message;
+                syncIndicator.innerText = "Database leesfout: " + error.message;
                 syncIndicator.style.color = "var(--negative)";
             });
 
         } catch (error) {
-            syncIndicator.innerText = "Firebase setup fout: " + error.message;
-            syncIndicator.style.color = "var(--negative)";
+            alert("Gecrasht tijdens Firebase Setup! Details: " + error.message);
+            console.error(error);
         }
     }
 
-    // Data Mutatie Logica
     async function saveDataToCloud() {
+        if (!dbRef) return;
         submitBtn.disabled = true;
         syncIndicator.innerText = "Opslaan...";
         syncIndicator.style.color = "#ffaa00";
 
         try {
             await set(dbRef, transactions);
-            // We hoeven niet handmatig te renderen of de status terug te zetten, 
-            // de 'onValue' listener hierboven triggert automatisch als de data succesvol is aangepast!
         } catch (error) {
-            syncIndicator.innerText = "Fout bij opslaan: " + error.message;
+            syncIndicator.innerText = "Schrijffout: " + error.message;
             syncIndicator.style.color = "var(--negative)";
-            console.error(error);
+            alert("Fout bij opslaan! Controleer of je de database wel op 'Testmodus' hebt gezet (Rules op true).");
         } finally {
             submitBtn.disabled = false;
         }
@@ -337,10 +322,10 @@
         await saveDataToCloud();
     });
 
-    // We hangen deze functies nu aan het window object omdat <script type="module"> scope isoleert
     window.togglePaidStatus = async function(txId, member) {
-        const tx = transactions.find(t => t.id === txId);
+        const tx = transactions.find(t => t && t.id === txId);
         if(tx) {
+            if (!tx.paidStatus) tx.paidStatus = { Mil: false, Sam: false, leks: false, sander: false };
             tx.paidStatus[member] = !tx.paidStatus[member];
             await saveDataToCloud();
         }
@@ -348,7 +333,7 @@
 
     window.deleteTransaction = async function(txId) {
         if(confirm("Weet je zeker dat je dit item wilt verwijderen?")) {
-            transactions = transactions.filter(t => t.id !== txId);
+            transactions = transactions.filter(t => t && t.id !== txId);
             await saveDataToCloud();
         }
     }
@@ -357,19 +342,30 @@
         let bandkasBalance = 0;
         let memberBalances = { Mil: 0, Sam: 0, leks: 0, sander: 0 };
 
+        if (!Array.isArray(transactions)) transactions = [];
+
         transactions.forEach(t => {
+            if (!t) return; 
+            
             if (t.type === 'inkomst') {
-                bandkasBalance += t.amount;
+                bandkasBalance += Number(t.amount) || 0;
             } else if (t.type === 'uitgave') {
+                const amount = Number(t.amount) || 0;
                 if (t.payer === 'Bandkas') {
-                    bandkasBalance -= t.amount;
+                    bandkasBalance -= amount;
                 } else {
-                    const splitAmount = t.amount / 4;
-                    memberBalances[t.payer] += (t.amount - splitAmount);
+                    const splitAmount = amount / 4;
+                    if (memberBalances.hasOwnProperty(t.payer)) {
+                        memberBalances[t.payer] += (amount - splitAmount);
+                    }
                     members.forEach(m => {
                         if (m !== t.payer) {
-                            if (!t.paidStatus[m]) memberBalances[m] -= splitAmount;
-                            else memberBalances[t.payer] -= splitAmount;
+                            const hasPaid = t.paidStatus && t.paidStatus[m];
+                            if (!hasPaid) {
+                                if (memberBalances.hasOwnProperty(m)) memberBalances[m] -= splitAmount;
+                            } else {
+                                if (memberBalances.hasOwnProperty(t.payer)) memberBalances[t.payer] -= splitAmount;
+                            }
                         }
                     });
                 }
@@ -378,22 +374,25 @@
 
         document.getElementById('bandkas-display').innerText = `€${bandkasBalance.toFixed(2)}`;
         document.getElementById('balances-display').innerHTML = members.map(m => {
-            const bal = memberBalances[m];
+            const bal = memberBalances[m] || 0;
             const colorClass = bal > 0 ? 'positive' : (bal < 0 ? 'negative' : '');
             return `<div class="balance-item"><span>${m}</span><span class="${colorClass}">${bal > 0 ? '+' : ''}€${bal.toFixed(2)}</span></div>`;
         }).join('');
 
         const tbody = document.getElementById('transactions-table');
         tbody.innerHTML = '';
+        
         [...transactions].reverse().forEach(t => {
+            if (!t) return;
             const tr = document.createElement('tr');
             let checkboxesHTML = '-';
             if (t.type === 'uitgave' && t.payer !== 'Bandkas') {
-                checkboxesHTML = `<div class="checkbox-group">` + members.filter(m => m !== t.payer).map(m => 
-                    `<label><input type="checkbox" onchange="window.togglePaidStatus(${t.id}, '${m}')" ${t.paidStatus[m] ? 'checked' : ''}>${m}</label>`
-                ).join('') + `</div>`;
+                checkboxesHTML = `<div class="checkbox-group">` + members.filter(m => m !== t.payer).map(m => {
+                    const isChecked = t.paidStatus && t.paidStatus[m] ? 'checked' : '';
+                    return `<label><input type="checkbox" onchange="window.togglePaidStatus(${t.id}, '${m}')" ${isChecked}>${m}</label>`;
+                }).join('') + `</div>`;
             }
-            tr.innerHTML = `<td>${t.date}</td><td><strong>${t.desc}</strong></td><td style="${t.type === 'inkomst' ? 'color: var(--positive);' : ''}">${t.type === 'inkomst' ? '+' : '-'}€${t.amount.toFixed(2)}</td><td>${t.payer}</td><td>${checkboxesHTML}</td><td><button class="delete-btn" onclick="window.deleteTransaction(${t.id})">X</button></td>`;
+            tr.innerHTML = `<td>${t.date}</td><td><strong>${t.desc}</strong></td><td style="${t.type === 'inkomst' ? 'color: var(--positive);' : ''}">${t.type === 'inkomst' ? '+' : '-'}€${(Number(t.amount) || 0).toFixed(2)}</td><td>${t.payer}</td><td>${checkboxesHTML}</td><td><button class="delete-btn" onclick="window.deleteTransaction(${t.id})">X</button></td>`;
             tbody.appendChild(tr);
         });
     }
